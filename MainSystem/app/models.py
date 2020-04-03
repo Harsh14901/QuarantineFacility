@@ -1,6 +1,7 @@
 from django.db import models
 from phone_field import PhoneField
 
+
 HIGH_RISK = "high"
 LOW_RISK = "low"
 RiskChoices=(
@@ -22,6 +23,10 @@ class Person(models.Model):
     luxuries = models.ManyToManyField("Luxury")
     vip = models.BooleanField()
 
+    def __str__(self):
+        return f"{self.name} | RISK is {self.risk}"
+    
+
 class Group(models.Model):
     FAMILY = "family"
     ADULTS = "adults"
@@ -32,7 +37,11 @@ class Group(models.Model):
 
     count = models.PositiveIntegerField(blank=False, null=False, default=0)
     category = models.CharField(choices=GroupType,max_length=100)
-    # 
+    facility_preference = models.ForeignKey("Facility", on_delete=models.CASCADE,null=True)
+    
+    def __str__(self):
+        return f"{self.category} group of {self.count} members"
+    
 
 class Facility(models.Model):   
     name = models.CharField(max_length=500,blank=False,null=False)
@@ -40,6 +49,17 @@ class Facility(models.Model):
     address = models.TextField()
     capacity = models.PositiveIntegerField()
     room_count = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def ward_list(self):
+        from app.serializers import WardSerializer
+        ward_list =  self.ward_set.all()
+        serializer = WardSerializer(ward_list,many=True)
+        return serializer.data
+
 
 class Ward(models.Model):
     WARD1 = "1"
@@ -54,22 +74,45 @@ class Ward(models.Model):
     category = models.CharField(
         choices=WardChoices, blank=False, null=False, max_length=50)
 
+    def __str__(self):
+        return f"{self.category} @ {str(self.facility)}"
+
+    @property
+    def room_list(self):
+        from app.serializers import RoomSerializer
+        room_list = self.room_set.all()
+        serializer = RoomSerializer(room_list, many=True)
+        return serializer.data
+    
+
 class Room(models.Model):
     SLEEPER = "0"
     ECONOMY = "1"
     DELUXE = "2"
     SUPER_DELUXE = "3"
-    CategoryChoices = (
+    RoomChoices = (
         (SLEEPER,"Sleeper"),
         (ECONOMY,"Economy"),
         (DELUXE,"Deluxe"),
         (SUPER_DELUXE,"Super Deluxe"),
     )
+    category = models.CharField(choices=RoomChoices,max_length=50)
     room_num = models.PositiveSmallIntegerField()
     floor = models.PositiveSmallIntegerField()
     area = models.FloatField()
     ward = models.ForeignKey("Ward", on_delete=models.CASCADE) 
     capacity = models.PositiveSmallIntegerField()
+
+    def __str__(self):
+        return f"{self.room_num} | Capacity: {self.capacity}"
+
+    @property
+    def occupant_list(self):
+        from app.serializers import PersonSerializer
+        occupant_list = self.person_set.all()
+        serializer = PersonSerializer(occupant_list, many=True)
+        return serializer.data
+    
 
 class Luxury(models.Model):
     TV = "led_tv"
@@ -91,3 +134,8 @@ class Luxury(models.Model):
     )
 
     category = models.CharField(choices=LuxuryItems,max_length=50)
+    cost = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.category
+    
