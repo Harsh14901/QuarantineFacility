@@ -59,6 +59,7 @@ wheels/
 *.egg
 MANIFEST
 share/
+man/
 
 lib64
 pyvenv.cfg
