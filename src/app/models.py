@@ -47,7 +47,6 @@ class Facility(models.Model):
     name = models.CharField(max_length=500,blank=False,null=False)
     owner = models.CharField(max_length=100)
     address = models.TextField()
-    capacity = models.PositiveIntegerField()
     room_count = models.PositiveIntegerField()
 
     def __str__(self):
@@ -60,6 +59,14 @@ class Facility(models.Model):
         serializer = WardSerializer(ward_list,many=True)
         return serializer.data
 
+    @property
+    def capacity(self):
+        wards = self.ward_set.all()
+        count = 0
+        for ward in wards:
+            count += ward.capacity
+        return count
+
 
 class Ward(models.Model):
     WARD1 = "1"
@@ -68,7 +75,6 @@ class Ward(models.Model):
         (WARD1,"Ward 1"),
         (WARD2,"Ward 2"),
     )
-    capacity = models.PositiveIntegerField()
     room_count = models.PositiveIntegerField()
     facility = models.ForeignKey("Facility", on_delete=models.CASCADE)
     category = models.CharField(
@@ -84,6 +90,13 @@ class Ward(models.Model):
         serializer = RoomSerializer(room_list, many=True)
         return serializer.data
     
+    @property
+    def capacity(self):
+        rooms = self.room_set.all()
+        count = 0
+        for room in rooms:
+            count += room.capacity
+        return count
 
 class Room(models.Model):
     SLEEPER = "0"
@@ -112,6 +125,10 @@ class Room(models.Model):
         occupant_list = self.person_set.all()
         serializer = PersonSerializer(occupant_list, many=True)
         return serializer.data
+
+    @property
+    def occupant_count(self):
+        return len(self.person_set.all())
     
 
 class Luxury(models.Model):
