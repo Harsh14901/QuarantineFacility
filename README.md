@@ -1,6 +1,6 @@
 # QuarantineFacility
 
-## Steps to sutup and run 
+## Steps to setup and run 
 1. create virtual environment in python3
 2. clone the repo and cd into src folder and execute following
 3. ``` bash
