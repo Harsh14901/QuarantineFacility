@@ -66,6 +66,14 @@ class Facility(models.Model):
         for ward in wards:
             count += ward.capacity
         return count
+    
+    @property
+    def occupancy_count(self):
+        wards = self.ward_set.all()
+        count = 0
+        for ward in wards:
+            count += ward.occupancy_count
+        return count
 
 
 class Ward(models.Model):
@@ -97,6 +105,15 @@ class Ward(models.Model):
         for room in rooms:
             count += room.capacity
         return count
+
+    @property
+    def occupancy_count(self):
+        rooms = self.room_set.all()
+        count = 0
+        for room in rooms:
+            count += room.occupant_count
+        return count
+
 
 class Room(models.Model):
     SLEEPER = "0"
