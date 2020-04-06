@@ -89,6 +89,6 @@ class LuxuryViewSet(ModelViewSet):
     serializer_class = LuxurySerializer
 
 
-class PersonAccomodationViewSet(ReadOnlyModelViewSet):
+class PersonAccomodationViewSet(ModelViewSet):
     queryset = Person.objects.all()
     serializer_class = PersonAccomodationSerializer
