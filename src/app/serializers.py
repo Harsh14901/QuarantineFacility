@@ -30,3 +30,8 @@ class LuxurySerializer(serializers.ModelSerializer):
     class Meta:
         model = Luxury
         fields = ['id','category','cost']
+
+class PersonAccomodationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Person
+        fields = ['room_pk','ward_pk','facility_pk']
