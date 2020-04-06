@@ -12,5 +12,8 @@ router.register(r'groups',GroupViewSet)
 router.register(r'luxuries',LuxuryViewSet)
 urlpatterns = [
     url('',include(router.urls)),
-    url(r'^index/$',index,name="index")
+    url(r'^index/$',index,name="index"),
+    url(r'^person/search/$',searchPerson,name="search_user"),
+    url(r'^facility/search/$',searchFacility,name="search_facility"),
+
 ]
