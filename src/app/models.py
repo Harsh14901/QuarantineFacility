@@ -169,6 +169,10 @@ class Room(models.Model):
     @property
     def occupant_count(self):
         return len(self.person_set.all())
+
+    @property
+    def has_vacancy(self):
+        return self.capacity > self.occupant_count
     
 
 class Luxury(models.Model):
