@@ -5,6 +5,8 @@ from django.http.response import HttpResponse
 from rest_framework.viewsets import *
 from .models import *
 from .serializers import *
+from rest_framework import mixins
+from rest_framework import generics
 
 # import random,names
 # from random_word import RandomWords
@@ -85,3 +87,8 @@ class GroupViewSet(ModelViewSet):
 class LuxuryViewSet(ModelViewSet):
     queryset = Luxury.objects.all()
     serializer_class = LuxurySerializer
+
+
+class PersonAccomodationViewSet(ReadOnlyModelViewSet):
+    queryset = Person.objects.all()
+    serializer_class = PersonAccomodationSerializer

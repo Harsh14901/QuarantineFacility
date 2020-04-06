@@ -19,13 +19,36 @@ class Person(models.Model):
     email = models.EmailField(max_length=254)
     risk = models.CharField(choices=RiskChoices,max_length=50)
     group = models.ForeignKey("Group", on_delete=models.CASCADE)
-    room = models.ForeignKey("Room", on_delete=models.CASCADE) 
-    luxuries = models.ManyToManyField("Luxury")
+    room = models.ForeignKey("Room", on_delete=models.CASCADE,null=True,blank=True) 
+    luxuries = models.ManyToManyField("Luxury",blank=True)
     vip = models.BooleanField()
 
     def __str__(self):
         return f"{self.name} | RISK is {self.risk}"
-    
+
+    @property
+    def room_pk(self):
+        try:
+            self.room.id
+        except:
+            return "None"
+        return self.room.id
+
+    @property
+    def ward_pk(self):
+        try:
+            self.room.ward.id
+        except:
+            return "None"
+        return self.room.ward.id
+
+    @property
+    def facility_pk(self):
+        try:
+            self.room.ward.facility.id
+        except:
+            return "None"
+        return self.room.ward.facility.id    
 
 class Group(models.Model):
     FAMILY = "family"
