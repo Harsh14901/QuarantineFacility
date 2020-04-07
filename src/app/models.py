@@ -19,13 +19,43 @@ class Person(models.Model):
     email = models.EmailField(max_length=254)
     risk = models.CharField(choices=RiskChoices,max_length=50)
     group = models.ForeignKey("Group", on_delete=models.CASCADE)
-    room = models.ForeignKey("Room", on_delete=models.CASCADE) 
-    luxuries = models.ManyToManyField("Luxury")
+    room = models.ForeignKey("Room", on_delete=models.CASCADE,null=True,blank=True) 
+    luxuries = models.ManyToManyField("Luxury",blank=True)
     vip = models.BooleanField()
 
     def __str__(self):
         return f"{self.name} | RISK is {self.risk}"
-    
+
+    @property
+    def room_pk(self):
+        try:
+            self.room.id
+        except:
+            return "None"
+        return self.room.id
+
+    @property
+    def ward_pk(self):
+        try:
+            self.room.ward.id
+        except:
+            return "None"
+        return self.room.ward.id
+
+    @property
+    def facility_pk(self):
+        try:
+            self.room.ward.facility.id
+        except:
+            return "None"
+        return self.room.ward.facility.id    
+
+    @property
+    def checkup_records(self):
+        from app.serializers import CheckupSerializer
+        records = self.checkuprecords_set.all()
+        serializer = CheckupSerializer(records,many=True)
+        return serializer.data
 
 class Group(models.Model):
     FAMILY = "family"
@@ -146,6 +176,10 @@ class Room(models.Model):
     @property
     def occupant_count(self):
         return len(self.person_set.all())
+
+    @property
+    def has_vacancy(self):
+        return self.capacity > self.occupant_count
     
 
 class Luxury(models.Model):
@@ -172,4 +206,39 @@ class Luxury(models.Model):
 
     def __str__(self):
         return self.category
+    
+
+class CheckupRecords(models.Model):
+    CRITICAL = "Critical"
+    RISKY = "Risky"
+    AVERAGE = "Average"
+    GOOD = "Good"
+    EXCELLENT = "Excellent"
+
+    HealthChoices = (
+        (CRITICAL,"Critical"),
+        (RISKY,"Risky"),
+        (AVERAGE,"Average"),
+        (GOOD,"Good"),
+        (EXCELLENT,"Excellent"),
+    )
+
+    person = models.ForeignKey("Person", on_delete=models.CASCADE)
+    doctor = models.CharField(max_length=100,null=True,blank=True)
+    date = models.DateField(auto_now=False, auto_now_add=True)
+    health_status = models.CharField(max_length=50,choices=HealthChoices)
+    medicines = models.ManyToManyField("Medicine")
+    next_checkup_date = models.DateField(auto_now=False, auto_now_add=False,null=True,blank=True)
+
+    def __str__(self):
+        return f"{self.person} | Doctor: {self.doctor} on {self.date}"
+    
+
+
+class Medicine(models.Model):
+    name = models.CharField(max_length=50)
+    cost = models.PositiveIntegerField(null=True,blank=True)
+
+    def __str__(self):
+        return self.name
     
