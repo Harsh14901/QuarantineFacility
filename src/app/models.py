@@ -26,6 +26,14 @@ class Person(models.Model):
     def __str__(self):
         return f"{self.name} | RISK is {self.risk}"
 
+    def priority(self):
+        pr = []
+        pr.append(1 if self.group.highrisk else 2)
+        pr.append(1 if self.group.GroupType==Group.FAMILY else 2)
+        pr.append(1 if self.group.vip else 2)
+        pr.append(-self.age)
+        return pr
+
     @property
     def room_pk(self):
         try:
@@ -72,6 +80,28 @@ class Group(models.Model):
     def __str__(self):
         return f"{self.category} group of {self.count} members"
     
+    @property
+    def vip(self):
+        for person in self.person_set.all():
+            if person.vip:
+                return True
+        return False
+    
+    @property
+    def highrisk(self):
+        for person in self.person_set.all():
+            if person.risk==HIGH_RISK:
+                return True
+        return False
+
+
+    
+        
+        
+
+            
+        
+        
 
 class Facility(models.Model):   
     name = models.CharField(max_length=500,blank=False,null=False)
