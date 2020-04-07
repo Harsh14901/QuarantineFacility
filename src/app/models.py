@@ -15,13 +15,13 @@ class Person(models.Model):
     name = models.CharField(max_length=100)
     age = models.SmallIntegerField(blank=False, null=False)
     address = models.TextField()
-    contact_num = PhoneField()
-    email = models.EmailField(max_length=254)
+    contact_num = PhoneField(null=True,blank=True)
+    email = models.EmailField(max_length=254,null=True,blank=True)
     risk = models.CharField(choices=RiskChoices,max_length=50)
     group = models.ForeignKey("Group", on_delete=models.CASCADE)
     room = models.ForeignKey("Room", on_delete=models.CASCADE,null=True,blank=True) 
-    luxuries = models.ManyToManyField("Luxury",blank=True)
-    vip = models.BooleanField()
+    luxuries = models.ManyToManyField("Luxury")
+    vip = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.name} | RISK is {self.risk}"
@@ -93,15 +93,7 @@ class Group(models.Model):
             if person.risk==HIGH_RISK:
                 return True
         return False
-
-
-    
-        
-        
-
-            
-        
-        
+     
 
 class Facility(models.Model):   
     name = models.CharField(max_length=500,blank=False,null=False)
