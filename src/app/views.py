@@ -61,14 +61,31 @@ def index(request):
     #         make_people(group.count, address, group, isVip, False)
 
             
+    groups = Group.objects.all()
+    # a = get_sorted_list(groups)
+    # b=[]
+    # for per in a:
+    #     b.append(f"{per.name} | {per.age} | {per.group.category} | {per.risk} | {per.vip}")
+    # resp = "<br/>".join(b)
+
+    resp = ""
+    result = allocate(groups)
+    if result is not None:
+        resp = "<h1>Failed for</h1>"
+        b = []
+        for per in result:
+            b.append(f"{per.name} | {per.age} | {per.group.category} | {per.risk} | {per.vip}")
+        resp += "<br/>".join(b)
     
-                
-    a = get_sorted_list()
-    b=[]
-    for per in a:
-        b.append(f"{per.name} | {per.age} | {per.group.category} | {per.risk} | {per.vip}")
-    resp = "<br/>".join(b)
-    return HttpResponse(resp)
+    resp += "<h1> Succesfully allocated rooms </h1>"
+    b = []
+    for group in groups:
+        for per in group.person_set.all():
+            if per.room is not None:
+                b.append(f"{per.name} | {per.age} | {per.group.category} | {per.risk} | {per.vip} | <b> {per.room} </b>")
+    resp += "<br/>".join(b)
+
+    return HttpResponse(str(resp))
     
     
 

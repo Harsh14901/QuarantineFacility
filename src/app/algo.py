@@ -4,10 +4,9 @@ import random
 
 def check_allocation_possible(person, **kwargs):
 
-    # if(person.group.category == Group.FAMILY and not()):
     if "facility_pk" in kwargs:
         facility_pk = kwargs.pop("facility_pk")
-        facility = Facility.objects.get(facility_pk)
+        facility = Facility.objects.get(id=facility_pk)
         for ward in facility.ward_set.all():
             room_pk = check_allocation_possible(person, ward_pk=ward.id)
             if room_pk is not None:
@@ -35,8 +34,7 @@ def check_allocation_possible(person, **kwargs):
         return
 
 
-def get_sorted_list():
-    all_groups = Group.objects.all()
+def get_sorted_list(all_groups):
     
     all_dummy_patients = []
     for group in all_groups:
@@ -48,4 +46,54 @@ def get_sorted_list():
     all_dummy_patients.sort(key=lambda  x:x.priority())
 
     return all_dummy_patients
-   
+
+def make_allocation(patient):
+
+    """ Allocation based on facility preference """
+    try:
+        
+        if(patient.group.category == Group.FAMILY):
+            family = patient.group.person_set.all()
+        else:
+            family = [patient]
+        
+
+        allocated = True
+        for i in range(len(family)):
+            patient = family[i]
+            fac_pref = patient.group.facility_preference.id
+            room_pk = check_allocation_possible(patient, facility_pk=fac_pref)
+            if room_pk is not None:
+                patient.room = Room.objects.get(id=room_pk)
+                patient.save()
+            else:
+                for human in family[:i]:
+                    human.room = None
+                    human.save()
+                allocated = False
+                break    
+        if allocated:
+            return True
+    except:
+        pass
+    
+    
+        """ Allocation considering proximity. """
+
+    
+    return False
+
+
+def allocate(groups):
+    patients = get_sorted_list(groups)
+    failed = []
+    for patient in patients:
+        if patient.room is not None:
+            continue
+        if not make_allocation(patient):
+            failed.append(patient)
+
+    if failed != []:
+        return failed
+    
+    return

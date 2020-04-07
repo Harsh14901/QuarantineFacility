@@ -26,7 +26,7 @@ class PersonSerializer(serializers.ModelSerializer):
 class GroupSerializer(serializers.ModelSerializer):
     class Meta():
         model = Group
-        fields = ['id','category','count']
+        fields = ['id','category','count','facility_preference']
 
 class LuxurySerializer(serializers.ModelSerializer):
     class Meta:
