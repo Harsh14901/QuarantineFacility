@@ -21,7 +21,7 @@ class RoomSerializer(serializers.ModelSerializer):
 class PersonSerializer(serializers.ModelSerializer):
     class Meta():
         model = Person
-        fields = ['id','name','age','contact_num','email','risk','vip','luxuries','group']
+        fields = ['id','name','age','contact_num','email','risk','vip','luxuries','group','checkup_records']
 
 class GroupSerializer(serializers.ModelSerializer):
     class Meta():
@@ -32,6 +32,16 @@ class LuxurySerializer(serializers.ModelSerializer):
     class Meta:
         model = Luxury
         fields = ['id','category','cost']
+
+class MedicineSerializer(serializers.ModelSerializer):
+    class Meta():
+        model = Medicine
+        fields = ['name','cost']
+
+class CheckupSerializer(serializers.ModelSerializer):
+    class Meta():
+        model = CheckupRecords
+        fields = ['id','person','doctor','date','health_status','medicines','next_checkup_date']
 
 class PersonAccomodationSerializer(serializers.ModelSerializer):
     class Meta:

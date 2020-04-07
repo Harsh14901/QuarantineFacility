@@ -92,3 +92,11 @@ class LuxuryViewSet(ModelViewSet):
 class PersonAccomodationViewSet(ModelViewSet):
     queryset = Person.objects.all()
     serializer_class = PersonAccomodationSerializer
+
+class MedicineViewSet(ModelViewSet):
+    queryset = Medicine.objects.all()
+    serializer_class = MedicineSerializer
+
+class CheckupViewSet(ModelViewSet):
+    queryset = CheckupRecords.objects.all()
+    serializer_class = CheckupSerializer
