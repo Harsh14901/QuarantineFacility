@@ -5,12 +5,8 @@ from django.http.response import HttpResponse
 from rest_framework.viewsets import *
 from .models import *
 from .serializers import *
-import app.serializers as jsonifier
 from django.http import JsonResponse
-
-from django.core import serializers
-from rest_framework.renderers import JSONRenderer
-
+from rest_framework import status
 
 
 # Create your views here.
@@ -21,10 +17,10 @@ def index(request):
 def searchPerson(request):
     queryDict = request.GET
 
-    location = queryDict.get('location',default='')
+    address = queryDict.get('address',default='')
     name = queryDict.get('name',default='')
     
-    queryset = Person.objects.filter(address__icontains=location,name__icontains=name)
+    queryset = Person.objects.filter(address__icontains=address,name__icontains=name)
     return JsonResponse(PersonSerializer(queryset,many=True).data,safe=False)
 
 def searchFacility(request):
@@ -44,9 +40,13 @@ def searchFacility(request):
     facilitySet = list(filter(lambda obj: capacity_lb <= obj.capacity <= capacity_ub,list(facilitySet)))
     facilitySet = list(filter(lambda obj: occupancy_lb <= obj.occupancy_count <= occupancy_ub,list(facilitySet)))
     if uid:
-        person = Person.objects.get(id=uid)
-        facilitySet = [person.room.ward.facility]
-    
+        facilitySet = []
+        try:
+            person = Person.objects.get(id=uid)
+            facilitySet = [person.room.ward.facility]
+        except :
+            # return HttpResponse('user does not exist', status=status.HTTP_400_BAD_REQUEST)
+            pass   
     return JsonResponse(FacilitySerializer(facilitySet,many=True).data,safe=False)
 
 
