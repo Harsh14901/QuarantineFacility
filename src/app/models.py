@@ -29,7 +29,7 @@ class Person(models.Model):
     def priority(self):
         pr = []
         pr.append(1 if self.group.highrisk else 2)
-        pr.append(1 if self.group.GroupType==Group.FAMILY else 2)
+        pr.append(1 if self.group.category == Group.FAMILY else 2)
         pr.append(1 if self.group.vip else 2)
         pr.append(-self.age)
         return pr
