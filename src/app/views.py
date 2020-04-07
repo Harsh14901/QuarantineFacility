@@ -5,64 +5,56 @@ from django.http.response import HttpResponse
 from rest_framework.viewsets import *
 from .models import *
 from .serializers import *
+
+from django.http import JsonResponse
+from rest_framework import status
+
 from rest_framework import mixins
 from rest_framework import generics
 
-# import random,names
-# from random_word import RandomWords
 
 
 # Create your views here.
 def index(request):
-    """ Populating database """
-    # Populating facilities
-    # word = RandomWords()
-    # for i in range(10):
-    #     f = Facility()
-    #     f.name = f"{word.get_random_word()} Facility"
-    #     f.owner = names.get_full_name()
-    #     f.address = f"Some place we cannot reach {random.randint(5000,10000)}"
-    #     w1, w2 = Ward(category=Ward.WARD1), Ward(category=Ward.WARD2)
-    #     rc1,rc2 = random.randint(1,10), random.randint(1, 10)
-    #     w1.room_count,w2.room_count = rc1,rc2
-    #     f.room_count = rc1+rc2
-    #     f.save()
-    #     print(f)
-    #     w1.facility,w2.facility = f,f
-    #     w1.save()
-    #     w2.save()
-    #     print(w1,w2)
-    #     for i in range(rc1):
-    #         r = Room()
-    #         r.category = Room.RoomChoices[random.randint(0,3)][0]
-    #         r.floor = random.randint(1,9)
-    #         r.room_num = 100*r.floor + random.randint(1,90)
-    #         r.area = 100*random.random()
-    #         r.ward = w1
-    #         r.capacity = random.randint(1,4)
-    #         r.save()
-    #         print(r)
+       return HttpResponse("<h1> Hi </h1>")
 
-    #     for i in range(rc2):
-    #         r = Room()
-    #         r.category = Room.RoomChoices[random.randint(0, 3)][0]
-    #         r.floor = random.randint(1, 9)
-    #         r.room_num = 100*r.floor + random.randint(1, 90)
-    #         r.area = 100*random.random()
-    #         r.ward = w2
-    #         r.capacity = random.randint(1, 4)
-    #         r.save()
-    #         print(r)
 
-    # Populating Room types
-    # for i in range(4):
-    #     for i in range(2):
-    #         r = Room(category=Room.RoomChoices[i][0])
-    #         r.room_num = random.randint(100,700)
-    #         r.floor = r.room_num // 100
-    #         r.area = 100*random.random()
-    #         r.capacity = 2 if i%2 ==0 else 3
-    return HttpResponse("<h1> Hi </h1>")
+def searchPerson(request):
+    queryDict = request.GET
+
+    address = queryDict.get('address',default='')
+    name = queryDict.get('name',default='')
+    
+    queryset = Person.objects.filter(address__icontains=address,name__icontains=name)
+    return JsonResponse(PersonSerializer(queryset,many=True).data,safe=False)
+
+def searchFacility(request):
+    queryDict = request.GET
+
+    location = queryDict.get('location',default='')
+    name = queryDict.get('name',default='')
+    occupancy_lb = int(queryDict.get('occupancy_lb',default=0))
+    occupancy_ub = int(queryDict.get('occupancy_ub',default=1000000000))
+
+    capacity_lb = int(queryDict.get('capacity_lb',default=0))
+    capacity_ub = int(queryDict.get('capacity_ub',default=1000000000))
+
+    uid = queryDict.get('uid',default=None)
+
+    facilitySet = Facility.objects.filter(name__icontains=name)
+    facilitySet = list(filter(lambda obj: capacity_lb <= obj.capacity <= capacity_ub,list(facilitySet)))
+    facilitySet = list(filter(lambda obj: occupancy_lb <= obj.occupancy_count <= occupancy_ub,list(facilitySet)))
+    if uid:
+        facilitySet = []
+        try:
+            person = Person.objects.get(id=uid)
+            facilitySet = [person.room.ward.facility]
+        except :
+            # return HttpResponse('user does not exist', status=status.HTTP_400_BAD_REQUEST)
+            pass   
+    return JsonResponse(FacilitySerializer(facilitySet,many=True).data,safe=False)
+
+
 
 class FacilityViewSet(ModelViewSet):
     queryset = Facility.objects.all()
