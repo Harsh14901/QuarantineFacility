@@ -10,6 +10,9 @@ router.register(r'rooms',RoomViewSet)
 router.register(r'people',PersonViewSet)
 router.register(r'groups',GroupViewSet)
 router.register(r'luxuries',LuxuryViewSet)
+router.register(r'medicines',MedicineViewSet)
+router.register(r'checkup-records',CheckupViewSet)
+router.register(r'person-accomodation',PersonAccomodationViewSet)
 urlpatterns = [
     url('',include(router.urls)),
     url(r'^index/$',index,name="index"),

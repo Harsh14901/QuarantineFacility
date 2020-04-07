@@ -5,8 +5,13 @@ from django.http.response import HttpResponse
 from rest_framework.viewsets import *
 from .models import *
 from .serializers import *
+
 from django.http import JsonResponse
 from rest_framework import status
+
+from rest_framework import mixins
+from rest_framework import generics
+
 
 
 # Create your views here.
@@ -74,3 +79,16 @@ class GroupViewSet(ModelViewSet):
 class LuxuryViewSet(ModelViewSet):
     queryset = Luxury.objects.all()
     serializer_class = LuxurySerializer
+
+
+class PersonAccomodationViewSet(ModelViewSet):
+    queryset = Person.objects.all()
+    serializer_class = PersonAccomodationSerializer
+
+class MedicineViewSet(ModelViewSet):
+    queryset = Medicine.objects.all()
+    serializer_class = MedicineSerializer
+
+class CheckupViewSet(ModelViewSet):
+    queryset = CheckupRecords.objects.all()
+    serializer_class = CheckupSerializer

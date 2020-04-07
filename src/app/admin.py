@@ -29,5 +29,12 @@ class GroupAdmin(admin.ModelAdmin):
     list_display = ['category','count','facility_preference']
 
 
+@admin.register(Medicine)
+class MedicineAdmin(admin.ModelAdmin):
+    list_display = ['name','cost']
 
+
+@admin.register(CheckupRecords)
+class CheckupRecordsAdmin(admin.ModelAdmin):
+    list_display = ['person','doctor','date','health_status','next_checkup_date']
 
