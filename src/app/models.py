@@ -50,6 +50,13 @@ class Person(models.Model):
             return "None"
         return self.room.ward.facility.id    
 
+    @property
+    def checkup_records(self):
+        from app.serializers import CheckupSerializer
+        records = self.checkuprecords_set.all()
+        serializer = CheckupSerializer(records,many=True)
+        return serializer.data
+
 class Group(models.Model):
     FAMILY = "family"
     ADULTS = "adults"
@@ -199,4 +206,39 @@ class Luxury(models.Model):
 
     def __str__(self):
         return self.category
+    
+
+class CheckupRecords(models.Model):
+    CRITICAL = "Critical"
+    RISKY = "Risky"
+    AVERAGE = "Average"
+    GOOD = "Good"
+    EXCELLENT = "Excellent"
+
+    HealthChoices = (
+        (CRITICAL,"Critical"),
+        (RISKY,"Risky"),
+        (AVERAGE,"Average"),
+        (GOOD,"Good"),
+        (EXCELLENT,"Excellent"),
+    )
+
+    person = models.ForeignKey("Person", on_delete=models.CASCADE)
+    doctor = models.CharField(max_length=100,null=True,blank=True)
+    date = models.DateField(auto_now=False, auto_now_add=True)
+    health_status = models.CharField(max_length=50,choices=HealthChoices)
+    medicines = models.ManyToManyField("Medicine")
+    next_checkup_date = models.DateField(auto_now=False, auto_now_add=False,null=True,blank=True)
+
+    def __str__(self):
+        return f"{self.person} | Doctor: {self.doctor} on {self.date}"
+    
+
+
+class Medicine(models.Model):
+    name = models.CharField(max_length=50)
+    cost = models.PositiveIntegerField(null=True,blank=True)
+
+    def __str__(self):
+        return self.name
     
