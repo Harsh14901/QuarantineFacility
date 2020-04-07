@@ -35,21 +35,19 @@ def check_allocation_possible(person, **kwargs):
         return
 
 
-# person = Person.objects.get(id=1)
-# wl = Ward.objects.all()
-# w = wl[random.randint(0, len(wl)-1)]
-# res = check_allocation_possible(person, ward_pk=w.id)
-
 def get_sorted_list():
     all_groups = Group.objects.all()
     
     all_dummy_patients = []
     for group in all_groups:
         if group.GroupType == Group.ADULTS:
+            print("AM I an adult?? ",group.category == Group.ADULTS)
             all_dummy_patients.append( list(group.person_set.all()) )
         else:
             all_dummy_patients.append( group.person_set.latest('age') )
     
+    for a in all_dummy_patients:
+        print(a.group)
     all_dummy_patients.sort(key=lambda  x:x.priority())
 
     return all_dummy_patients

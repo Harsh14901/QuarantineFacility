@@ -12,11 +12,65 @@ from rest_framework import status
 from rest_framework import mixins
 from rest_framework import generics
 
+import random
+import names
+from random_word.random_word import RandomWords
 
+
+        
 
 # Create your views here.
 def index(request):
-       return HttpResponse("<h1> Hi </h1>")
+    """ Populating Groups and Persons  """
+    # def make_people(num, address, group, isVip, isChild):
+    #     if isChild:
+    #         age_min = 1
+    #         age_max = 17
+    #     else:
+    #         age_min = 18
+    #         age_max = 95
+    #     for i in range(num):
+    #         p = Person(age=random.randint(age_min, age_max),
+    #                 address=address, group=group, vip=isVip)
+    #         p.name = names.get_full_name()
+    #         p.risk = RiskChoices[random.randint(1, 1000) % 2][0]
+    #         p.save()
+    #         print(p)
+    
+    # for i in range(10):
+    #     group = Group()
+    #     group.category = Group.FAMILY if random.randint(1,1000)%2==0 else Group.ADULTS
+    #     group.count = random.randint(2,6)
+    #     group.facility_preference = Facility.objects.get(id=random.randint(3,11))
+    #     group.save()
+    #     print(group)
+
+    #     r = RandomWords()
+    #     isVip = bool(random.randint(1, 1000) % 2)
+    #     try:
+    #         address = ', '.join(r.get_random_words()[:3])
+    #     except:
+    #         address = "Some unknown address"
+        
+            
+        
+    #     if group.category == Group.FAMILY:
+    #         make_people(2,address,group,isVip,True)
+    #         make_people(group.count - 2,address,group,isVip,False)
+    #     else:
+    #         make_people(group.count, address, group, isVip, False)
+
+            
+    
+                
+    a = get_sorted_list()
+    b=[]
+    for per in a:
+        b.append(f"{per.name} | {per.age} | {per.group.category} | {per.risk} | {per.vip}")
+    resp = "<br/>".join(b)
+    return HttpResponse(resp)
+    
+    
 
 
 def searchPerson(request):
