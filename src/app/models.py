@@ -22,6 +22,8 @@ class Person(models.Model):
     room = models.ForeignKey("Room", on_delete=models.CASCADE,null=True,blank=True) 
     luxuries = models.ManyToManyField("Luxury")
     vip = models.BooleanField(default=False)
+    latitude = models.FloatField(null=True)
+    longitude = models.FloatField(null=True)
 
     def __str__(self):
         return f"{self.name} | RISK is {self.risk}"
@@ -100,6 +102,8 @@ class Facility(models.Model):
     owner = models.CharField(max_length=100)
     address = models.TextField()
     room_count = models.PositiveIntegerField()
+    latitude = models.FloatField(null=True)
+    longitude = models.FloatField(null=True)
 
     def __str__(self):
         return self.name
