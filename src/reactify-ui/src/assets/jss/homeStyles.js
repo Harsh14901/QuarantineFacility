@@ -11,7 +11,7 @@ const style= {
           justifyContent: "center"
   },
   formDiv: {
-          width: "40%",
+          width: "100%",
           marginTop: "6vh",
           display: "flex",
           flexDirection: "column",
@@ -30,10 +30,7 @@ const style= {
           borderRadius: 3,
           boxShadow: '0 3px 5px 2px rgba(167, 66, 185, .3)',
           color: 'white',
-          padding: '0 30px',
-          marginTop: "2vh",
-          left: "30%",
-          position: "relative"
+          padding: '10px 30px',
   }
 };
 
