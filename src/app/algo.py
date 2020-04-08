@@ -1,5 +1,6 @@
 from .models import *
 import random
+import requests
 
 
 def check_allocation_possible(person, **kwargs):
@@ -50,37 +51,52 @@ def get_sorted_list(all_groups):
 def make_allocation(patient):
 
     """ Allocation based on facility preference """
-    try:
+    print('allocating',patient)
         
-        if(patient.group.category == Group.FAMILY):
-            family = patient.group.person_set.all()
+    if(patient.group.category == Group.FAMILY):
+        family = patient.group.person_set.all()
+    else:
+        family = [patient]
+    
+
+    allocated = True
+    for i in range(len(family)):
+        patient = family[i]
+        fac_pref = patient.group.facility_preference.id
+        room_pk = check_allocation_possible(patient, facility_pk=fac_pref)
+        if room_pk is not None:
+            patient.room = Room.objects.get(id=room_pk)
+            patient.save()
         else:
-            family = [patient]
+            for human in family[:i]:
+                human.room = None
+                human.save()
+            allocated = False
+            break    
+    if allocated:
+        return True
+    else:
         
+        row = get_all_distances(patient)
+        for fac_tuple in row:
+            allocated = True
+            for i in range(len(family)):
+                patient = family[i]
+                room_pk = check_allocation_possible(patient, facility_pk=fac_tuple[1].id)
+                if room_pk is not None:
+                    patient.room = Room.objects.get(id=room_pk)
+                    patient.save()
+                else:
+                    for human in family[:i]:
+                        human.room = None
+                        human.save()
+                    allocated = False
+                    print('sry')
+                    break    
+            if allocated:
+                return True      
+    
 
-        allocated = True
-        for i in range(len(family)):
-            patient = family[i]
-            fac_pref = patient.group.facility_preference.id
-            room_pk = check_allocation_possible(patient, facility_pk=fac_pref)
-            if room_pk is not None:
-                patient.room = Room.objects.get(id=room_pk)
-                patient.save()
-            else:
-                for human in family[:i]:
-                    human.room = None
-                    human.save()
-                allocated = False
-                break    
-        if allocated:
-            return True
-    except:
-        pass
-    
-    
-        """ Allocation considering proximity. """
-
-    
     return False
 
 
@@ -97,3 +113,69 @@ def allocate(groups):
         return failed
     
     return
+
+'''
+enter location in form of string of comma separated latitude and longitude
+eg : '49.932707,11.588051'
+'''
+def get_distance(p1,p2):
+    key='efe1c6b8-2b70-4252-a030-7d7f9ae2be5c'
+    url='https://graphhopper.com/api/1/matrix'
+    params={
+        'from_point':p1, 
+        'to_point':p2,
+        'type': 'json',
+        'vehicle':'car',
+        'out_array':'distances',
+        'key':key,
+    }
+    r=requests.get(url=url,params=params)
+    data = r.json()
+    distance = data['distances'][0][0]
+    return distance
+# get_distance('49.932,11.051','50.817,11.337')
+
+def get_all_distances(patient):
+    p1='{},{}'.format(patient.latitude,patient.longitude)
+    d=[]
+    for facility in Facility.objects.all():
+        try:
+            p2='{},{}'.format(facility.latitude,facility.longitude)
+            d.append((get_distance(p1,p2),facility))    
+        except:
+            print('wrong location',facility,patient)
+    d.sort(key=lambda x:x[0])
+    print(d)  
+    return d
+
+def set_location(obj):
+    try:
+        p1='{},{}'.format(random.random()+22,random.random()+88)
+        key='efe1c6b8-2b70-4252-a030-7d7f9ae2be5c'
+        url='https://graphhopper.com/api/1/geocode'
+        params={
+            'point':p1,
+            'reverse':'true',
+            'debug':'true',
+            'key':key,
+        }
+        r=requests.get(url=url,params=params)
+        # print(r.url)
+        point = r.json()['hits'][0]['point']
+        obj.address = r.json()['hits'][0]['name']
+        obj.latitude = point['lat']
+        obj.longitude = point['lng']
+        obj.save()
+    except:
+        set_location(obj)
+
+def locate_facilities():
+    for facility in Facility.objects.all():
+        set_location(facility)
+
+def locate_persons():
+    for person in Person.objects.all():
+        set_location(person)
+        
+
+

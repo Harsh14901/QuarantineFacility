@@ -6,7 +6,7 @@ from rest_framework.exceptions import ValidationError
 class FacilitySerializer(serializers.ModelSerializer):
     class Meta():
         model = Facility
-        fields = ['id','name','owner','address','capacity','room_count','ward_list']
+        fields = ['id','name','owner','address','capacity','room_count','ward_list','latitude','longitude']
 
 class WardSerializer(serializers.ModelSerializer):
     class Meta():
@@ -21,7 +21,7 @@ class RoomSerializer(serializers.ModelSerializer):
 class PersonSerializer(serializers.ModelSerializer):
     class Meta():
         model = Person
-        fields = ['id','name','age','contact_num','email','risk','vip','luxuries','group','checkup_records']
+        fields = ['id','name','age','contact_num','email','risk','vip','luxuries','group','checkup_records','latitude','longitude']
 
 class GroupSerializer(serializers.ModelSerializer):
     class Meta():
