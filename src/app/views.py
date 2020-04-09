@@ -18,7 +18,6 @@ import random
 import names
 # from random_word.random_word import RandomWords
 
-
         
 
 # Create your views here.
@@ -115,9 +114,6 @@ class PersonViewSet(ModelViewSet):
     queryset = Person.objects.all()
     serializer_class = PersonSerializer
 
-class GroupViewSet(ModelViewSet):
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
 
 class LuxuryViewSet(ModelViewSet):
     queryset = Luxury.objects.all()
@@ -135,3 +131,27 @@ class MedicineViewSet(ModelViewSet):
 class CheckupViewSet(ModelViewSet):
     queryset = CheckupRecords.objects.all()
     serializer_class = CheckupSerializer
+
+
+class GroupViewSet(ModelViewSet):
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+
+    # def get_serializer(self, *args, **kwargs):
+    #     print("Get serializer called")
+    #     kwargs['many'] = True
+    #     a = super().get_serializer(*args, **kwargs)
+    #     print("and it is returning , ",a)
+    #     return a
+
+# class GroupsAllocate(generics.GenericAPIView):
+#     queryset = Group.objects.all()
+#     serializer_class = GroupSerializer
+
+#     def get_serializer(self, *args, **kwargs):
+#         kwargs['many'] = True
+#         return super().get_serializer(*args, **kwargs)
+
+#     def create(self, request, *args, **kwargs):
+#         serializer = self.get_serializer(data=request.data,**kwargs)
+        
