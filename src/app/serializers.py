@@ -3,30 +3,7 @@ from .models import *
 from .algo import *
 from rest_framework.exceptions import ValidationError
 
-class FacilitySerializer(serializers.ModelSerializer):
-    class Meta():
-        model = Facility
-        fields = ['id','name','owner','address','capacity','room_count','ward_list','latitude','longitude']
 
-class WardSerializer(serializers.ModelSerializer):
-    class Meta():
-        model = Ward
-        fields = ['id','category','room_count','capacity','room_list']
-
-class RoomSerializer(serializers.ModelSerializer):
-    class Meta():
-        model = Room
-        fields = ['id','category','room_num','floor','area','capacity','occupant_list']
-
-class PersonSerializer(serializers.ModelSerializer):
-    class Meta():
-        model = Person
-        fields = ['id','name','age','contact_num','email','risk','vip','luxuries','group','checkup_records','latitude','longitude']
-
-class GroupSerializer(serializers.ModelSerializer):
-    class Meta():
-        model = Group
-        fields = ['id','category','count','facility_preference']
 
 class LuxurySerializer(serializers.ModelSerializer):
     class Meta:
@@ -68,5 +45,60 @@ class PersonAccomodationSerializer(serializers.ModelSerializer):
         
         return a and (room_pk is not None)
 
-    
 
+class PersonSerializer(serializers.ModelSerializer):
+    checkuprecords_set = CheckupSerializer(many=True,read_only=True)
+
+    class Meta():
+        model = Person
+        fields = ['id', 'name', 'age', 'contact_num', 'email', 'risk', 'vip',
+                  'luxuries', 'group', 'latitude', 'longitude','room' ,'checkuprecords_set']
+     
+
+class GroupSerializer(serializers.ModelSerializer):
+    person_set = PersonSerializer(many=True,read_only=True)
+
+    def create(self, validated_data):
+        people_data = validated_data.pop("person_set")
+        group = Group.objects.create(**validated_data)
+        for person_data in people_data:
+            person_data['group'] = group.id
+            person_serializer = PersonSerializer(data=person_data)
+            if person_serializer.is_valid():
+                person = person_serializer.save()
+            else:
+                group.delete()
+                raise ValidationError(person_serializer.errors)
+        return group 
+   
+    
+    class Meta():
+        model = Group
+        fields = ['id', 'category', 'count', 'facility_preference', 'person_set']
+
+
+
+class RoomSerializer(serializers.ModelSerializer):
+    person_set = PersonSerializer(many=True,read_only=True)
+
+    class Meta():
+        model = Room
+        fields = ['id','ward', 'category', 'room_num',
+                  'floor', 'area', 'capacity', 'person_set']
+
+
+class WardSerializer(serializers.ModelSerializer):
+    room_set = RoomSerializer(many=True,read_only=True)
+
+    class Meta():
+        model = Ward
+        fields = ['id','facility', 'category', 'room_count', 'capacity', 'room_set']
+
+
+class FacilitySerializer(serializers.ModelSerializer):
+    ward_set = WardSerializer(many=True,read_only=True)
+
+    class Meta():
+        model = Facility
+        fields = ['id', 'name', 'owner', 'address', 'capacity',
+                  'room_count', 'ward_set', 'latitude', 'longitude']

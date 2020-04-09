@@ -18,7 +18,6 @@ import random
 import names
 # from random_word.random_word import RandomWords
 
-
         
 
 # Create your views here.
@@ -115,9 +114,6 @@ class PersonViewSet(ModelViewSet):
     queryset = Person.objects.all()
     serializer_class = PersonSerializer
 
-class GroupViewSet(ModelViewSet):
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
 
 class LuxuryViewSet(ModelViewSet):
     queryset = Luxury.objects.all()
@@ -135,3 +131,37 @@ class MedicineViewSet(ModelViewSet):
 class CheckupViewSet(ModelViewSet):
     queryset = CheckupRecords.objects.all()
     serializer_class = CheckupSerializer
+
+
+class GroupViewSet(ModelViewSet):
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+
+@api_view(['POST'])
+def AllocateGroups(request):
+    if request.method == "POST":
+        groups_data = []
+        groups = []
+        for group_data in request.data:
+            people_data = group_data.pop("person_set")
+            group_serializer = GroupSerializer(data=group_data)
+            if group_serializer.is_valid():
+                group = group_serializer.save(person_set=people_data)
+                if group is not None:
+                    groups.append(group)
+                
+            else:
+                return Response(group_serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        
+        allocation = allocate(groups)
+        for group in groups:
+            groups_data.append(GroupSerializer(group).data)
+
+        return Response(groups_data)        
+    
+    
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    
+
+
