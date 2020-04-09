@@ -20,7 +20,7 @@ class Person(models.Model):
     risk = models.CharField(choices=RiskChoices,max_length=50)
     group = models.ForeignKey("Group", on_delete=models.CASCADE)
     room = models.ForeignKey("Room", on_delete=models.CASCADE,null=True,blank=True) 
-    luxuries = models.ManyToManyField("Luxury")
+    luxuries = models.ManyToManyField("Luxury",blank=True)
     vip = models.BooleanField(default=False)
     latitude = models.FloatField(null=True)
     longitude = models.FloatField(null=True)
@@ -60,12 +60,7 @@ class Person(models.Model):
             return "None"
         return self.room.ward.facility.id    
 
-    @property
-    def checkup_records(self):
-        from app.serializers import CheckupSerializer
-        records = self.checkuprecords_set.all()
-        serializer = CheckupSerializer(records,many=True)
-        return serializer.data
+    
 
 class Group(models.Model):
     FAMILY = "family"
@@ -75,13 +70,16 @@ class Group(models.Model):
         (ADULTS,"All adults above 18 years of age"),
     )
 
-    count = models.PositiveIntegerField(blank=False, null=False, default=0)
     category = models.CharField(choices=GroupType,max_length=100)
     facility_preference = models.ForeignKey("Facility", on_delete=models.CASCADE,null=True)
     
     def __str__(self):
         return f"{self.category} group of {self.count} members"
     
+    @property
+    def count(self):
+        return len(self.person_set.all())
+        
     @property
     def vip(self):
         for person in self.person_set.all():
@@ -101,7 +99,6 @@ class Facility(models.Model):
     name = models.CharField(max_length=500,blank=False,null=False)
     owner = models.CharField(max_length=100)
     address = models.TextField()
-    room_count = models.PositiveIntegerField()
     latitude = models.FloatField(null=True)
     longitude = models.FloatField(null=True)
 
@@ -109,11 +106,11 @@ class Facility(models.Model):
         return self.name
 
     @property
-    def ward_list(self):
-        from app.serializers import WardSerializer
-        ward_list =  self.ward_set.all()
-        serializer = WardSerializer(ward_list,many=True)
-        return serializer.data
+    def room_count(self):
+        count = 0
+        for ward in self.ward_set.all():
+            count += ward.room_count
+        return count
 
     @property
     def capacity(self):
@@ -139,7 +136,6 @@ class Ward(models.Model):
         (WARD1,"Ward 1"),
         (WARD2,"Ward 2"),
     )
-    room_count = models.PositiveIntegerField()
     facility = models.ForeignKey("Facility", on_delete=models.CASCADE)
     category = models.CharField(
         choices=WardChoices, blank=False, null=False, max_length=50)
@@ -148,12 +144,9 @@ class Ward(models.Model):
         return f"{self.category} @ {str(self.facility)}"
 
     @property
-    def room_list(self):
-        from app.serializers import RoomSerializer
-        room_list = self.room_set.all()
-        serializer = RoomSerializer(room_list, many=True)
-        return serializer.data
-    
+    def room_count(self):
+        return len(self.room_set.all())
+
     @property
     def capacity(self):
         rooms = self.room_set.all()
@@ -185,19 +178,13 @@ class Room(models.Model):
     category = models.CharField(choices=RoomChoices,max_length=50)
     room_num = models.PositiveSmallIntegerField()
     floor = models.PositiveSmallIntegerField()
-    area = models.FloatField()
+    area = models.FloatField(null=True,blank=True)
     ward = models.ForeignKey("Ward", on_delete=models.CASCADE) 
     capacity = models.PositiveSmallIntegerField()
 
     def __str__(self):
         return f"{self.room_num} | Capacity: {self.capacity}"
 
-    @property
-    def occupant_list(self):
-        from app.serializers import PersonSerializer
-        occupant_list = self.person_set.all()
-        serializer = PersonSerializer(occupant_list, many=True)
-        return serializer.data
 
     @property
     def occupant_count(self):

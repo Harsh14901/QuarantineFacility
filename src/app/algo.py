@@ -62,7 +62,13 @@ def make_allocation(patient):
     allocated = True
     for i in range(len(family)):
         patient = family[i]
-        fac_pref = patient.group.facility_preference.id
+        
+        try:
+            fac_pref = patient.group.facility_preference.id
+        except:
+            allocated = False
+            break
+        
         room_pk = check_allocation_possible(patient, facility_pk=fac_pref)
         if room_pk is not None:
             patient.room = Room.objects.get(id=room_pk)
@@ -115,7 +121,7 @@ def allocate(groups):
     return
 
 '''
-enter location in form of string of comma separated latitude and longitude
+enter location in form of string or comma separated latitude and longitude
 eg : '49.932707,11.588051'
 '''
 def get_distance(p1,p2):
