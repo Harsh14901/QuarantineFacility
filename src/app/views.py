@@ -137,21 +137,31 @@ class GroupViewSet(ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
-    # def get_serializer(self, *args, **kwargs):
-    #     print("Get serializer called")
-    #     kwargs['many'] = True
-    #     a = super().get_serializer(*args, **kwargs)
-    #     print("and it is returning , ",a)
-    #     return a
-
-# class GroupsAllocate(generics.GenericAPIView):
-#     queryset = Group.objects.all()
-#     serializer_class = GroupSerializer
-
-#     def get_serializer(self, *args, **kwargs):
-#         kwargs['many'] = True
-#         return super().get_serializer(*args, **kwargs)
-
-#     def create(self, request, *args, **kwargs):
-#         serializer = self.get_serializer(data=request.data,**kwargs)
+@api_view(['POST'])
+def AllocateGroups(request):
+    if request.method == "POST":
+        groups_data = []
+        groups = []
+        for group_data in request.data:
+            people_data = group_data.pop("person_set")
+            group_serializer = GroupSerializer(data=group_data)
+            if group_serializer.is_valid():
+                group = group_serializer.save(person_set=people_data)
+                if group is not None:
+                    groups.append(group)
+                
+            else:
+                return Response(group_serializer.errors,status=status.HTTP_400_BAD_REQUEST)
         
+        allocation = allocate(groups)
+        for group in groups:
+            groups_data.append(GroupSerializer(group).data)
+
+        return Response(groups_data)        
+    
+    
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    
+
+
