@@ -5,16 +5,18 @@ import cookie from 'react-cookies'
 class Facility extends Component {
   state={
     facilities:[]
-  }
+  };
+
+
   getFacilities(){
-    let thisFacility = this
-    const endpt = '/facilities/'
+    let thisFacility = this;
+    const endpt = '/facilities/';
     let lookupOpts = {
       method: 'GET',
       headers:{
         'Content-Type':'application/json'
       }
-    }
+    };
     fetch(endpt,lookupOpts).then(function(responnse){
       return responnse.json()
     }).then(function(data){
@@ -28,8 +30,8 @@ class Facility extends Component {
   }
 
   postFacility(){
-    const endpt = '/facilities/'
-    const csrf = cookie.load('csrftoken')
+    const endpt = '/facilities/';
+    const csrf = cookie.load('csrftoken');
     let facility = {
       //
     }
@@ -50,17 +52,17 @@ class Facility extends Component {
     this.setState({
       facilities:[]
     })
-    this.getFacilities(); 
+    this.getFacilities();
   }
 
   render() {
-    const {facilities} = this.state
+    const {facilities} = this.state;
     return (
       <div>
         <p>hello world this is a list of all facilities</p>
         {facilities.length > 0 ? facilities.map((facility,index)=>{
           return (<FacilityData name = {facility.name}/>)
-        }):<p>No facilities exist</p>}
+        }):<p>No Facilities exist</p>}
       </div>
     );
   }

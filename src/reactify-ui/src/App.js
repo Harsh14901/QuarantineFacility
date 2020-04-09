@@ -5,19 +5,14 @@ import  {useContext, useEffect, useReducer, useState} from 'react';
 import styles from './assets/jss/homeStyles'
 import { makeStyles } from "@material-ui/core/styles";
 import {TextField} from "@material-ui/core";
-import CustomInput from "components/CustomInput/CustomInput";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import Icon from "@material-ui/core/Icon";
 import Email from "@material-ui/icons/Email";
 import People from "@material-ui/icons/People";
-import {AccountCircle} from "@material-ui/icons";
 import MenuItem from "@material-ui/core/MenuItem";
 import CustomTabs from "components/CustomTabs/CustomTabs";
-import Fab from "@material-ui/core/Fab";
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Button from "@material-ui/core/Button";
-import Tooltip from "@material-ui/core/Tooltip";
 import tooltipsStyle from "assets/jss/material-kit-react/tooltipsStyle";
 import SvgIcon from "@material-ui/core/SvgIcon";
 import IconButton from "@material-ui/core/IconButton";
@@ -32,6 +27,8 @@ import PhoneIcon from "@material-ui/icons/Phone";
 import HomeIcon from "@material-ui/icons/Home"
 import GridContainer from "components/Grid/GridContainer";
 import GridItem from "components/Grid/GridItem";
+import GetFacilityData from "facility/GetFacilityData";
+import PostFacilityData from "facility/postFacilityData";
 
 
 
@@ -100,8 +97,15 @@ function App() {
 
         };
 
-        function submitDetails(){
+        function getFacilityData() {
+                GetFacilityData();
+        }
+        function postFacilityData() {
+                PostFacilityData();
+        }
 
+
+        function submitDetails(){
         }
 
         function addMember() {
@@ -130,6 +134,12 @@ function App() {
                       </button>
                       <button>
                               Search for a group
+                      </button>
+                      <button onClick={getFacilityData}>
+                              Get Data
+                      </button>
+                      <button onClick={postFacilityData}>
+                              Post Data
                       </button>
               </div>
               {addGrp?
