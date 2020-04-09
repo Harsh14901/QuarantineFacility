@@ -20,7 +20,7 @@ router.register(r'person-accomodation',PersonAccomodationViewSet)
 urlpatterns = [
     url('',include(router.urls)),
     url(r'^index/$',index,name="index"),
-    # path('groups/add/',GroupWriteViewSet.as_view(),name="group_add"),
+    url(r'^allocate/$',AllocateGroups,name="allocate"),
     url(r'^person/search/$',searchPerson,name="search_user"),
     url(r'^facility/search/$',searchFacility,name="search_facility"),
 
