@@ -4,18 +4,17 @@ import {func} from "prop-types";
 
 function PostFacilityData() {
 
-        const endpt = 'http://127.0.0.1:8000/facilities/';
+        const endpt = 'http://127.0.0.1:8000/groups/';
                 let lookupOpts = {
-                        method:'POST',
+                        method:'PATCH',
                         headers:{
                                 'Content-Type':'application/json',
                                 'Authorization': 'Basic YWRtaW46YWRtaW4xMjM0'
                         }
                 };
-                axios.post(endpt, {
+                axios.patch(endpt, {
                         "category": "family",
-                        "count": 4,
-                        "facility_preference": 11
+                        "facility_preference": 3
                 },lookupOpts). then(r => console.log(r)).catch(function(error){console.log(error)})
 
 }
