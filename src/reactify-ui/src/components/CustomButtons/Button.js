@@ -1,27 +1,23 @@
 import React from "react";
-// nodejs library to set properties for components
-import PropTypes from "prop-types";
 // nodejs library that concatenates classes
 import classNames from "classnames";
+// nodejs library to set properties for components
+import PropTypes from "prop-types";
 
-// @material-ui/core components
-import makeStyles from "@material-ui/core/styles/makeStyles";
+// material-ui components
+import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 
-// core components
+import styles from "assets/jss/material-dashboard-react/components/buttonStyle.js";
 
-import buttonStyle from "assets/jss/material-kit-react/components/buttonStyle.js";
+const useStyles = makeStyles(styles);
 
-const makeComponentStyles = makeStyles(() => ({
-  ...buttonStyle
-}));
-
-const RegularButton = React.forwardRef((props, ref) => {
+export default function RegularButton(props) {
+  const classes = useStyles();
   const {
     color,
     round,
     children,
-    fullWidth,
     disabled,
     simple,
     size,
@@ -29,17 +25,14 @@ const RegularButton = React.forwardRef((props, ref) => {
     link,
     justIcon,
     className,
+    muiClasses,
     ...rest
   } = props;
-
-  const classes = makeComponentStyles();
-
   const btnClasses = classNames({
     [classes.button]: true,
     [classes[size]]: size,
     [classes[color]]: color,
     [classes.round]: round,
-    [classes.fullWidth]: fullWidth,
     [classes.disabled]: disabled,
     [classes.simple]: simple,
     [classes.block]: block,
@@ -48,11 +41,11 @@ const RegularButton = React.forwardRef((props, ref) => {
     [className]: className
   });
   return (
-    <Button {...rest} ref={ref} className={btnClasses}>
+    <Button {...rest} classes={muiClasses} className={btnClasses}>
       {children}
     </Button>
   );
-});
+}
 
 RegularButton.propTypes = {
   color: PropTypes.oneOf([
@@ -63,22 +56,17 @@ RegularButton.propTypes = {
     "danger",
     "rose",
     "white",
-    "facebook",
-    "twitter",
-    "google",
-    "github",
     "transparent"
   ]),
   size: PropTypes.oneOf(["sm", "lg"]),
   simple: PropTypes.bool,
   round: PropTypes.bool,
-  fullWidth: PropTypes.bool,
   disabled: PropTypes.bool,
   block: PropTypes.bool,
   link: PropTypes.bool,
   justIcon: PropTypes.bool,
-  children: PropTypes.node,
-  className: PropTypes.string
+  className: PropTypes.string,
+  // use this to pass the classes props from Material-UI
+  muiClasses: PropTypes.object,
+  children: PropTypes.node
 };
-
-export default RegularButton;

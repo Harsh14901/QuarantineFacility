@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-function getFacilityData() {
+const getFacilityData = callback => {
         const endpt = 'http://127.0.0.1:8000/facilities/';
         let lookupOpts = {
                 method: 'GET',
@@ -11,10 +11,10 @@ function getFacilityData() {
         axios.get(endpt,lookupOpts).then(function(response){
                 return response.data
         }).then(function(data){
-                console.log("Ok I print data I got from server");
-                console.log(data);
+                return data
 
-        }).catch(function(error){
+        }).then(res => callback(res))
+            .catch(function(error){
                 console.error(error)
         })
 
