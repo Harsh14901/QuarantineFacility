@@ -121,11 +121,11 @@ class Facility(models.Model):
         return count
     
     @property
-    def occupancy_count(self):
+    def occupant_count(self):
         wards = self.ward_set.all()
         count = 0
         for ward in wards:
-            count += ward.occupancy_count
+            count += ward.occupant_count
         return count
 
 
@@ -156,7 +156,7 @@ class Ward(models.Model):
         return count
 
     @property
-    def occupancy_count(self):
+    def occupant_count(self):
         rooms = self.room_set.all()
         count = 0
         for room in rooms:

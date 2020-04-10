@@ -86,7 +86,7 @@ class RoomSerializer(serializers.ModelSerializer):
 
     class Meta():
         model = Room
-        fields = ['id','ward', 'category', 'room_num',
+        fields = ['id','ward', 'category', 'room_num','occupant_count',
                   'floor', 'area', 'capacity', 'person_set']
 
 
@@ -95,7 +95,7 @@ class WardSerializer(serializers.ModelSerializer):
 
     class Meta():
         model = Ward
-        fields = ['id','facility', 'category', 'room_count', 'capacity', 'room_set']
+        fields = ['id','facility', 'category','occupant_count' ,'room_count', 'capacity', 'room_set']
 
 
 class FacilitySerializer(serializers.ModelSerializer):
@@ -103,5 +103,5 @@ class FacilitySerializer(serializers.ModelSerializer):
 
     class Meta():
         model = Facility
-        fields = ['id', 'name', 'owner', 'address', 'capacity',
+        fields = ['id', 'name', 'owner', 'address', 'capacity','occupant_count',
                   'room_count', 'ward_set', 'latitude', 'longitude']
