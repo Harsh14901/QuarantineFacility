@@ -14,11 +14,11 @@ class RoomAdmin(admin.ModelAdmin):
 
 @admin.register(Ward)
 class WardAdmin(admin.ModelAdmin):
-    list_display = ['category','capacity','room_count','facility','occupancy_count']
+    list_display = ['category','capacity','room_count','facility','occupant_count']
 
 @admin.register(Facility)
 class FacilityAdmin(admin.ModelAdmin):
-    list_display = ['name','owner','capacity','room_count','address','occupancy_count']
+    list_display = ['name','owner','capacity','room_count','address','occupant_count']
 
 @admin.register(Person)
 class PersonAdmin(admin.ModelAdmin):
