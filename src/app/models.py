@@ -12,8 +12,17 @@ RiskChoices=(
 
 # Create your models here.
 class Person(models.Model):
+    MALE = 'M'
+    FEMALE = 'F'
+    OTHER = 'Other'
+    GenderChoices = (
+        (MALE,"Male"),
+        (FEMALE,"Female"),
+        (OTHER,"Other"),
+    )
     name = models.CharField(max_length=100)
     age = models.SmallIntegerField(blank=False, null=False)
+    gender = models.CharField(max_length=50,choices=GenderChoices,null=True)
     address = models.TextField()
     contact_num = PhoneField(null=True,blank=True)
     email = models.EmailField(max_length=254,null=True,blank=True)
@@ -35,6 +44,14 @@ class Person(models.Model):
         pr.append(1 if self.group.vip else 2)
         pr.append(-self.age)
         return pr
+
+    @property
+    def facility_name(self):
+        try:
+            Facility.objects.get(id=self.facility_pk)
+        except:
+            return None
+        return Facility.objects.get(id=self.facility_pk).name
 
     @property
     def room_pk(self):
