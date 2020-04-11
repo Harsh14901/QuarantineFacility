@@ -60,9 +60,9 @@ export default function UserProfile() {
                         console.log(result);
                         setPeopleData(result);
                         let details=[];
-                         result.map((data) =>{
+                         result.map((data,j) =>{
                                  details.push({id:data.id,name:data.name,age:data.age,member_count:-1
-                                         ,facility:"",risk: data.risk,"date":"",number: data.contact_num,email:data.email})
+                                         ,facility:data.facility_pk,risk: data.risk,"date":"",number: data.contact_num,email:data.email})
                          });
                         setDataDisplay(details);
                 };

@@ -17,6 +17,7 @@ import avatar from "assets/img/faces/marc.jpg";
 import GetFacilityData from "facility/GetFacilityData";
 import CustomTable from "components/CustomTable";
 import GetPeopleData from "PeopleData/GetPeopleData";
+import GetGroupData from "PeopleData/GetGroupData";
 
 const styles = {
         cardCategoryWhite: {
@@ -48,8 +49,7 @@ export default function GroupsDetail() {
                 { title: 'ID', field: 'id' },
                 { title: 'Category', field: 'category' },
                 { title: 'Group Members', field: 'count' },
-                { title: 'Facility', field: 'facility' },
-                { title: 'Risk',field: 'risk'},
+                { title: 'People with high Risk',field: 'risk'},
                 {
                         title: 'Date Quarantined',
                         field: 'date',
@@ -58,15 +58,20 @@ export default function GroupsDetail() {
         function getGroupsData() {
                 const callback = result => {
                         console.log(result);
-                        setPeopleData(result);
+                        setGroupData(result);
                         let details=[];
                         result.map((data) =>{
-                                details.push({id:data.id,name:data.name,age:data.age,member_count:-1
-                                        ,facility:"",risk: data.risk,"date":"",number: data.contact_num,email:data.email})
+                                let high=0
+                                data.person_set.map((data)=>{
+                                        if(data.risk==="high")
+                                                high++
+                                });
+                                details.push({id:data.id,category:data.category,count:data.count
+                                        ,risk: high,date:""})
                         });
                         setDataDisplay(details);
                 };
-                GetPeopleData(callback)
+                GetGroupData(callback)
         }
 
         useEffect(() => {
