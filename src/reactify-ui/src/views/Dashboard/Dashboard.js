@@ -28,6 +28,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
+import 'assets/css/chartist.css'
 
 import { bugs, website, server } from "variables/general.js";
 
@@ -280,7 +281,6 @@ export default function Dashboard() {
           </Card>
         </GridItem>
       </GridContainer>
-            <ChartistGraph data={data} options={options} type={type}/>
     </div>
   );
 }

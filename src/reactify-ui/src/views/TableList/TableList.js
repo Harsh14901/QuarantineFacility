@@ -117,7 +117,7 @@ export default function TableList() {
                                     <StatDetailCard title="Ward 1 Capacity" color="success" data={ward1TotalCapacity} status={"Just Updated"} />
                             </GridItem>
                             <GridItem xs={12} sm={12} md={4}>
-                                    <StatDetailCard title="Ward 2 Capacity" color="danger" data={ward2TotalCapacity} status={"Just Updated"} />
+                                    <StatDetailCard graph d1={ward1TotalCapacity} d2={facilityTotalCapacity}  title="Ward 2 Capacity" color="danger" data={ward2TotalCapacity} status={"Just Updated"} />
                             </GridItem>
                     </GridContainer>
     <GridContainer>
