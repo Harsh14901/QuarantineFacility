@@ -51,8 +51,9 @@ class PersonSerializer(serializers.ModelSerializer):
 
     class Meta():
         model = Person
-        fields = ['id', 'name', 'age', 'contact_num', 'email', 'risk', 'vip',
-                  'luxuries', 'group', 'latitude', 'longitude','room' ,'checkuprecords_set','room_pk','ward_pk','facility_pk']
+
+        fields = ['id', 'name', 'age','gender' ,'contact_num', 'email', 'risk', 'vip',
+                  'luxuries', 'group', 'latitude', 'longitude','room' ,'checkuprecords_set','room_pk','ward_pk','facility_pk','facility_name']
      
 
 class GroupSerializer(serializers.ModelSerializer):
