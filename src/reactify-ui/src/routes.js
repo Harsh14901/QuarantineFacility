@@ -29,6 +29,7 @@ import DashboardPage from "views/Dashboard/Dashboard.js";
 import UserProfile from "views/UserProfile/UserProfile.js";
 import TableList from "views/TableList/TableList.js";
 import Typography from "views/Typography/Typography.js";
+import GroupsDetail from "views/Groups/GroupsDetail";
 // import Icons from "views/Icons/Icons.js";
 // import Maps from "views/Maps/Maps.js";
 // import NotificationsPage from "views/Notifications/Notifications.js";
@@ -60,7 +61,7 @@ const dashboardRoutes = [
     path: "/groups",
     name: "Groups",
     icon: LibraryBooks,
-    component: TableList,
+    component: GroupsDetail,
     layout: "/admin"
   },
   // {

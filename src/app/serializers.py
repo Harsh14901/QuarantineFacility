@@ -52,7 +52,7 @@ class PersonSerializer(serializers.ModelSerializer):
     class Meta():
         model = Person
         fields = ['id', 'name', 'age', 'contact_num', 'email', 'risk', 'vip',
-                  'luxuries', 'group', 'latitude', 'longitude','room' ,'checkuprecords_set']
+                  'luxuries', 'group', 'latitude', 'longitude','room' ,'checkuprecords_set','room_pk','ward_pk','facility_pk']
      
 
 class GroupSerializer(serializers.ModelSerializer):
