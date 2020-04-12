@@ -36,12 +36,12 @@ const useStyles2 = makeStyles(styles2);
 
 const useStyles = makeStyles(styles);
 
-function AddGroupDialog() {
+function AddGroupDialog(props) {
         const classes =useStyles();
         const classes2 = useStyles2();
 
 
-        const defaultUserDetail={name: "",age: 18,address: "",severe: false,contact: "",email: ""};
+        const defaultUserDetail={name: "",age: 18,address: "",risk: false,contact: "",email: "",latitude:"80.12345",longitude:"80.12345",vip:false};
         const [userDetails,setUserDetails] = useState([defaultUserDetail,defaultUserDetail]);
         const [step,setStep] = useState(1);
         const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
@@ -111,8 +111,11 @@ function AddGroupDialog() {
 
 
         function submitDetails(){
-                console.log("Submitting",userDetails)
-
+                let temp=[];
+                userDetails.map((data,j)=>{
+                        temp.push({...userDetails[j],vip: VIPStatus,risk: userDetails[j].risk?"high":"low"})
+                });
+                props.submitFunc([{category:(category?"adults":"family"),facility_preference:3,person_set: temp}])
         }
 
         function goNext(){
@@ -208,8 +211,8 @@ function AddGroupDialog() {
                                                                 id="severity"
                                                                 select
                                                                 label="Severity"
-                                                                value={userDetails[j].severe}
-                                                                onChange={handleChange('severe',j)}
+                                                                value={userDetails[j].risk}
+                                                                onChange={handleChange('risk',j)}
                                                                 fullWidth={true}
                                                                 InputProps={{style: {fontSize: "0.9rem"}}}
 
@@ -300,7 +303,7 @@ function AddGroupDialog() {
                             :<Card className={classes2[cardAnimaton]}>
                                                 <form className={classes2.form}>
                                                         <CardHeader color="primary" className={classes2.cardHeader}>
-                                                                <h4>GROUP DETAILS</h4>
+                                                                <h4>ADDITIONAL GROUP DETAILS</h4>
                                                         </CardHeader>
                                                         <CardBody>
                                                                 <FormControlLabel
