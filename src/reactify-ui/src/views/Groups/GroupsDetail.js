@@ -18,6 +18,12 @@ import GetFacilityData from "facility/GetFacilityData";
 import CustomTable from "components/CustomTable";
 import GetPeopleData from "PeopleData/GetPeopleData";
 import GetGroupData from "PeopleData/GetGroupData";
+import Fab from "@material-ui/core/Fab";
+import AddIcon from '@material-ui/icons/Add';
+import Dialog from "@material-ui/core/Dialog";
+import AddGroupDialog from "views/Components/AddGroupDialog";
+import LoginPage from "views/Components/LoginPage";
+
 
 const styles = {
         cardCategoryWhite: {
@@ -44,6 +50,7 @@ export default function GroupsDetail() {
         const classes = useStyles();
         const [groupData,setGroupData]=useState([]);
         const [dataDisplay,setDataDisplay] = useState([]);
+        const [groupAddDialog,setGroupAddDialog] = useState(false);
 
         const columnsHeading=[
                 { title: 'ID', field: 'id' },
@@ -78,10 +85,24 @@ export default function GroupsDetail() {
                 getGroupsData();
         }, []);
 
+        const handleClose= () => {
+                setGroupAddDialog(false);
+        };
 
+
+        function handleOpen()  {
+                setGroupAddDialog(true)
+        };
 
 
         return (
+            <div >
+                    <div  style={{marinLeft:"100px"}}>
+                    <Fab variant="extended" color="primary" onClick={handleOpen}>
+                            <AddIcon className={classes.extendedIcon} />
+                            Add Group
+                    </Fab>
+                    </div>
             <GridContainer>
                     <GridItem xs={12} sm={12} md={12}>
                             <Card>
@@ -100,5 +121,20 @@ export default function GroupsDetail() {
                             </Card>
                     </GridItem>
             </GridContainer>
+                    <Dialog
+                        open={groupAddDialog}
+                        PaperProps={{
+                                style: {
+                                        backgroundColor: 'transparent',
+                                        boxShadow: 'none',
+                                        scrollbarColor: "transparent"
+                                },
+                        }}
+                        onClose={handleClose}
+                    >
+                            <AddGroupDialog />
+
+                    </Dialog>
+            </div>
         );
 }
