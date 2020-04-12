@@ -34,6 +34,9 @@ class Person(models.Model):
     latitude = models.FloatField(null=True)
     longitude = models.FloatField(null=True)
 
+    #Date of Admission
+    doa = models.DateField(auto_now=False, auto_now_add=True,null=True,blank=True)
+
     def __str__(self):
         return f"{self.name} | RISK is {self.risk}"
 
