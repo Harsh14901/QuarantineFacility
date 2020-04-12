@@ -23,6 +23,9 @@ import AddIcon from '@material-ui/icons/Add';
 import Dialog from "@material-ui/core/Dialog";
 import AddGroupDialog from "views/Components/AddGroupDialog";
 import LoginPage from "views/Components/LoginPage";
+import PostGroupData from "PeopleData/postGroupData";
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
 
 
 const styles = {
@@ -51,6 +54,9 @@ export default function GroupsDetail() {
         const [groupData,setGroupData]=useState([]);
         const [dataDisplay,setDataDisplay] = useState([]);
         const [groupAddDialog,setGroupAddDialog] = useState(false);
+        const [succesAlert,setSuccessAlert] = useState(false);
+
+
 
         const columnsHeading=[
                 { title: 'ID', field: 'id' },
@@ -89,10 +95,42 @@ export default function GroupsDetail() {
                 setGroupAddDialog(false);
         };
 
+        const handleAlertClose = () =>{
+                setSuccessAlert(false)
+        };
 
         function handleOpen()  {
                 setGroupAddDialog(true)
         };
+
+        function submitDetails(data){
+                console.log("Submitting",data);
+                console.log("Hello boy",JSON.stringify(data));
+                handleClose();
+
+                const callback = result => {
+                        console.log(result);
+                        console.log("Hurrah");
+                        let temp=[];
+                        temp=[...groupData];
+                        setGroupData(temp.concat(result));
+                        let details=[];
+                        result.map((data) =>{
+                                let high=0;
+                                data.person_set.map((data)=>{
+                                        if(data.risk==="high")
+                                                high++
+                                });
+                                details.push({id:data.id,category:data.category,count:data.count
+                                        ,risk: high,date:""})
+                        });
+                        setDataDisplay(dataDisplay.concat(details));
+                        setSuccessAlert(true)
+
+                };
+                PostGroupData(callback,data)
+
+        }
 
 
         return (
@@ -132,9 +170,14 @@ export default function GroupsDetail() {
                         }}
                         onClose={handleClose}
                     >
-                            <AddGroupDialog />
+                            <AddGroupDialog submitFunc={submitDetails}/>
 
                     </Dialog>
+                    <Snackbar open={succesAlert} autoHideDuration={6000} onClose={handleClose}>
+                            <Alert onClose={handleAlertClose} severity="success">
+                                    Group Added Successfully
+                            </Alert>
+                    </Snackbar>
             </div>
         );
 }
