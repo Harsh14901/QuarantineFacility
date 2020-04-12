@@ -173,7 +173,7 @@ export default function GroupsDetail() {
                             <AddGroupDialog submitFunc={submitDetails}/>
 
                     </Dialog>
-                    <Snackbar open={succesAlert} autoHideDuration={6000} onClose={handleClose}>
+                    <Snackbar open={succesAlert} autoHideDuration={6000} onClose={handleAlertClose}>
                             <Alert onClose={handleAlertClose} severity="success">
                                     Group Added Successfully
                             </Alert>
