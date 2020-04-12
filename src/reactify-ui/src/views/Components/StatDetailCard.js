@@ -52,7 +52,13 @@ function StatDetailCard(props){
                             </CardIcon>
                             <p className={classes.cardCategory}>{props.title}</p>
                             <h3 className={classes.cardTitle}>{props.data}</h3>
-                            {props.graph?<Doughnut data={data} />:null}
+                            {props.graph?
+                                <div>
+                                <Doughnut data={data} options={
+                                    {legend: {
+                                    display: false} }}/>
+                                </div>
+                                :null}
                             {/*<ChartistGraph*/}
                             {/*    className="ct-chart"*/}
                             {/*    data={data}*/}

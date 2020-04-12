@@ -2,9 +2,8 @@ import cookie from "react-cookies";
 import axios from 'axios';
 import {func} from "prop-types";
 
-const PostFacilityData = (callback,data) => {
+const PostData = (callback,data,url) => {
 
-        const endpt = 'http://127.0.0.1:8000/facilities/';
         let lookupOpts = {
                 method:'POST',
                 headers:{
@@ -13,8 +12,8 @@ const PostFacilityData = (callback,data) => {
                         'Accept': 'application/json'
                 }
         };
-        axios.post(endpt, data,lookupOpts). then(r => callback(r.data)).catch(function(error){console.log("hi",error)})
+        axios.post(url, data,lookupOpts). then(r => callback(r.data)).catch(function(error){console.log("hi",error)})
 
 };
 
-export default PostFacilityData
+export default PostData

@@ -92,10 +92,6 @@ function AddGroupDialog(props) {
                 { icon: <RestoreIcon />, name: 'Reset Member Details' },
         ];
 
-        const handleInputChange = e => {
-                const {id, value} = e.target;
-        };
-
 
         const handleChange = (prop,j) => (event) => {
                 if(prop==='age'){
@@ -169,7 +165,6 @@ function AddGroupDialog(props) {
                                                             <CustomInput
                                                                 labelText="Age..."
                                                                 id="age"
-                                                                onChange={handleInputChange}
                                                                 formControlProps={{
                                                                         fullWidth: true
                                                                 }}
@@ -190,7 +185,6 @@ function AddGroupDialog(props) {
                                                                 labelText="Address..."
                                                                 id="address"
                                                                 required
-                                                                onChange={handleInputChange}
                                                                 formControlProps={{
                                                                         fullWidth: true
                                                                 }}
@@ -228,7 +222,6 @@ function AddGroupDialog(props) {
                                                                 labelText="Contact Number..."
                                                                 id="contact"
                                                                 value={userDetails[j].contact}
-                                                                onChange={handleInputChange}
                                                                 formControlProps={{
                                                                         fullWidth: true
                                                                 }}
@@ -249,7 +242,6 @@ function AddGroupDialog(props) {
                                                                 labelText="Email..."
                                                                 id="email"
                                                                 required
-                                                                onChange={handleInputChange}
                                                                 formControlProps={{
                                                                         fullWidth: true
                                                                 }}
