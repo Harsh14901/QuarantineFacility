@@ -53,7 +53,7 @@ class PersonSerializer(serializers.ModelSerializer):
         model = Person
 
         fields = ['id', 'name', 'age','gender' ,'contact_num', 'email', 'risk', 'vip',
-                  'luxuries', 'group', 'latitude', 'longitude','room' ,'checkuprecords_set','room_pk','ward_pk','facility_pk','facility_name']
+                  'luxuries', 'group', 'latitude', 'longitude','room' ,'checkuprecords_set','room_pk','ward_pk','facility_pk','facility_name','doa']
      
 
 class GroupSerializer(serializers.ModelSerializer):
