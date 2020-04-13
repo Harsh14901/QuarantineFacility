@@ -134,6 +134,7 @@ export default function TableList() {
                         setSuccessAlert(true)
                         handleClose();
                 };
+                console.log("submit detaisl",JSON.stringify(data));
                 PostData(callback,data,'http://127.0.0.1:8000/rooms/')
 
         }
