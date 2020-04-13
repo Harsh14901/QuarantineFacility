@@ -2,7 +2,7 @@ from .models import *
 import random
 import requests
 
-
+INFINITY = 1000000000
 def check_allocation_possible(person, **kwargs):
 
     if "facility_pk" in kwargs:
@@ -78,7 +78,8 @@ def make_allocation(patient):
                 human.room = None
                 human.save()
             allocated = False
-            break    
+            break  
+          
     if allocated:
         return True
     else:
@@ -92,6 +93,8 @@ def make_allocation(patient):
                 if room_pk is not None:
                     patient.room = Room.objects.get(id=room_pk)
                     patient.save()
+                    print('{} successfully allocated at room{} in {}'.format(patient,patient.room,patient.room.ward.facility.name))
+        
                 else:
                     for human in family[:i]:
                         human.room = None
@@ -101,8 +104,10 @@ def make_allocation(patient):
                     print('sry')
                     break    
             if allocated:
-                return True      
-    
+                return True
+        if not allocated:
+            pass  
+
 
     return False
 
@@ -115,6 +120,9 @@ def allocate(groups):
             continue
         if not make_allocation(patient):
             failed.append(patient)
+        else:
+            # print('{} successfully allocated in {}'.format(patient,patient.room.ward.facility.name))
+            pass
 
     if failed != []:
         return failed
@@ -150,7 +158,8 @@ def get_all_distances(patient):
             p2='{},{}'.format(facility.latitude,facility.longitude)
             d.append((get_distance(p1,p2),facility))    
         except:
-            print('wrong location',facility,patient)
+            print('wrong location of either {},or {}'.format(facility,patient))
+            d.append((INFINITY,facility))
     d.sort(key=lambda x:x[0])
     print(d)  
     return d
