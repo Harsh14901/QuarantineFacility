@@ -10,7 +10,10 @@ def get_sorted_rooms(person,facility):
         if((person.risk == HIGH_RISK and ward.category == Ward.WARD1) or (person.risk == LOW_RISK and ward.category == Ward.WARD2)):
             for room in ward.room_set.all():
                 room_list.append(room)
-    room_list.sort(key=lambda x: x.category)
+    if person.vip:
+        room_list.sort(key=lambda x: x.category,reverse=True)
+    else:
+        random.shuffle(room_list)
     for room in room_list:
         print(room)
     print()
@@ -24,8 +27,6 @@ def check_allocation_possible(person, **kwargs):
         facility = Facility.objects.get(id=facility_pk)
 
         sorted_rooms = get_sorted_rooms(person,facility)
-        if person.vip:
-            sorted_rooms.reverse()
 
         for room in sorted_rooms:
             room_pk = check_allocation_possible(person,room_pk=room.id)
@@ -88,7 +89,7 @@ def make_allocation(patient):
         patient = family[i]
         
         try:
-            fac_pref = 3
+            fac_pref = 8
             # fac_pref = patient.group.facility_preference.id
         except:
             allocated = False
@@ -108,7 +109,7 @@ def make_allocation(patient):
     if allocated:
         return True
     else:
-        
+        print('allocating through GEO API')
         row = get_all_distances(patient)
         for fac_tuple in row:
             allocated = True
