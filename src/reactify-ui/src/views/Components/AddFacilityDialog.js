@@ -144,7 +144,7 @@ function AddFacilityDialog(props){
                                 details.push({ward: id,category: id+"",room_num: parseInt(data2),floor: 0,area:data.area,capacity:data.capacity})
                         })
                 });
-                props.submitFunc(details);
+                props.submitFunc({details});
                 console.log("Submitting Details",details)
         }
 
