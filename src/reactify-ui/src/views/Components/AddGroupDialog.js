@@ -111,7 +111,7 @@ function AddGroupDialog(props) {
                 userDetails.map((data,j)=>{
                         temp.push({...userDetails[j],vip: VIPStatus,risk: userDetails[j].risk?"high":"low"})
                 });
-                props.submitFunc([{category:(category?"adults":"family"),facility_preference:3,person_set: temp}])
+                props.submitFunc([{category:(category?"adults":"family"),person_set: temp}])
         }
 
         function goNext(){

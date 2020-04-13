@@ -139,12 +139,11 @@ function AddFacilityDialog(props){
                         if(num!=="")
                                 numbers.push(num);
                         numbers.map((data2) => {
-
-                                const id =(data.category===1)?1:2
-                                details.push({ward: id,category: id+"",room_num: parseInt(data2),floor: 0,area:data.area,capacity:data.capacity})
+                                const id =(data.category===1)?ward1Id:ward2Id;
+                                details.push({ward: id,category: data.category+"",room_num: parseInt(data2),floor: 0,area:data.area,capacity:data.capacity})
                         })
                 });
-                props.submitFunc({details});
+                props.submitFunc(details);
                 console.log("Submitting Details",details)
         }
 
