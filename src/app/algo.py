@@ -3,26 +3,50 @@ import random
 import requests
 
 INFINITY = 1000000000
+
+def get_sorted_rooms(person,facility):
+    room_list = []
+    for ward in facility.ward_set.all():
+        if((person.risk == HIGH_RISK and ward.category == Ward.WARD1) or (person.risk == LOW_RISK and ward.category == Ward.WARD2)):
+            for room in ward.room_set.all():
+                room_list.append(room)
+    room_list.sort(key=lambda x: x.category)
+    for room in room_list:
+        print(room)
+    print()
+    return room_list
+
+
 def check_allocation_possible(person, **kwargs):
 
     if "facility_pk" in kwargs:
         facility_pk = kwargs.pop("facility_pk")
         facility = Facility.objects.get(id=facility_pk)
-        for ward in facility.ward_set.all():
-            room_pk = check_allocation_possible(person, ward_pk=ward.id)
+
+        sorted_rooms = get_sorted_rooms(person,facility)
+        if person.vip:
+            sorted_rooms.reverse()
+
+        for room in sorted_rooms:
+            room_pk = check_allocation_possible(person,room_pk=room.id)
             if room_pk is not None:
                 return room_pk
+        
+        # for ward in facility.ward_set.all():
+        #     room_pk = check_allocation_possible(person, ward_pk=ward.id)
+        #     if room_pk is not None:
+        #         return room_pk
 
-    elif "ward_pk" in kwargs:
-        ward_pk = kwargs.pop("ward_pk")
-        ward = Ward.objects.get(id=ward_pk)
+    # elif "ward_pk" in kwargs:
+    #     ward_pk = kwargs.pop("ward_pk")
+    #     ward = Ward.objects.get(id=ward_pk)
 
-        # Check if the risk level matches the ward it is being allocated to
-        if((person.risk == HIGH_RISK and ward.category == Ward.WARD1) or (person.risk == LOW_RISK and ward.category == Ward.WARD2)):
-            for room in ward.room_set.all():
-                room_pk = check_allocation_possible(person, room_pk=room.id)
-                if room_pk is not None:
-                    return room_pk
+    #     # Check if the risk level matches the ward it is being allocated to
+    #     if((person.risk == HIGH_RISK and ward.category == Ward.WARD1) or (person.risk == LOW_RISK and ward.category == Ward.WARD2)):
+    #         for room in ward.room_set.all():
+    #             room_pk = check_allocation_possible(person, room_pk=room.id)
+    #             if room_pk is not None:
+    #                 return room_pk
 
     elif "room_pk" in kwargs:
         room_pk = kwargs.pop("room_pk")
@@ -64,7 +88,8 @@ def make_allocation(patient):
         patient = family[i]
         
         try:
-            fac_pref = patient.group.facility_preference.id
+            fac_pref = 3
+            # fac_pref = patient.group.facility_preference.id
         except:
             allocated = False
             break
@@ -93,7 +118,7 @@ def make_allocation(patient):
                 if room_pk is not None:
                     patient.room = Room.objects.get(id=room_pk)
                     patient.save()
-                    print('{} successfully allocated at room{} in {}'.format(patient,patient.room,patient.room.ward.facility.name))
+                    print('{} successfully allocated at room {} in {}'.format(patient,patient.room,patient.room.ward.facility.name))
         
                 else:
                     for human in family[:i]:
