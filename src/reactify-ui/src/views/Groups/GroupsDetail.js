@@ -17,6 +17,16 @@ import avatar from "assets/img/faces/marc.jpg";
 import GetFacilityData from "facility/GetFacilityData";
 import CustomTable from "components/CustomTable";
 import GetPeopleData from "PeopleData/GetPeopleData";
+import GetGroupData from "PeopleData/GetGroupData";
+import Fab from "@material-ui/core/Fab";
+import AddIcon from '@material-ui/icons/Add';
+import Dialog from "@material-ui/core/Dialog";
+import AddGroupDialog from "views/Components/AddGroupDialog";
+import LoginPage from "views/Components/LoginPage";
+import PostGroupData from "PeopleData/postGroupData";
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
+
 
 const styles = {
         cardCategoryWhite: {
@@ -43,13 +53,16 @@ export default function GroupsDetail() {
         const classes = useStyles();
         const [groupData,setGroupData]=useState([]);
         const [dataDisplay,setDataDisplay] = useState([]);
+        const [groupAddDialog,setGroupAddDialog] = useState(false);
+        const [succesAlert,setSuccessAlert] = useState(false);
+
+
 
         const columnsHeading=[
                 { title: 'ID', field: 'id' },
                 { title: 'Category', field: 'category' },
                 { title: 'Group Members', field: 'count' },
-                { title: 'Facility', field: 'facility' },
-                { title: 'Risk',field: 'risk'},
+                { title: 'People with high Risk',field: 'risk'},
                 {
                         title: 'Date Quarantined',
                         field: 'date',
@@ -58,25 +71,76 @@ export default function GroupsDetail() {
         function getGroupsData() {
                 const callback = result => {
                         console.log(result);
-                        setPeopleData(result);
+                        setGroupData(result);
                         let details=[];
                         result.map((data) =>{
-                                details.push({id:data.id,name:data.name,age:data.age,member_count:-1
-                                        ,facility:"",risk: data.risk,"date":"",number: data.contact_num,email:data.email})
+                                let high=0
+                                data.person_set.map((data)=>{
+                                        if(data.risk==="high")
+                                                high++
+                                });
+                                details.push({id:data.id,category:data.category,count:data.count
+                                        ,risk: high,date:""})
                         });
                         setDataDisplay(details);
                 };
-                GetPeopleData(callback)
+                GetGroupData(callback)
         }
 
         useEffect(() => {
                 getGroupsData();
         }, []);
 
+        const handleClose= () => {
+                setGroupAddDialog(false);
+        };
 
+        const handleAlertClose = () =>{
+                setSuccessAlert(false)
+        };
+
+        function handleOpen()  {
+                setGroupAddDialog(true)
+        };
+
+        function submitDetails(data){
+                console.log("Submitting",data);
+                console.log("Hello boy",JSON.stringify(data));
+                handleClose();
+
+                const callback = result => {
+                        console.log(result);
+                        console.log("Hurrah");
+                        let temp=[];
+                        temp=[...groupData];
+                        setGroupData(temp.concat(result));
+                        let details=[];
+                        result.map((data) =>{
+                                let high=0;
+                                data.person_set.map((data)=>{
+                                        if(data.risk==="high")
+                                                high++
+                                });
+                                details.push({id:data.id,category:data.category,count:data.count
+                                        ,risk: high,date:""})
+                        });
+                        setDataDisplay(dataDisplay.concat(details));
+                        setSuccessAlert(true)
+
+                };
+                PostGroupData(callback,data)
+
+        }
 
 
         return (
+            <div >
+                    <div  style={{marinLeft:"100px"}}>
+                    <Fab variant="extended" color="primary" onClick={handleOpen}>
+                            <AddIcon className={classes.extendedIcon} />
+                            Add Group
+                    </Fab>
+                    </div>
             <GridContainer>
                     <GridItem xs={12} sm={12} md={12}>
                             <Card>
@@ -95,5 +159,25 @@ export default function GroupsDetail() {
                             </Card>
                     </GridItem>
             </GridContainer>
+                    <Dialog
+                        open={groupAddDialog}
+                        PaperProps={{
+                                style: {
+                                        backgroundColor: 'transparent',
+                                        boxShadow: 'none',
+                                        scrollbarColor: "transparent"
+                                },
+                        }}
+                        onClose={handleClose}
+                    >
+                            <AddGroupDialog submitFunc={submitDetails}/>
+
+                    </Dialog>
+                    <Snackbar open={succesAlert} autoHideDuration={6000} onClose={handleAlertClose}>
+                            <Alert onClose={handleAlertClose} severity="success">
+                                    Group Added Successfully
+                            </Alert>
+                    </Snackbar>
+            </div>
         );
 }

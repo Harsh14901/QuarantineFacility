@@ -12,6 +12,14 @@ import CardBody from "components/Card/CardBody.js";
 import GetFacilityData from "facility/GetFacilityData";
 import CustomTable from "components/CustomTable";
 import StatDetailCard from "views/Components/StatDetailCard";
+import Dialog from "@material-ui/core/Dialog";
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
+import {func} from "prop-types";
+import AddIcon from "@material-ui/icons/Add";
+import Fab from "@material-ui/core/Fab";
+import AddFacilityDialog from "views/Components/AddFacilityDialog";
+import PostData from "facility/postData";
 
 const styles = {
   cardCategoryWhite: {
@@ -56,6 +64,10 @@ export default function TableList() {
         const [facilityTotalCapacity,setFacilityTotalCapacity] =useState("0/0");
         const [ward1TotalCapacity,setWard1TotalCapacity] = useState("0/0");
         const [ward2TotalCapacity,setWard2TotalCapacity] = useState("0/0");
+        const [addFacilityDialog,setAddFacilityDialog] = useState(false);
+        const [successAlert,setSuccessAlert] =useState(false);
+
+
 
         const columnsHeading=[
                 { title: 'Facility Name', field: 'name' },
@@ -66,6 +78,17 @@ export default function TableList() {
                         field: 'capacity',
                 },
         ];
+
+        function handleAlertClose(){
+                setSuccessAlert(true)
+        }
+        function handleClose(){
+                setAddFacilityDialog(false)
+        }
+        function handleOpen(){
+                setAddFacilityDialog(true)
+        }
+
         function getFacilityData() {
                 const callback = result => {
                         console.log(result);
@@ -105,21 +128,36 @@ export default function TableList() {
         }, []);
 
 
+        function submitDetails(data){
+                const callback = result => {
+                        console.log("this is result",result);
+                        setSuccessAlert(true)
+                        handleClose();
+                };
+                console.log("submit detaisl",JSON.stringify(data));
+                PostData(callback,data,'http://127.0.0.1:8000/rooms/')
+
+        }
+
 
 
         return (
             <div>
                     <GridContainer justifyContent={"center"}>
                             <GridItem xs={12} sm={12} md={4}>
-                                    <StatDetailCard title="Total Capacity" data={facilityTotalCapacity} status={"Just Updated"} />
+                                    <StatDetailCard graph title="Total Capacity" data={facilityTotalCapacity} status={"Just Updated"} />
                             </GridItem>
                             <GridItem xs={12} sm={12} md={4}>
-                                    <StatDetailCard title="Ward 1 Capacity" color="success" data={ward1TotalCapacity} status={"Just Updated"} />
+                                    <StatDetailCard graph title="Ward 1 Capacity" color="success" data={ward1TotalCapacity} status={"Just Updated"} />
                             </GridItem>
                             <GridItem xs={12} sm={12} md={4}>
-                                    <StatDetailCard graph d1={ward1TotalCapacity} d2={facilityTotalCapacity}  title="Ward 2 Capacity" color="danger" data={ward2TotalCapacity} status={"Just Updated"} />
+                                    <StatDetailCard graph  title="Ward 2 Capacity" color="danger" data={ward2TotalCapacity} status={"Just Updated"} />
                             </GridItem>
                     </GridContainer>
+                    <Fab variant="extended" color="primary" onClick={handleOpen}>
+                            <AddIcon className={classes.extendedIcon} />
+                            Add Facility
+                    </Fab>
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
         <Card>
@@ -138,6 +176,26 @@ export default function TableList() {
         </Card>
       </GridItem>
     </GridContainer>
+                    <Dialog
+                        open={addFacilityDialog}
+                        PaperProps={{
+                                style: {
+                                        backgroundColor: 'transparent',
+                                        boxShadow: 'none',
+                                        scrollbarColor: "transparent"
+                                },
+                        }}
+                        onClose={handleClose}
+                    >
+                            <AddFacilityDialog submitFunc={submitDetails}/>
+
+                    </Dialog>
+                    <Snackbar open={successAlert} autoHideDuration={6000} onClose={handleAlertClose}>
+                            <Alert onClose={handleAlertClose} severity="success">
+                                    Facility Added Successfully
+                            </Alert>
+                    </Snackbar>
             </div>
+
   );
 }

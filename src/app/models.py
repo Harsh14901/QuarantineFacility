@@ -204,7 +204,7 @@ class Room(models.Model):
     capacity = models.PositiveSmallIntegerField()
 
     def __str__(self):
-        return f"{self.room_num} | Capacity: {self.capacity}"
+        return f"room {self.room_num} @{self.ward.facility.name} | category: {self.category} | type : {self.ward.category} | Capacity: {self.capacity} | occupied: {len(self.person_set.all())}"
 
 
     @property

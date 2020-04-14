@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const getFacilityData = callback => {
-        const endpt = 'http://127.0.0.1:8000/facilities/';
+const getFacilityName = (callback,id) => {
+        const endpt = 'http://127.0.0.1:8000/facilities/'+id;
         let lookupOpts = {
                 method: 'GET',
                 headers:{
@@ -15,9 +15,9 @@ const getFacilityData = callback => {
 
         }).then(res => callback(res))
             .catch(function(error){
-                console.error(error)
-        })
+                    console.error(error)
+            })
 
 };
 
-export default getFacilityData
+export default getFacilityName

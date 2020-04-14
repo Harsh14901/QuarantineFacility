@@ -49,10 +49,17 @@ class PersonAccomodationSerializer(serializers.ModelSerializer):
 class PersonSerializer(serializers.ModelSerializer):
     checkuprecords_set = CheckupSerializer(many=True,read_only=True)
 
+    def save(self, **kwargs):
+        # print(self.validated_data)
+        set_location(self.validated_data)
+        
+        return super().save(**kwargs)
+
     class Meta():
         model = Person
-        fields = ['id','code', 'name', 'age','gender' ,'contact_num', 'email', 'risk', 'vip',
-                  'luxuries', 'group', 'latitude', 'longitude','room' ,'checkuprecords_set','room_pk','ward_pk','facility_pk','facility_name']
+
+        fields = ['id','code', 'name', 'age','gender','address' ,'contact_num', 'email', 'risk', 'vip',
+                  'luxuries', 'group', 'latitude', 'longitude' ,'checkuprecords_set','room_pk','ward_pk','facility_pk','facility_name','doa']
 
     def is_valid(self, raise_exception=False):
         code = "P" + str(random.randint(10000, 99999))
@@ -61,6 +68,7 @@ class PersonSerializer(serializers.ModelSerializer):
         self.initial_data['code'] = code  
         a = super().is_valid(raise_exception=raise_exception)        
         return a
+
      
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -108,6 +116,12 @@ class WardSerializer(serializers.ModelSerializer):
 
 class FacilitySerializer(serializers.ModelSerializer):
     ward_set = WardSerializer(many=True,read_only=True)
+
+    def save(self, **kwargs):
+        print(self.validated_data)
+        set_location(self.validated_data)
+        
+        return super().save(**kwargs)
 
     class Meta():
         model = Facility
