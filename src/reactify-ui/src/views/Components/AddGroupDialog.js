@@ -47,6 +47,10 @@ function AddGroupDialog(props) {
         const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
         const [VIPStatus,setVipStatus] = useState(false);
         const [category,setCategory] =useState(false);
+
+        defaultUserDetail['latitude'] = Math.random()+22
+        defaultUserDetail['longitude'] = Math.random()+88
+
         setTimeout(function() {
                 setCardAnimation("");
         }, 700);
