@@ -20,6 +20,7 @@ import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
 import AddFacilityDialog from "views/Components/AddFacilityDialog";
 import PostData from "facility/postData";
+import MapExtreme from "views/Maps/MapExtreme";
 
 const styles = {
   cardCategoryWhite: {
@@ -66,6 +67,7 @@ export default function TableList() {
         const [ward2TotalCapacity,setWard2TotalCapacity] = useState("0/0");
         const [addFacilityDialog,setAddFacilityDialog] = useState(false);
         const [successAlert,setSuccessAlert] =useState(false);
+        const [latLong,setLatLong] = useState({lat:31,lng:80});
 
 
 
@@ -143,6 +145,7 @@ export default function TableList() {
 
         return (
             <div>
+                    <h1>{latLong.lat}</h1>
                     <GridContainer justifyContent={"center"}>
                             <GridItem xs={12} sm={12} md={4}>
                                     <StatDetailCard graph title="Total Capacity" data={facilityTotalCapacity} status={"Just Updated"} />
@@ -187,7 +190,9 @@ export default function TableList() {
                         }}
                         onClose={handleClose}
                     >
-                            <AddFacilityDialog submitFunc={submitDetails}/>
+                            <MapExtreme submitFunc={submitDetails} setLatLong={(data)=> {
+                                    setLatLong(data)
+                            }}/>
 
                     </Dialog>
                     <Snackbar open={successAlert} autoHideDuration={6000} onClose={handleAlertClose}>

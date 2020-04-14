@@ -62,7 +62,7 @@ export default function UserProfile() {
                         let details=[];
                          result.map((data,j) =>{
                                  details.push({id:data.id,name:data.name,age:data.age,member_count:-1
-                                         ,facility:data.facility_pk,risk: data.risk,"date":"",number: data.contact_num,email:data.email})
+                                         ,facility:data.facility_pk,risk: data.risk,"date":data.doa,number: data.contact_num,email:data.email})
                          });
                         setDataDisplay(details);
                 };
