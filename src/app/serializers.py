@@ -49,6 +49,12 @@ class PersonAccomodationSerializer(serializers.ModelSerializer):
 class PersonSerializer(serializers.ModelSerializer):
     checkuprecords_set = CheckupSerializer(many=True,read_only=True)
 
+    def save(self, **kwargs):
+        # print(self.validated_data)
+        set_location(self.validated_data)
+        
+        return super().save(**kwargs)
+
     class Meta():
         model = Person
 
@@ -101,6 +107,12 @@ class WardSerializer(serializers.ModelSerializer):
 
 class FacilitySerializer(serializers.ModelSerializer):
     ward_set = WardSerializer(many=True,read_only=True)
+
+    def save(self, **kwargs):
+        print(self.validated_data)
+        set_location(self.validated_data)
+        
+        return super().save(**kwargs)
 
     class Meta():
         model = Facility

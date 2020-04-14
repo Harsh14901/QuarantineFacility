@@ -14,9 +14,9 @@ def get_sorted_rooms(person,facility):
         room_list.sort(key=lambda x: x.category,reverse=True)
     else:
         random.shuffle(room_list)
-    for room in room_list:
-        print(room)
-    print()
+    # for room in room_list:
+    #     print(room)
+    # print()
     return room_list
 
 
@@ -90,7 +90,7 @@ def make_allocation(patient):
         
         try:
             fac_pref = 8
-            # fac_pref = patient.group.facility_preference.id
+            fac_pref = patient.group.facility_preference.id
         except:
             allocated = False
             break
@@ -118,16 +118,13 @@ def make_allocation(patient):
                 room_pk = check_allocation_possible(patient, facility_pk=fac_tuple[1].id)
                 if room_pk is not None:
                     patient.room = Room.objects.get(id=room_pk)
-                    patient.save()
-                    print('{} successfully allocated at room {} in {}'.format(patient,patient.room,patient.room.ward.facility.name))
-        
+                    patient.save()        
                 else:
                     for human in family[:i]:
                         human.room = None
                         human.doa = None
                         human.save()
                     allocated = False
-                    print('sry')
                     break    
             if allocated:
                 return True
@@ -147,7 +144,8 @@ def allocate(groups):
         if not make_allocation(patient):
             failed.append(patient)
         else:
-            # print('{} successfully allocated in {}'.format(patient,patient.room.ward.facility.name))
+            patient = Person.objects.get(pk=patient.id)
+            print('{} successfully allocated in {}'.format(patient,patient.room))
             pass
 
     if failed != []:
@@ -187,29 +185,34 @@ def get_all_distances(patient):
             print('wrong location of either {},or {}'.format(facility,patient))
             d.append((INFINITY,facility))
     d.sort(key=lambda x:x[0])
-    print(d)  
+    for a in d:
+        print(a)  
     return d
 
 def set_location(obj):
+    p1=f"{obj['latitude']},{obj['longitude']}"
+    key='efe1c6b8-2b70-4252-a030-7d7f9ae2be5c'
+    url='https://graphhopper.com/api/1/geocode'
+    params={
+        'point':p1,
+        'reverse':'true',
+        'debug':'true',
+        'key':key,
+    }
+    r=requests.get(url=url,params=params)
+    
     try:
-        p1='{},{}'.format(random.random()+22,random.random()+88)
-        key='efe1c6b8-2b70-4252-a030-7d7f9ae2be5c'
-        url='https://graphhopper.com/api/1/geocode'
-        params={
-            'point':p1,
-            'reverse':'true',
-            'debug':'true',
-            'key':key,
-        }
-        r=requests.get(url=url,params=params)
-        # print(r.url)
         point = r.json()['hits'][0]['point']
-        obj.address = r.json()['hits'][0]['name']
-        obj.latitude = point['lat']
-        obj.longitude = point['lng']
-        obj.save()
     except:
-        set_location(obj)
+        print( f'could not locate address lat {p1}' )
+    else:
+        print(point)
+        obj['address'] = r.json()['hits'][0]['name']
+        obj['latitude'] = point['lat']
+        obj['longitude'] = point['lng']
+        print(obj)
+    
+    
 
 def locate_facilities():
     for facility in Facility.objects.all():
