@@ -13,11 +13,6 @@ import Tooltip from "@material-ui/core/Tooltip";
 
 // @material-ui/icons
 import { Apps, CloudDownload } from "@material-ui/icons";
-import SportsIcon from "assets/img/icons/cup.js";
-import MessIcon from "assets/img/icons/eat.js";
-import MaintenanceIcon from "assets/img/icons/repair.js";
-import LoginIcon from "assets/img/icons/login.js";
-import TeamIcon from "assets/img/icons/group.js";
 
 // core components
 import CustomDropdown from "components/CustomDropdown/CustomDropdown.js";
