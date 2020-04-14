@@ -30,6 +30,8 @@ import UserProfile from "views/UserProfile/UserProfile.js";
 import TableList from "views/TableList/TableList.js";
 import Typography from "views/Typography/Typography.js";
 import GroupsDetail from "views/Groups/GroupsDetail";
+import Maps from "views/Maps/Maps";
+import MapExtreme from "views/Maps/MapExtreme";
 // import Icons from "views/Icons/Icons.js";
 // import Maps from "views/Maps/Maps.js";
 // import NotificationsPage from "views/Notifications/Notifications.js";
@@ -40,7 +42,7 @@ const dashboardRoutes = [
     path: "/dashboard",
     name: "Dashboard",
     icon: Dashboard,
-    component: UserProfile,
+    component: MapExtreme,
     layout: "/admin"
   },
   {
