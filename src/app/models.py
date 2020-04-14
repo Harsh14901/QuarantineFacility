@@ -276,3 +276,6 @@ class Medicine(models.Model):
     def __str__(self):
         return self.name
     
+class Discharged(models.Model):
+    person = models.OneToOneField("Person",  on_delete=models.CASCADE)
+    date_discharged = models.DateField(auto_now=False, auto_now_add=True)
