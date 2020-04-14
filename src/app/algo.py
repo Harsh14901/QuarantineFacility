@@ -76,6 +76,7 @@ def make_allocation(patient):
         else:
             for human in family[:i]:
                 human.room = None
+                human.doa = None
                 human.save()
             allocated = False
             break    
