@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import *
 from .algo import *
 from rest_framework.exceptions import ValidationError
-
+import random
 
 
 class LuxurySerializer(serializers.ModelSerializer):
@@ -51,8 +51,16 @@ class PersonSerializer(serializers.ModelSerializer):
 
     class Meta():
         model = Person
-        fields = ['id', 'name', 'age','gender' ,'contact_num', 'email', 'risk', 'vip',
+        fields = ['id','code', 'name', 'age','gender' ,'contact_num', 'email', 'risk', 'vip',
                   'luxuries', 'group', 'latitude', 'longitude','room' ,'checkuprecords_set','room_pk','ward_pk','facility_pk','facility_name']
+
+    def is_valid(self, raise_exception=False):
+        code = "P" + str(random.randint(10000, 99999))
+        while(len(Person.objects.filter(code=code)) != 0):
+            code = "P" + str(random.randint(10000, 99999))
+        self.initial_data['code'] = code  
+        a = super().is_valid(raise_exception=raise_exception)        
+        return a
      
 
 class GroupSerializer(serializers.ModelSerializer):

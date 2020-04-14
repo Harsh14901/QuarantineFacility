@@ -22,6 +22,7 @@ class Person(models.Model):
     )
     name = models.CharField(max_length=100)
     age = models.SmallIntegerField(blank=False, null=False)
+    code = models.CharField(max_length=50,null=True,blank=True)
     gender = models.CharField(max_length=50,choices=GenderChoices,null=True)
     address = models.TextField()
     contact_num = PhoneField(null=True,blank=True)
