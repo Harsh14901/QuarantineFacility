@@ -113,3 +113,16 @@ class FacilitySerializer(serializers.ModelSerializer):
         model = Facility
         fields = ['id', 'name', 'owner', 'address', 'capacity','occupant_count',
                   'room_count', 'ward_set', 'latitude', 'longitude']
+
+class DischargedSerializer(serializers.ModelSerializer):
+
+    class Meta():
+        model = Discharged
+        fields = ['person','date_discharged']
+
+    def create(self, validated_data):
+        print(validated_data)
+        person = validated_data['person']
+        person.room = None
+        person.save()
+        return super().create(validated_data)
