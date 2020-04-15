@@ -17,6 +17,9 @@ import avatar from "assets/img/faces/marc.jpg";
 import GetFacilityData from "facility/GetFacilityData";
 import CustomTable from "components/CustomTable";
 import GetPeopleData from "PeopleData/GetPeopleData";
+import MapExtreme from "views/Maps/MapExtreme";
+import Dialog from "@material-ui/core/Dialog";
+import UserDetails from "views/UserProfile/UserDetails";
 
 const styles = {
   cardCategoryWhite: {
@@ -43,6 +46,8 @@ export default function UserProfile() {
   const classes = useStyles();
         const [peopleData,setPeopleData]=useState([]);
         const [dataDisplay,setDataDisplay] = useState([]);
+        const [openDialog,setOpenDialog] = useState(false);
+        const [selectedUserDetails,setSelectedUserDetails] = useState({});
 
         const columnsHeading=[
                 { title: 'Name', field: 'name' },
@@ -61,12 +66,22 @@ export default function UserProfile() {
                         setPeopleData(result);
                         let details=[];
                          result.map((data,j) =>{
-                                 details.push({id:data.id,name:data.name,age:data.age,member_count:-1
-                                         ,facility:data.facility_pk,risk: data.risk,"date":data.doa,number: data.contact_num,email:data.email})
+                                 details.push({id:data.id,name:data.name,age:data.age,member_count:-1,gender: data.gender
+                                         ,facility:data.facility_name,risk: data.risk,date:data.doa,number: data.contact_num,email:data.email
+                                 ,vip: data.vip})
                          });
                         setDataDisplay(details);
                 };
                 GetPeopleData(callback)
+        }
+
+        function handleDialogClose(){
+                setOpenDialog(false)
+        }
+
+        function openDetails(data){
+                setSelectedUserDetails(data);
+                setOpenDialog(true)
         }
 
         useEffect(() => {
@@ -77,6 +92,7 @@ export default function UserProfile() {
 
 
         return (
+            <div>
             <GridContainer>
                     <GridItem xs={12} sm={12} md={12}>
                             <Card>
@@ -89,11 +105,31 @@ export default function UserProfile() {
                                             </p>
                                     </CardHeader>
                                     <CardBody>
-                                            <CustomTable title="People Details" columns={columnsHeading} data={dataDisplay}/>
+                                            <CustomTable title="People Details" openDetails={openDetails} columns={columnsHeading} data={dataDisplay}/>
 
                                     </CardBody>
                             </Card>
                     </GridItem>
             </GridContainer>
+
+
+
+                    <Dialog
+                        open={openDialog}
+                        PaperProps={{
+                                style: {
+                                        backgroundColor: 'transparent',
+                                        boxShadow: 'none',
+                                        scrollbarColor: "transparent"
+                                },
+                        }}
+                        onClose={handleDialogClose}
+                    >
+                            <UserDetails closeFunc={handleDialogClose} data={selectedUserDetails}/>
+
+                    </Dialog>
+
+
+            </div>
         );
 }
