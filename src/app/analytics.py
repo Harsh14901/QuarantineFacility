@@ -1,7 +1,7 @@
 from .models import *
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from django.db.models import Count
+from django.db.models import Count,Sum
 
 
 DATE_FORMAT = '%d/%m/%y'
@@ -11,7 +11,7 @@ def discharge_count(request):
     coordinates = {}
     queryset = Discharged.objects.values('date_discharged').annotate(Count('person'))
     for point in queryset:
-        coordinates[str(point['date_discharged'])] = point['person__count']
+        coordinates[point['date_discharged'].strftime(DATE_FORMAT)] = point['person__count']
     return Response(coordinates)
 
 @api_view(['GET'])
@@ -33,3 +33,22 @@ def avg_discharge_time(request):
     return Response(coordinates)
             
 
+@api_view(['GET'])
+def new_cases(request=None):
+    coordinates = {}
+    queryset = Person.objects.values('doa').annotate(Count('doa'))
+    for point in queryset:
+        coordinates[point['doa'].strftime(DATE_FORMAT)] = point['doa__count']
+    return Response(coordinates)
+
+@api_view(['GET'])
+def total_cases(request):
+    coordinates = {}
+    count = 0
+    for person in Person.objects.all().order_by('doa'):
+        doa = person.doa
+        x = doa.strftime(DATE_FORMAT)
+        if x not in coordinates.keys():
+            count += Person.objects.filter(doa=doa).count()
+            coordinates[x] = count
+    return Response(coordinates)
