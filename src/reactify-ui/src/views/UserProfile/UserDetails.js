@@ -27,6 +27,8 @@ import changeUserWard from "PeopleData/changeUserWard";
 import Zoom from "@material-ui/core/Zoom";
 import Tooltip from "@material-ui/core/Tooltip";
 import TootltipStyles from 'assets/jss/material-kit-react/tooltipsStyle'
+import getData from "facility/getData";
+import postData from "facility/postData";
 
 const useStyles2 = makeStyles(styles2);
 const useStyles = makeStyles(styles);
@@ -52,6 +54,16 @@ export default function UserDetails(props) {
 
         const [cardAnimation,setCardAnimation] =useState("cardHidden");
         const [open,setOpen] = useState(false);
+        const [dischargeDialogOpen,setDischargeDialogOpen] = useState(false);
+
+
+        function handleDischargeClose() {
+                setDischargeDialogOpen(false)
+        }
+
+        function handleDischargeOpen() {
+                setDischargeDialogOpen(true)
+        }
 
         function handleClose() {
                 setOpen(false)
@@ -60,16 +72,37 @@ export default function UserDetails(props) {
                 setOpen(true);
         }
 
-        function changeWard() {
+        function changeWard(id) {
                 const callback = result => {
                         console.log("Seems to have changed ward",result)
                 };
 
-                changeUserWard(callback,{id:props.data.id,risk: props.data.risk})
+
+                changeUserWard(callback,{id:props.data.id,ward_pk: id})
+        }
+
+        function getPairWard() {
+                const callback = result => {
+                        console.log(result);
+                        let a=result.ward_set[0].id;
+                        let b=result.ward_set[1].id;
+                        if(a===props.data.ward_pk)
+                                changeWard(b);
+                        else
+                                changeWard(a);
+
+                };
+                getData(callback,'http://127.0.0.1:8000/facilities/'+props.data.facility_pk+"/")
         }
 
         function dischargeUser() {
+                const callback= result =>{
+                  console.log("Shud have discharged",result);
+                        setDischargeDialogOpen(false)
+                        props.closeFunc();
+                };
 
+                postData(callback,{person: props.data.id},'http://127.0.0.1:8000/discharge/')
         }
 
         function closeDialog() {
@@ -105,8 +138,8 @@ export default function UserDetails(props) {
                                                     </GridItem>
                                             </GridContainer>
                                             <div style={{display: "flex"}}>
-                                                    <Para text={"Ward Category:- " + ((props.data.risk) ? 1 : 2)}/>
-                                                    <SideButton onClick={handleWardChange} text={"Shift to Ward "+(props.data.risk?2:1)}/>
+                                                    <Para text={"Ward Category:- " + ((props.data.risk==='high') ? 1 : 2)}/>
+                                                    <SideButton onClick={handleWardChange} text={"Shift to Ward "+(props.data.risk==='high'?2:1)}/>
                                             </div>
                                             <div style={{display: "flex",marginTop:"10px"}}>
                                                     <Para text={"Facility Enrolled:- " + props.data.facility}/>
@@ -157,7 +190,7 @@ export default function UserDetails(props) {
                                     <Button onClick={closeDialog} className={classes.submitButton}>
                                             CLOSE
                                     </Button>
-                                    <Button onClick={dischargeUser} className={classes.submitButton}>
+                                    <Button onClick={handleDischargeOpen} className={classes.submitButton}>
                                             DISCHARGE
                                     </Button>
                             </CardFooter>
@@ -183,12 +216,35 @@ export default function UserDetails(props) {
                                     <Button onClick={handleClose} color="primary">
                                             Cancel
                                     </Button>
-                                    <Button onClick={changeWard} color="primary">
+                                    <Button onClick={getPairWard} color="primary">
                                             Yes, Change Ward
                                     </Button>
                             </DialogActions>
                     </Dialog>
 
+                    <Dialog
+                        open={dischargeDialogOpen}
+                        TransitionComponent={Transition}
+                        keepMounted
+                        onClose={handleDischargeClose}
+                        aria-labelledby="alert-dialog-slide-title"
+                        aria-describedby="alert-dialog-slide-description"
+                    >
+                            <DialogTitle id="alert-dialog-slide-title">{"Discharge User?"}</DialogTitle>
+                            <DialogContent>
+                                    <DialogContentText id="alert-dialog-slide-description">
+                                            {"Are you sure you want to discharge "+props.data.name+" ?"}
+                                    </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                    <Button onClick={handleDischargeClose} color="primary">
+                                            Cancel
+                                    </Button>
+                                    <Button onClick={dischargeUser} color="primary">
+                                            Yes, Discharge
+                                    </Button>
+                            </DialogActions>
+                    </Dialog>
 
             </div>
         )

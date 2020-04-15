@@ -68,7 +68,7 @@ export default function UserProfile() {
                          result.map((data,j) =>{
                                  details.push({id:data.id,name:data.name,age:data.age,member_count:-1,gender: data.gender
                                          ,facility:data.facility_name,risk: data.risk,date:data.doa,number: data.contact_num,email:data.email
-                                 ,vip: data.vip})
+                                 ,vip: data.vip,facility_pk:data.facility_pk})
                          });
                         setDataDisplay(details);
                 };
