@@ -169,6 +169,7 @@ def AllocateGroups(request):
     
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
-    
 
-
+class DischargedViewSet(generics.ListCreateAPIView):
+    queryset = Discharged.objects.all()
+    serializer_class = DischargedSerializer

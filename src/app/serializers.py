@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import *
 from .algo import *
 from rest_framework.exceptions import ValidationError
-
+import random
 
 
 class LuxurySerializer(serializers.ModelSerializer):
@@ -49,11 +49,26 @@ class PersonAccomodationSerializer(serializers.ModelSerializer):
 class PersonSerializer(serializers.ModelSerializer):
     checkuprecords_set = CheckupSerializer(many=True,read_only=True)
 
+    def save(self, **kwargs):
+        # print(self.validated_data)
+        set_location(self.validated_data)
+        
+        return super().save(**kwargs)
+
     class Meta():
         model = Person
 
-        fields = ['id', 'name', 'age','gender' ,'contact_num', 'email', 'risk', 'vip',
-                  'luxuries', 'group', 'latitude', 'longitude','room' ,'checkuprecords_set','room_pk','ward_pk','facility_pk','facility_name','doa']
+        fields = ['id','code', 'name', 'age','gender','address' ,'contact_num', 'email', 'risk', 'vip',
+                  'luxuries', 'group', 'latitude', 'longitude' ,'checkuprecords_set','room_pk','ward_pk','facility_pk','facility_name','doa']
+
+    def is_valid(self, raise_exception=False):
+        code = "P" + str(random.randint(10000, 99999))
+        while(len(Person.objects.filter(code=code)) != 0):
+            code = "P" + str(random.randint(10000, 99999))
+        self.initial_data['code'] = code  
+        a = super().is_valid(raise_exception=raise_exception)        
+        return a
+
      
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -102,7 +117,26 @@ class WardSerializer(serializers.ModelSerializer):
 class FacilitySerializer(serializers.ModelSerializer):
     ward_set = WardSerializer(many=True,read_only=True)
 
+    def save(self, **kwargs):
+        print(self.validated_data)
+        set_location(self.validated_data)
+        
+        return super().save(**kwargs)
+
     class Meta():
         model = Facility
         fields = ['id', 'name', 'owner', 'address', 'capacity','occupant_count',
                   'room_count', 'ward_set', 'latitude', 'longitude']
+
+class DischargedSerializer(serializers.ModelSerializer):
+
+    class Meta():
+        model = Discharged
+        fields = ['person','date_discharged']
+
+    def create(self, validated_data):
+        print(validated_data)
+        person = validated_data['person']
+        person.room = None
+        person.save()
+        return super().create(validated_data)
