@@ -14,15 +14,26 @@ def get_sorted_rooms(person,facility):
         room_list.sort(key=lambda x: x.category,reverse=True)
     else:
         random.shuffle(room_list)
-    # for room in room_list:
-    #     print(room)
-    # print()
     return room_list
 
 
 def check_allocation_possible(person, **kwargs):
 
-    if "facility_pk" in kwargs:
+    if "ward_pk" in kwargs:
+        ward_pk = kwargs.pop("ward_pk")
+        risk_initial = person.risk
+        person.risk = HIGH_RISK if (risk_initial == LOW_RISK) else LOW_RISK
+        person.save()
+
+        room_pk = check_allocation_possible(person,facility_pk=Ward.objects.get(id=ward_pk).facility.id)
+        if room_pk is not None:
+            return room_pk
+        else:
+            person.risk = risk_initial
+            person.save()
+            return
+
+    elif "facility_pk" in kwargs:
         facility_pk = kwargs.pop("facility_pk")
         facility = Facility.objects.get(id=facility_pk)
 
@@ -32,29 +43,13 @@ def check_allocation_possible(person, **kwargs):
             room_pk = check_allocation_possible(person,room_pk=room.id)
             if room_pk is not None:
                 return room_pk
-        
-        # for ward in facility.ward_set.all():
-        #     room_pk = check_allocation_possible(person, ward_pk=ward.id)
-        #     if room_pk is not None:
-        #         return room_pk
-
-    # elif "ward_pk" in kwargs:
-    #     ward_pk = kwargs.pop("ward_pk")
-    #     ward = Ward.objects.get(id=ward_pk)
-
-    #     # Check if the risk level matches the ward it is being allocated to
-    #     if((person.risk == HIGH_RISK and ward.category == Ward.WARD1) or (person.risk == LOW_RISK and ward.category == Ward.WARD2)):
-    #         for room in ward.room_set.all():
-    #             room_pk = check_allocation_possible(person, room_pk=room.id)
-    #             if room_pk is not None:
-    #                 return room_pk
+ 
 
     elif "room_pk" in kwargs:
         room_pk = kwargs.pop("room_pk")
         room = Room.objects.get(id=room_pk)
 
-        # Checks if room is vacant or not
-        if room.has_vacancy:
+        if room.has_vacancy:    #Checking if room has vacancy or not
             return room_pk
     else:
         return
