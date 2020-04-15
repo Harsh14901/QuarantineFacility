@@ -2,6 +2,7 @@ import {
   successColor,
   whiteColor,
   grayColor,
+  dangerColor,
   hexToRgb
 } from "assets/jss/material-dashboard-react.js";
 
@@ -9,10 +10,17 @@ const dashboardStyle = {
   successText: {
     color: successColor[0]
   },
+        lossText: {
+                color: dangerColor[2]
+        },
   upArrowCardCategory: {
     width: "16px",
     height: "16px"
   },
+        downArrowCardCategory: {
+                width: "16px",
+                height: "16px"
+        },
   stats: {
     color: grayColor[0],
     display: "inline-flex",

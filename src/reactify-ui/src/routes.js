@@ -42,7 +42,7 @@ const dashboardRoutes = [
     path: "/dashboard",
     name: "Dashboard",
     icon: Dashboard,
-    component: MapExtreme,
+    component: DashboardPage,
     layout: "/admin"
   },
   {
