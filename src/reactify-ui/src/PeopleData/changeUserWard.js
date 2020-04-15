@@ -4,7 +4,8 @@ import {func} from "prop-types";
 
 const changeUserWard = (callback,data) => {
 
-        const endpt = 'http://127.0.0.1:8000/allocate/';
+        const endpt = 'http://127.0.0.1:8000/person-accomodation/'+data.id;
+        let dataToPatch={risk:data.risk};
         let lookupOpts = {
                 method:'PATCH',
                 headers:{
@@ -13,7 +14,7 @@ const changeUserWard = (callback,data) => {
                         'Accept': 'application/json'
                 }
         };
-        axios.patch(endpt, data,lookupOpts). then(r => callback(data)).catch(function(error){console.log("hi",error)})
+        axios.patch(endpt, dataToPatch,lookupOpts). then(r => callback(data)).catch(function(error){console.log("hi",error)})
 
 };
 
