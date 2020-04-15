@@ -1,6 +1,6 @@
 from django.db import models
 from phone_field import PhoneField
-
+import datetime as dt
 
 HIGH_RISK = "high"
 LOW_RISK = "low"
@@ -79,7 +79,16 @@ class Person(models.Model):
             self.room.ward.facility.id
         except:
             return "None"
-        return self.room.ward.facility.id    
+        return self.room.ward.facility.id 
+
+    @property
+    def discharge_time(self):
+        try:
+            discharge_date = self.discharged.date_discharged
+            return discharge_date - self.doa
+        except:
+            return None
+              
 
     
 

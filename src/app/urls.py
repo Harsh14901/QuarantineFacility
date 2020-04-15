@@ -4,6 +4,7 @@ from .views import *
 from rest_framework.routers import DefaultRouter
 import requests
 from .models import *
+from .analytics import *
 import random
 
 
@@ -24,5 +25,6 @@ urlpatterns = [
     url(r'^discharge/$',DischargedViewSet.as_view(),name="discharge"),
     url(r'^person/search/$',searchPerson,name="search_user"),
     url(r'^facility/search/$',searchFacility,name="search_facility"),
-
+    url(r'^analytics/avg_discharge_time/$',avg_discharge_time,name="avg_discharge_time"),
+    url(r'^analytics/discharge_count/$',discharge_count,name="discharge_count"),
 ]
