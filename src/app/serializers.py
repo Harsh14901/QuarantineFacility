@@ -59,7 +59,7 @@ class PersonSerializer(serializers.ModelSerializer):
         model = Person
 
         fields = ['id','code', 'name', 'age','gender','address' ,'contact_num', 'email', 'risk', 'vip',
-                  'luxuries', 'group', 'latitude', 'longitude' ,'checkuprecords_set','room_pk','ward_pk','facility_pk','facility_name','doa']
+                  'luxuries', 'group', 'latitude', 'longitude' ,'checkuprecords_set','room_pk','ward_pk','facility_pk','facility_name','doa','address']
 
     def is_valid(self, raise_exception=False):
         code = "P" + str(random.randint(10000, 99999))
