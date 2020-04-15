@@ -38,3 +38,6 @@ class MedicineAdmin(admin.ModelAdmin):
 class CheckupRecordsAdmin(admin.ModelAdmin):
     list_display = ['person','doctor','date','health_status','next_checkup_date']
 
+@admin.register(Discharged)
+class DischargedAdmin(admin.ModelAdmin):
+    list_display = ['person','date_discharged']

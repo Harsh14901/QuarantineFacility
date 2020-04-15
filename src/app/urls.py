@@ -25,8 +25,12 @@ urlpatterns = [
     url(r'^discharge/$',DischargedViewSet.as_view(),name="discharge"),
     url(r'^person/search/$',searchPerson,name="search_user"),
     url(r'^facility/search/$',searchFacility,name="search_facility"),
+
     url(r'^analytics/avg_discharge_time/$',avg_discharge_time,name="avg_discharge_time"),
-    url(r'^analytics/discharge_count/$',discharge_count,name="discharge_count"),
     url(r'^analytics/new_cases/$',new_cases,name="new_cases"),
     url(r'^analytics/total_cases/$',total_cases,name="total_cases"),
+    url(r'^analytics/discharge_count/$',discharge_count,name="discharge_count"),
+    url(r'^analytics/total_discharges/$',total_discharges,name="total_discharges"),
+    url(r'^analytics/cases_vs_age/$',cases_vs_age,name="cases_vs_age"),
+    url(r'^analytics/cases_vs_gender/$',cases_vs_gender,name="cases_vs_gender"),
 ]
