@@ -1,6 +1,6 @@
 from django.db import models
 from phone_field import PhoneField
-
+import datetime as dt
 
 HIGH_RISK = "high"
 LOW_RISK = "low"
@@ -22,6 +22,7 @@ class Person(models.Model):
     )
     name = models.CharField(max_length=100)
     age = models.SmallIntegerField(blank=False, null=False)
+    code = models.CharField(max_length=50,null=True,blank=True)
     gender = models.CharField(max_length=50,choices=GenderChoices,null=True)
     address = models.TextField()
     contact_num = PhoneField(null=True,blank=True)
@@ -78,7 +79,16 @@ class Person(models.Model):
             self.room.ward.facility.id
         except:
             return "None"
-        return self.room.ward.facility.id    
+        return self.room.ward.facility.id 
+
+    @property
+    def discharge_time(self):
+        try:
+            discharge_date = self.discharged.date_discharged
+            return discharge_date - self.doa
+        except:
+            return None
+              
 
     
 
@@ -94,7 +104,7 @@ class Group(models.Model):
     facility_preference = models.ForeignKey("Facility", on_delete=models.CASCADE,null=True)
     
     def __str__(self):
-        return f"{self.category} group of {self.count} members"
+        return f"{self.id} | {self.category} group of {self.count} members"
     
     @property
     def count(self):
@@ -203,7 +213,7 @@ class Room(models.Model):
     capacity = models.PositiveSmallIntegerField()
 
     def __str__(self):
-        return f"{self.room_num} | Capacity: {self.capacity}"
+        return f"room {self.room_num} @{self.ward.facility.name} | category: {self.category} | type : {self.ward.category} | Capacity: {self.capacity} | occupied: {len(self.person_set.all())}"
 
 
     @property
@@ -275,3 +285,6 @@ class Medicine(models.Model):
     def __str__(self):
         return self.name
     
+class Discharged(models.Model):
+    person = models.OneToOneField("Person",  on_delete=models.CASCADE)
+    date_discharged = models.DateField(auto_now=False, auto_now_add=True)
