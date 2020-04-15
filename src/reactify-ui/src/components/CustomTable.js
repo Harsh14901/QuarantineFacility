@@ -65,7 +65,7 @@ function CustomTable(props){
                         {
                                 icon: 'details',
                                 tooltip: 'See Details',
-                                onClick: (event, rowData) => alert("Will soon see details of " + rowData.name)
+                                onClick: (event, rowData) => props.openDetails(rowData)
                         }
                 ]}
                 components={{
