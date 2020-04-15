@@ -41,6 +41,7 @@ def new_cases(request=None):
         coordinates[point['doa'].strftime(DATE_FORMAT)] = point['doa__count']
     return Response(coordinates)
 
+
 @api_view(['GET'])
 def total_cases(request):
     coordinates = {}
@@ -50,5 +51,34 @@ def total_cases(request):
         x = doa.strftime(DATE_FORMAT)
         if x not in coordinates.keys():
             count += Person.objects.filter(doa=doa).count()
+            coordinates[x] = count
+    return Response(coordinates)
+
+@api_view(['GET'])
+def cases_vs_age(request):
+    coordinates = {age:0 for age in range(1,100)}
+    for patient in Person.objects.all():
+        coordinates[patient.age] += 1
+    return Response(coordinates)
+
+@api_view(['GET'])
+def cases_vs_gender(request):
+    print(Person.objects.all()[0].gender)
+    distribution = {
+        'male': Person.objects.filter(gender='Male').count(),
+        'female': Person.objects.filter(gender='Female').count(),
+        'other': Person.objects.filter(gender='Other').count(),
+    }
+    return Response(distribution)
+
+@api_view(['GET'])
+def total_discharges(request):
+    coordinates = {}
+    count = 0
+    for person in Discharged.objects.all().order_by('date_discharged'):
+        dod = person.date_discharged                                      # date of discharge
+        x = dod.strftime(DATE_FORMAT)
+        if x not in coordinates.keys():
+            count += Discharged.objects.filter(date_discharged=dod).count()
             coordinates[x] = count
     return Response(coordinates)
