@@ -44,6 +44,15 @@ function ActiveVsDischargeGraph() {
                                         percentage2.push(100-temp)
                                 }
 
+                                if(percentages.length>7){
+                                        let abcd=parseInt((percentages.length/10).toFixed(0));
+                                        setOptions({...options,axisX: {...options.axisX,
+                                                        labelInterpolationFnc: function (value,index) {
+                                                                return (index%abcd===0)?value:''
+                                                        }}});
+
+                                }
+
                                 setOptions({...options,high: 110,height: "30vh"});
                                 setData({labels: labels,series: [percentages,percentage2]});
                                 console.log("hurrah",[percentages,percentage2])
@@ -80,7 +89,7 @@ function ActiveVsDischargeGraph() {
                                     />
                             </CardHeader>
                             <CardBody>
-                                    <h2 className={classes.cardTitle}>Active Cases vs Discharged Cases</h2>
+                                    <h3 className={classes.cardTitle}>Active Cases vs Discharged Cases</h3>
                             </CardBody>
                     </Card>
             </GridItem>

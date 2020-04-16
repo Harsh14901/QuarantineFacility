@@ -75,10 +75,10 @@ export default function GroupsDetail() {
                 { title: 'Category', field: 'category' },
                 { title: 'Group Members', field: 'count' },
                 { title: 'People with high Risk',field: 'risk'},
-                {
-                        title: 'Date Quarantined',
-                        field: 'date',
-                },
+                // {
+                //         title: 'Date Quarantined',
+                //         field: 'date',
+                // },
         ];
         function getGroupsData() {
                 const callback = result => {

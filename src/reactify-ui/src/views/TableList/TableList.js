@@ -150,10 +150,10 @@ export default function TableList() {
                                     <StatDetailCard graph title="Total Capacity" data={facilityTotalCapacity} status={"Just Updated"} />
                             </GridItem>
                             <GridItem xs={12} sm={12} md={4}>
-                                    <StatDetailCard graph title="Ward 1 Capacity" color="success" data={ward1TotalCapacity} status={"Just Updated"} />
+                                    <StatDetailCard graph title="Ward 1 Capacity" color="danger" data={ward1TotalCapacity} status={"Just Updated"} />
                             </GridItem>
                             <GridItem xs={12} sm={12} md={4}>
-                                    <StatDetailCard graph  title="Ward 2 Capacity" color="danger" data={ward2TotalCapacity} status={"Just Updated"} />
+                                    <StatDetailCard graph  title="Ward 2 Capacity" color="success" data={ward2TotalCapacity} status={"Just Updated"} />
                             </GridItem>
                     </GridContainer>
                     <Fab variant="extended" color="primary" onClick={handleOpen}>
