@@ -23,7 +23,7 @@ L.Icon.Default.mergeOptions({
 export default function MapExtreme(props) {
 
 
-        const position =[22.4606543,88.420414];
+        const position = props.center;
 
         const [LatLong,setLatLong] = useState({lat: position[0],lng: position[1]});
         const [markerPopup,setMarkerPopup] = useState("");

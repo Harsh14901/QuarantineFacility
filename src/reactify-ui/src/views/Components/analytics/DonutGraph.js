@@ -16,6 +16,30 @@ const useStyles = makeStyles(styles);
 function DonutGraph(props){
         const classes = useStyles();
         const [data,setData] = useState({});
+        const options={
+                events: ['mousemove', 'mouseout', 'touchstart', 'touchmove', 'touchend'],
+                responsive: true,
+                // maintainAspectRatio: false,
+                tooltips: {
+                        mode: 'point',
+                        position: 'nearest',
+                        callbacks: {
+                                label: function (tooltipItem, data) {
+                                        const dataset = data.datasets[tooltipItem.datasetIndex];
+                                        const meta = dataset._meta[Object.keys(dataset._meta)[0]];
+                                        const total = meta.total;
+                                        const currentValue = dataset.data[tooltipItem.index];
+                                        const percentage = parseFloat(
+                                            ((currentValue / total) * 100).toFixed(1)
+                                        );
+                                        return currentValue + ' (' + percentage + '%)';
+                                },
+                                title: function (tooltipItem, data) {
+                                        return data.labels[tooltipItem[0].index];
+                                },
+                        },
+                },
+        };
 
         function getGraphData() {
                 const callback = result =>{
@@ -44,7 +68,8 @@ function DonutGraph(props){
                                         ],
 
                                 }],
-                        });
+                        }
+                        );
                 };
                 getData(callback,'http://127.0.0.1:8000/analytics/ward_distribution/')
         }
@@ -57,7 +82,7 @@ function DonutGraph(props){
             <GridItem xs={12} md={8}>
             <Card>
                     <CardHeader >
-                    <Doughnut data={data}
+                    <Doughnut data={data} options={options}
                     />
                     </CardHeader>
                     <CardBody>
