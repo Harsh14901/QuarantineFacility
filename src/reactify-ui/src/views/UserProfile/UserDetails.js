@@ -29,6 +29,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import TootltipStyles from 'assets/jss/material-kit-react/tooltipsStyle'
 import getData from "facility/getData";
 import postData from "facility/postData";
+import GroupInfo from "views/Groups/GroupInfo";
 
 const useStyles2 = makeStyles(styles2);
 const useStyles = makeStyles(styles);
@@ -55,6 +56,23 @@ export default function UserDetails(props) {
         const [cardAnimation,setCardAnimation] =useState("cardHidden");
         const [open,setOpen] = useState(false);
         const [dischargeDialogOpen,setDischargeDialogOpen] = useState(false);
+        const [openDialog,setOpenDialog] = useState(false);
+        const [selectedGroupDetails,setSelectedGroupDetails] = useState({});
+
+
+
+        const handleDialogClose= () => {
+                setOpenDialog(false);
+        };
+
+        function openGroupDetails() {
+                const callback = res => {
+                setSelectedGroupDetails(res);
+                setOpenDialog(true);
+                };
+                console.log("Hi good night",'http://127.0.0.1:8000/groups/'+props.data.group+'/');
+                getData(callback,'http://127.0.0.1:8000/groups/'+props.data.group+'/')
+        };
 
 
         function handleDischargeClose() {
@@ -147,7 +165,7 @@ export default function UserDetails(props) {
                                             </div>
                                             <div style={{display: "flex",marginTop:"10px"}}>
                                                     <Para text={"Group ID:- " + props.data.group}/>
-                                                    <Button size="small" variant="outlined" color="primary" style={{marginLeft: "auto",fontSize: "0.7rem"}}>View Group Details</Button>
+                                                    <Button onClick={openGroupDetails} size="small" variant="outlined" color="primary" style={{marginLeft: "auto",fontSize: "0.7rem"}}>View Group Details</Button>
                                             </div>
                                             <Para text={"Address:- " + props.data.address}/>
                                             <Para text={"Date of Admission:- " + props.data.date}/>
@@ -244,6 +262,20 @@ export default function UserDetails(props) {
                                             Yes, Discharge
                                     </Button>
                             </DialogActions>
+                    </Dialog>
+                    <Dialog
+                        open={openDialog}
+                        PaperProps={{
+                                style: {
+                                        backgroundColor: 'transparent',
+                                        boxShadow: 'none',
+                                        scrollbarColor: "transparent"
+                                },
+                        }}
+                        onClose={handleDialogClose}
+                    >
+                            <GroupInfo closeFunc={handleDialogClose} data={selectedGroupDetails}/>
+
                     </Dialog>
 
             </div>
