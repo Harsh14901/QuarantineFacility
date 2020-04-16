@@ -22,15 +22,34 @@ L.Icon.Default.mergeOptions({
 
 export default function MapExtreme(props) {
 
-        let LatLong ={lat: 31.4,lng: 78.7};
 
         const position =[22.4606543,88.420414];
+
+        const [LatLong,setLatLong] = useState({lat: position[0],lng: position[1]});
+        const [markerPopup,setMarkerPopup] = useState("");
+
         const [marker,setMarker] = useState(position);
-        const [geojsonFeature,setGeojsonFeature] = useState([]);
+
+
+        const geoJsonFeature = {
+                "type": "Feature",
+                "properties": {
+                        "name": "Coors Field",
+                        "amenity": "Baseball Stadium",
+                        "popupContent": "This is where the Rockies play!"
+                },
+                "geometry": {
+                        "type": "Point",
+                        "coordinates": [-104.99404, 39.75621]
+                }
+        };
+
+        const [geojsonFeature,setGeojsonFeature] = useState([geoJsonFeature]);
 
 
         function savePosition() {
-                props.setLatLong(LatLong);
+                props.setLatLong(marker);
+                console.log("HI",LatLong)
         }
 
         function getFacilitiesData(){
@@ -49,6 +68,8 @@ export default function MapExtreme(props) {
                                             "coordinates": [data.latitude, data.longitude]}}
                                 )
                         });
+                        console.log("Eureka",temp);
+                        console.log("oereka",geoJsonFeature);
                         setGeojsonFeature(temp)
                 };
                 getFacilityData(callback)
@@ -57,15 +78,22 @@ export default function MapExtreme(props) {
 
         function RealTimePass(SearchInfo){
                 console.log("Haha",SearchInfo.latLng);
-                LatLong = (SearchInfo.latLng);
+                addMarker(SearchInfo);
+                // setLatLong(SearchInfo.latLng);
                 // setMarker([SearchInfo.latLng.lat,SearchInfo.latLng.lng])
 
         }
 
         const addMarker = (e) => {
-                setMarker([e.latlng.lat,e.latlng.lng]);
+                try {
+                        setMarker([e.latlng.lat, e.latlng.lng]);
+                }catch (error) {
+                        console.log("Yipee",e);
+                        setMarker([e.latLng.lat,e.latLng.lng])
+                }
+                setMarkerPopup(e.info);
                 console.log("HUHUHUHUH",e);
-                LatLong = e.latlng;
+                setLatLong(e.latlng);
 
         };
 
@@ -112,20 +140,19 @@ export default function MapExtreme(props) {
                         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     />
                             <Marker position={marker}>
-                                    <Popup>Selected Location</Popup>
+                                    <Popup>{markerPopup?markerPopup:"Selected Location"}</Popup>
                             </Marker>
 
-                                    {geojsonFeature.map((position, idx) => {
-                                            return(
-                                            <GeoJSON key={`marker-${idx}`} data={position} />)
-                                    }
 
-                                        // <Marker key={`marker-${idx}`} position={position}>
-                                                //         <Popup>
-                                                //                 <span>{data.properties.name}<br/> Easily customizable.</span>
-                                                //         </Popup>
-                                                // </Marker>
-                                            )}
+
+                            {  geojsonFeature.map((data,idx) =>
+                                    <Marker key={`marker-${idx}`} position={position} >
+                                            <Popup>
+                                                    <span>{"Name:- "+data.properties.name}<br/> {data.properties.popupContent}</span>
+                                            </Popup>
+                                    </Marker> )
+                            }
+
 
                 </Map>
                     <Button onClick={savePosition} style={{
