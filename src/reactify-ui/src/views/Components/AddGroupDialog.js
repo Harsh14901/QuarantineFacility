@@ -29,6 +29,10 @@ import CardFooter from "components/Card/CardFooter";
 import Card from "components/Card/Card";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
+import AddFacilityDialog from "views/Components/AddFacilityDialog";
+import Dialog from "@material-ui/core/Dialog";
+import MapExtreme from "views/Maps/MapExtreme";
+import {func} from "prop-types";
 
 const useStyles2 = makeStyles(styles2);
 
@@ -47,6 +51,9 @@ function AddGroupDialog(props) {
         const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
         const [VIPStatus,setVipStatus] = useState(false);
         const [category,setCategory] =useState(false);
+        const [LocationPicker,setLocationPicker] = useState(false);
+        const [address,setAddress] = useState("");
+        const [latLong,setLatLong] = useState({});
 
         defaultUserDetail['latitude'] = Math.random()+22
         defaultUserDetail['longitude'] = Math.random()+88
@@ -88,6 +95,25 @@ function AddGroupDialog(props) {
                 setFabOpen(false);
         };
 
+        function pickLocation() {
+                setLocationPicker(true)
+        }
+
+        function handleLocationClose(){
+                setLocationPicker(false)
+        }
+
+        function submitLocationDetails(data){
+                setAddress(data.info);
+                setLatLong(data.marker);
+                handleLocationClose();
+                console.log(data.marker)
+                if(data.info===""){
+                        setAddress(data.marker[0]+"N , "+data.marker[1]+"S")
+                }
+
+        }
+
 
 
         const actions = [
@@ -112,10 +138,13 @@ function AddGroupDialog(props) {
 
         function submitDetails(){
                 let temp=[];
+                let category='adults';
                 userDetails.map((data,j)=>{
                         temp.push({...userDetails[j],vip: VIPStatus,risk: userDetails[j].risk?"high":"low"})
+                        if(userDetails[j].age<18)
+                                category='family'
                 });
-                props.submitFunc([{category:(category?"adults":"family"),person_set: temp}])
+                props.submitFunc([{category:category,person_set: temp}])
         }
 
         function goNext(){
@@ -185,25 +214,7 @@ function AddGroupDialog(props) {
                                                                         )
                                                                 }}
                                                             />
-                                                            <CustomInput
-                                                                labelText="Address..."
-                                                                id="address"
-                                                                required
-                                                                formControlProps={{
-                                                                        fullWidth: true
-                                                                }}
-                                                                inputProps={{
-                                                                        value: userDetails[j].address,
-                                                                        onChange: handleChange("address",j),
-                                                                        type: "text",
-                                                                        endAdornment: (
-                                                                            <InputAdornment position="end">
-                                                                                    <HomeIcon className={classes2.inputIconsColor} />
-                                                                            </InputAdornment>
-                                                                        ),
-                                                                        autoComplete: "off"
-                                                                }}
-                                                            />
+
                                                             <TextField
                                                                 style={{marginTop: "6px"}}
                                                                 id="severity"
@@ -313,38 +324,25 @@ function AddGroupDialog(props) {
                                                                     }
                                                                     label="Enable VIP Status"
                                                                 />
-                                                                <FormControlLabel
-                                                                    control={
-                                                                            <Switch
-                                                                                checked={category}
-                                                                                onChange={handleCategory}
-                                                                                name="Category"
-                                                                                color="primary"
-                                                                            />
-                                                                    }
-                                                                    label={"Category: " + (category?"Adults":"Family")}
+                                                                <CustomInput
+                                                                    labelText="Address..."
+                                                                    id="address"
+                                                                    required
+                                                                    formControlProps={{
+                                                                            fullWidth: true
+                                                                    }}
+                                                                    inputProps={{
+                                                                            value: address,
+                                                                            type: "text",
+                                                                            endAdornment: (
+                                                                                <InputAdornment position="end">
+                                                                                        <HomeIcon onClick={pickLocation} className={classes2.inputIconsColor} />
+                                                                                </InputAdornment>
+                                                                            ),
+                                                                            autoComplete: "off"
+                                                                    }}
                                                                 />
-                                                                {/*<CustomInput*/}
-                                                                {/*    labelText="Name..."*/}
-                                                                {/*    id="name"*/}
-                                                                {/*    onChange={handleInputChange}*/}
-                                                                {/*    formControlProps={{*/}
-                                                                {/*            fullWidth: true*/}
-                                                                {/*    }}*/}
-                                                                {/*    inputProps={{*/}
-                                                                {/*            type: "text",*/}
-                                                                {/*            endAdornment: (*/}
-                                                                {/*                <InputAdornment position="end">*/}
-                                                                {/*                        <People className={classes2.inputIconsColor} />*/}
-                                                                {/*                </InputAdornment>*/}
-                                                                {/*            )*/}
-                                                                {/*    }}*/}
-                                                                {/*/>*/}
 
-                                                                {/*<FormControlLabel*/}
-                                                                {/*    control={<Checkbox checked={checked} onChange={handleChange} name="checkedA" />}*/}
-                                                                {/*    label="I agree to terms and conditions"*/}
-                                                                {/*/>*/}
                                                         </CardBody>
                                                         <CardFooter className={classes2.cardFooter}>
                                                                 <Button onClick={goNext} className={classes.submitButton}>
@@ -361,7 +359,20 @@ function AddGroupDialog(props) {
 
                             </GridItem>
                     </GridContainer>
+                    <Dialog
+                        open={LocationPicker}
+                        PaperProps={{
+                                style: {
+                                        backgroundColor: 'transparent',
+                                        boxShadow: 'none',
+                                        scrollbarColor: "transparent"
+                                },
+                        }}
+                        onClose={handleLocationClose}
+                    >
+                            <MapExtreme submitFunc={submitLocationDetails}/>
 
+                    </Dialog>
 
 
             </div>
