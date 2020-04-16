@@ -3,6 +3,7 @@ import random
 import requests
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from math import *
 # from django.http import *
 
 INFINITY = 1000000000
@@ -110,11 +111,11 @@ def make_allocation(patient):
     else:
         print('allocating through GEO API')
         row = get_all_distances(patient)
-        for fac_tuple in row:
+        for facility in row:
             allocated = True
             for i in range(len(family)):
                 patient = family[i]
-                room_pk = check_allocation_possible(patient, facility_pk=fac_tuple[1].id)
+                room_pk = check_allocation_possible(patient, facility_pk=facility.id)
                 if room_pk is not None:
                     patient.room = Room.objects.get(id=room_pk)
                     patient.save()        
@@ -156,12 +157,33 @@ def allocate(groups):
 enter location in form of string or comma separated latitude and longitude
 eg : '49.932707,11.588051'
 '''
-def get_distance(p1,p2):
+def naive_distance(p1,p2):
+    return sqrt((p1[0]-p2[0])**2 + (p1[1]-p2[1])**2)
+
+def sort_naively(p1):
+    unsorted = []
+    for facility in Facility.objects.all():
+        p2=(facility.latitude,facility.longitude)
+        unsorted.append((naive_distance(p1,p2),facility))
+    sorted_pairs = sorted(unsorted,key=lambda x:x[0])
+    print(sorted_pairs)
+    return [pair[1] for pair in sorted_pairs]
+
+def get_all_distances(patient):
+    p1=(float(patient.latitude),float(patient.longitude))
+    half_sorted = sort_naively(p1)
+    print(half_sorted)
+    p1='{},{}'.format(patient.latitude,patient.longitude)
+    all_facilities = []
+
+    list_facility_location = ['{},{}'.format(facility.latitude,facility.longitude) for facility in half_sorted]
+    list_facility_location=list_facility_location[0:10]
+
     key='efe1c6b8-2b70-4252-a030-7d7f9ae2be5c'
     url='https://graphhopper.com/api/1/matrix'
     params={
         'from_point':p1, 
-        'to_point':p2,
+        'to_point':list_facility_location,
         'type': 'json',
         'vehicle':'car',
         'out_array':'distances',
@@ -169,24 +191,22 @@ def get_distance(p1,p2):
     }
     r=requests.get(url=url,params=params)
     data = r.json()
-    distance = data['distances'][0][0]
-    return distance
-# get_distance('49.932,11.051','50.817,11.337')
+    all_distances = []
+    if 'distances' in data.keys():
+        for i in range(len(list_facility_location)):
+            dist = data['distances'][0][i]
+            all_distances.append((dist,half_sorted[i]))
+        all_distances.sort(key=lambda x:x[0])
+        print(all_distances)
+        all_facilities = [pair[1] for pair in all_distances]
 
-def get_all_distances(patient):
-    p1='{},{}'.format(patient.latitude,patient.longitude)
-    d=[]
-    for facility in Facility.objects.all():
-        try:
-            p2='{},{}'.format(facility.latitude,facility.longitude)
-            d.append((get_distance(p1,p2),facility))    
-        except:
-            print('wrong location of either {},or {}'.format(facility,patient))
-            d.append((INFINITY,facility))
-    d.sort(key=lambda x:x[0])
-    for a in d:
-        print(a)  
-    return d
+        if len(half_sorted)>10:
+            all_facilities += half_sorted[10:]
+    else:
+        all_facilities = half_sorted
+        print('API call failed ... using point to point distances')
+    return all_facilities
+
 
 def set_location(obj):
     p1=f"{obj['latitude']},{obj['longitude']}"
@@ -205,21 +225,9 @@ def set_location(obj):
     except:
         print( f'could not locate address lat {p1}' )
     else:
-        print(point)
-        obj['address'] = r.json()['hits'][0]['name']
         obj['latitude'] = point['lat']
         obj['longitude'] = point['lng']
-        print(obj)
     
-    
-
-def locate_facilities():
-    for facility in Facility.objects.all():
-        set_location(facility)
-
-def locate_persons():
-    for person in Person.objects.all():
-        set_location(person)
         
 
 
@@ -230,8 +238,5 @@ def getClosestFacilities(request):
         longitude=request.GET['longitude'],
     )
     a=get_all_distances(dummy)
-    print(a)
-    ans={}
-    for pair in a:
-        ans[pair[1].pk] = pair[0]
-    return Response(ans)
+    # print(a)
+    return Response({'id':f.id,'name':f.name} for f in a)
