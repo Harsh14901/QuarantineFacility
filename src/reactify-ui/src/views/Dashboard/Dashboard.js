@@ -39,8 +39,15 @@ import {
 } from "variables/charts.js";
 
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
-import AverageDischargeCases, {TotalCasesGraph, TotalDischargeCaseGraph} from "views/Components/analytics/GetDischargeCases";
+import AverageDischargeCases, {
+        ActiveCasesGraph,
+        TotalCasesGraph,
+        TotalDischargeCaseGraph
+} from "views/Components/analytics/GetDischargeCases";
 import {AgeGraph, GenderGraph, NewCasesGraph, NewDischargesGraph} from "views/Components/analytics/GetNewCasesGraph";
+import LineGraphs from "views/Components/analytics/LineGraphs";
+import DonutGraph from "views/Components/analytics/DonutGraph";
+import ActiveVsDischargeGraph from "views/Components/analytics/ActiveVsDischargeGraph";
 
 
 const useStyles = makeStyles(styles);
@@ -51,87 +58,20 @@ export default function Dashboard() {
   console.log(emailsSubscriptionChart.data);
   return (
     <div>
-    <GridContainer>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card chart>
-            <CardHeader color="success">
-              <ChartistGraph
-                className="ct-chart"
-                data={dailySalesChart.data}
-                type="Line"
-                options={dailySalesChart.options}
-                listener={dailySalesChart.animation}
-              />
-            </CardHeader>
-            <CardBody>
-              <h4 className={classes.cardTitle}>Daily Sales</h4>
-              <p className={classes.cardCategory}>
-                <span className={classes.successText}>
-                  <ArrowUpward className={classes.upArrowCardCategory} /> 55%
-                </span>{" "}
-                increase in today sales.
-              </p>
-            </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-                <AccessTime /> updated 4 minutes ago
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card chart>
-            <CardHeader color="warning">
-              <ChartistGraph
-                className="ct-chart"
-                data={emailsSubscriptionChart.data}
-                type="Bar"
-                options={emailsSubscriptionChart.options}
-                responsiveOptions={emailsSubscriptionChart.responsiveOptions}
-                listener={emailsSubscriptionChart.animation}
-              />
-            </CardHeader>
-            <CardBody>
-              <h4 className={classes.cardTitle}>Email Subscriptions</h4>
-              <p className={classes.cardCategory}>Last Campaign Performance</p>
-            </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-                <AccessTime /> campaign sent 2 days ago
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card chart>
-            <CardHeader color="danger">
-              <ChartistGraph
-                className="ct-chart"
-                data={completedTasksChart.data}
-                type="Line"
-                options={completedTasksChart.options}
-                listener={completedTasksChart.animation}
-              />
-            </CardHeader>
-            <CardBody>
-              <h4 className={classes.cardTitle}>Completed Tasks</h4>
-              <p className={classes.cardCategory}>Last Campaign Performance</p>
-            </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-                <AccessTime /> campaign sent 2 days ago
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
+    <GridContainer style={{justifyContent: "center"}}>
+
             <TotalCasesGraph/>
+            <ActiveCasesGraph/>
             <TotalDischargeCaseGraph/>
             <NewCasesGraph/>
+            <NewDischargesGraph/>
             <AverageDischargeCases/>
+            <ActiveVsDischargeGraph/>
             <AgeGraph/>
             <GenderGraph/>
-            <NewDischargesGraph/>
-      </GridContainer>
+            <DonutGraph/>
+
+    </GridContainer>
     </div>
   );
 }

@@ -42,7 +42,6 @@ function StatDetailCard(props){
                         ],
 
                 }],
-                        text: "HI"
         };}
         return(
             <Card>

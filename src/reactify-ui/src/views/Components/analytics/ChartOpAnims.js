@@ -61,7 +61,8 @@ export const line={
 export const bar = {
         options: {
                 axisX: {
-                        showGrid: false
+                        showGrid: false,
+                        scaleMinSpace: 15
                 },
                 height: "30vh",
                 low: 0,

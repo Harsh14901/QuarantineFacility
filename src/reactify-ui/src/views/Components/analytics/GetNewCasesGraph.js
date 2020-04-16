@@ -3,7 +3,7 @@ import React from "react";
 
 export function NewCasesGraph() {
         return(
-                <BarGraph title={"New Cases"} url='http://127.0.0.1:8000/analytics/new_cases/'/>
+                <BarGraph title={"New Cases"} url='http://127.0.0.1:8000/analytics/new_cases/' color={"info"}/>
         )
 }
 
@@ -50,19 +50,19 @@ function processGenderData(data) {
 
 export function AgeGraph() {
         return(
-            <BarGraph title="Number of Cases vs Age" noCategory dataProcessFunction={processAgeGraph} url='http://127.0.0.1:8000/analytics/cases_vs_age/'/>
+            <BarGraph title="Number of Cases vs Age" noCategory dataProcessFunction={processAgeGraph} url='http://127.0.0.1:8000/analytics/cases_vs_age/' color={"success"}/>
         )
 }
 
 export function GenderGraph() {
         return(
-            <BarGraph horizontal title="Cases based on Gender" noCategory dataProcessFunction={processGenderData} url='http://127.0.0.1:8000/analytics/cases_vs_gender/'/>
+            <BarGraph horizontal title="Cases based on Gender" noCategory dataProcessFunction={processGenderData} url='http://127.0.0.1:8000/analytics/cases_vs_gender/' color={"success"}/>
         )
 
 }
 
 export function NewDischargesGraph(){
         return(
-            <BarGraph title="Daily People Discharged" url='http://127.0.0.1:8000/analytics/discharge_count/'/>
+            <BarGraph title="Daily People Discharged" url='http://127.0.0.1:8000/analytics/discharge_count/' color={"danger"}/>
         )
 }
