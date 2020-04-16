@@ -62,9 +62,9 @@ class PersonSerializer(serializers.ModelSerializer):
                   'luxuries', 'group', 'latitude', 'longitude' ,'checkuprecords_set','room_pk','ward_pk','facility_pk','facility_name','doa']
 
     def is_valid(self, raise_exception=False):
-        code = "P" + str(random.randint(10000, 99999))
+        code = "P" + str(random.randint(10000000, 99999999))
         while(len(Person.objects.filter(code=code)) != 0):
-            code = "P" + str(random.randint(10000, 99999))
+            code = "P" + str(random.randint(10000000, 99999999))
         self.initial_data['code'] = code  
         a = super().is_valid(raise_exception=raise_exception)        
         return a
