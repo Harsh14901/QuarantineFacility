@@ -33,6 +33,9 @@ import AddFacilityDialog from "views/Components/AddFacilityDialog";
 import Dialog from "@material-ui/core/Dialog";
 import MapExtreme from "views/Maps/MapExtreme";
 import {func} from "prop-types";
+import {LocationCity} from "@material-ui/icons";
+import getData from "facility/getData";
+import getFacilitiesList from "facility/getFacilitiesList";
 
 const useStyles2 = makeStyles(styles2);
 
@@ -46,17 +49,20 @@ function AddGroupDialog(props) {
 
 
         const defaultUserDetail={name: "",age: 18,address: "",risk: false,contact: "",email: "",latitude:"80.12345",longitude:"80.12345",vip:false};
-        const [userDetails,setUserDetails] = useState([defaultUserDetail,defaultUserDetail]);
+        const [userDetails,setUserDetails] = useState([defaultUserDetail]);
         const [step,setStep] = useState(1);
         const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
         const [VIPStatus,setVipStatus] = useState(false);
         const [category,setCategory] =useState(false);
         const [LocationPicker,setLocationPicker] = useState(false);
         const [address,setAddress] = useState("");
-        const [latLong,setLatLong] = useState({});
+        const [latLong,setLatLong] = useState([82,25]);
+        const [facilitiesList,setFacilitiesList] = useState([]);
+        const [selectedFacility,setSelectedFacility] = useState("");
 
-        defaultUserDetail['latitude'] = Math.random()+22
-        defaultUserDetail['longitude'] = Math.random()+88
+
+        defaultUserDetail['latitude'] = Math.random()+22;
+        defaultUserDetail['longitude'] = Math.random()+88;
 
         setTimeout(function() {
                 setCardAnimation("");
@@ -91,6 +97,9 @@ function AddGroupDialog(props) {
                 else if(title===actions[1].name){
                         deleteMember(j);
                 }
+                else if(title===actions[2].name){
+                        restoreMember(j);
+                }
                 console.log(event);
                 setFabOpen(false);
         };
@@ -107,12 +116,33 @@ function AddGroupDialog(props) {
                 setAddress(data.info);
                 setLatLong(data.marker);
                 handleLocationClose();
-                console.log(data.marker)
-                if(data.info===""){
+                console.log(data.marker);
+                console.log(data.info);
+                if(!data.info){
                         setAddress(data.marker[0]+"N , "+data.marker[1]+"S")
                 }
+                getFacilities(data.marker)
 
         }
+
+        function getFacilities(data){
+
+                const callback = res => {
+                        console.log("Got the facilities",res);
+                        let temp=[];
+                        for (let x in res){
+                                temp.push({value: x,label: x})
+                        }
+                        setFacilitiesList(temp)
+                };
+
+                getFacilitiesList(callback,{latitude: data[0],longitude: data[0]})
+
+        }
+
+        const handleAddressChange = event => {
+                setAddress(event.target.value)
+        };
 
 
 
@@ -140,11 +170,11 @@ function AddGroupDialog(props) {
                 let temp=[];
                 let category='adults';
                 userDetails.map((data,j)=>{
-                        temp.push({...userDetails[j],vip: VIPStatus,risk: userDetails[j].risk?"high":"low"})
+                        temp.push({...userDetails[j],latitude: latLong[0],longitude: latLong[0],address: address,vip: VIPStatus,risk: userDetails[j].risk?"high":"low"})
                         if(userDetails[j].age<18)
                                 category='family'
                 });
-                props.submitFunc([{category:category,person_set: temp}])
+                props.submitFunc([{facility_preference: selectedFacility,category:category,person_set: temp}])
         }
 
         function goNext(){
@@ -160,6 +190,12 @@ function AddGroupDialog(props) {
                 let temp=[...userDetails];
                 temp.splice(j, 1);
                 setUserDetails(temp)
+        }
+
+        function restoreMember(j){
+                let temp=[...userDetails];
+                temp[j]=defaultUserDetail;
+                setUserDetails(j);
         }
 
         function handleVIP(){
@@ -333,15 +369,34 @@ function AddGroupDialog(props) {
                                                                     }}
                                                                     inputProps={{
                                                                             value: address,
+                                                                            onChange: handleAddressChange,
                                                                             type: "text",
                                                                             endAdornment: (
                                                                                 <InputAdornment position="end">
-                                                                                        <HomeIcon onClick={pickLocation} className={classes2.inputIconsColor} />
+                                                                                        <LocationCity onClick={pickLocation} className={classes2.inputIconsColor} />
                                                                                 </InputAdornment>
                                                                             ),
                                                                             autoComplete: "off"
                                                                     }}
                                                                 />
+                                                                <TextField
+                                                                    style={{marginTop: "12px"}}
+                                                                    id="facility"
+                                                                    select
+                                                                    label="Chose Preferred facility"
+                                                                    value={selectedFacility}
+                                                                    onChange={(e) =>{setSelectedFacility(e.target.value)}}
+                                                                    fullWidth={true}
+                                                                    InputProps={{style: {fontSize: "0.9rem"}}}
+
+
+                                                                >
+                                                                        {facilitiesList.map((option) => (
+                                                                            <MenuItem  key={option.value} value={option.value}>
+                                                                                    {option.label}
+                                                                            </MenuItem>
+                                                                        ))}
+                                                                </TextField>
 
                                                         </CardBody>
                                                         <CardFooter className={classes2.cardFooter}>
@@ -370,7 +425,7 @@ function AddGroupDialog(props) {
                         }}
                         onClose={handleLocationClose}
                     >
-                            <MapExtreme submitFunc={submitLocationDetails}/>
+                            <MapExtreme center={latLong} submitFunc={submitLocationDetails}/>
 
                     </Dialog>
 
