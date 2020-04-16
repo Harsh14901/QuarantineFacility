@@ -57,9 +57,8 @@ function DonutGraph(props){
             <GridItem xs={12} md={8}>
             <Card>
                     <CardHeader >
-                    <Doughnut data={data} options={
-                            {legend: {
-                                            display: false} }}/>
+                    <Doughnut data={data}
+                    />
                     </CardHeader>
                     <CardBody>
                             <h4 className={classes.cardTitle}>{"Ward Distribution"}</h4>

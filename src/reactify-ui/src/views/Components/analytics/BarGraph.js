@@ -55,6 +55,16 @@ function BarGraph(props) {
                                 }
                         }
 
+                        if(series.length>7){
+                                let abcd=parseInt((series.length/10).toFixed(0));
+                                console.log("abcd is ",abcd,series.length);
+                                setOptions({...options,axisX: {...options.axisX,
+                                                labelInterpolationFnc: function (value,index) {
+                                                        return (index%abcd===0)?value:''
+                                                }}});
+
+                        }
+
                         props.horizontal?setOptions({...options,horizontalBars: true}):null
                         setOptions({...options,high: (1.5*max)});
                         setData({labels: labels,series: [series]});
