@@ -5,6 +5,7 @@ from rest_framework.routers import DefaultRouter
 import requests
 from .models import *
 from .analytics import *
+from .algo import *
 import random
 
 
@@ -34,7 +35,8 @@ urlpatterns = [
     url(r'^analytics/total_discharges/$',total_discharges,name="total_discharges"),
     url(r'^analytics/cases_vs_age/$',cases_vs_age,name="cases_vs_age"),
     url(r'^analytics/cases_vs_gender/$',cases_vs_gender,name="cases_vs_gender"),
-
     url(r'^analytics/ward_distribution/$',get_ward_distribution,name="ward_distribution"),
+
+    url(r'^get_nearest_facilities/$',getClosestFacilities,name="getClosestFacilities")
 
 ]
