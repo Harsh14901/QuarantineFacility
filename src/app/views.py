@@ -150,22 +150,20 @@ def AllocateGroups(request):
         groups_data = []
         groups = []
         for group_data in request.data:
+            print(group_data)
             people_data = group_data.pop("person_set")
             group_serializer = GroupSerializer(data=group_data)
             if group_serializer.is_valid():
                 group = group_serializer.save(person_set=people_data)
                 if group is not None:
                     groups.append(group)
-                
             else:
                 return Response(group_serializer.errors,status=status.HTTP_400_BAD_REQUEST)
-        
         allocation = allocate(groups)
         for group in groups:
             groups_data.append(GroupSerializer(group).data)
 
         return Response(groups_data)        
-    
     
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
