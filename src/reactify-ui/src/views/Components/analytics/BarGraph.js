@@ -73,7 +73,7 @@ function BarGraph(props) {
         return(
                         <GridItem xs={12} sm={6} md={6}>
                                 <Card chart>
-                                        <CardHeader color="warning">
+                                        <CardHeader color={props.color}>
                                                 <ChartistGraph
                                                     className="ct-chart"
                                                     data={data}
