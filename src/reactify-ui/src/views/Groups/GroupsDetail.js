@@ -26,6 +26,8 @@ import LoginPage from "views/Components/LoginPage";
 import PostGroupData from "PeopleData/postGroupData";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
+import UserDetails from "views/UserProfile/UserDetails";
+import GroupInfo from "views/Groups/GroupInfo";
 
 
 const styles = {
@@ -55,8 +57,18 @@ export default function GroupsDetail() {
         const [dataDisplay,setDataDisplay] = useState([]);
         const [groupAddDialog,setGroupAddDialog] = useState(false);
         const [succesAlert,setSuccessAlert] = useState(false);
+        const [openDialog,setOpenDialog] = useState(false);
+        const [selectedGroupDetails,setSelectedGroupDetails] = useState({});
 
 
+        function handleDialogClose(){
+                setOpenDialog(false)
+        }
+
+        function openDetails(data){
+                setSelectedGroupDetails(data);
+                setOpenDialog(true)
+        }
 
         const columnsHeading=[
                 { title: 'ID', field: 'id' },
@@ -80,7 +92,7 @@ export default function GroupsDetail() {
                                                 high++
                                 });
                                 details.push({id:data.id,category:data.category,count:data.count
-                                        ,risk: high,date:""})
+                                        ,risk: high,date:"",person_set:data.person_set})
                         });
                         setDataDisplay(details);
                 };
@@ -100,8 +112,8 @@ export default function GroupsDetail() {
         };
 
         function handleOpen()  {
-                setGroupAddDialog(true)
-        };
+                setGroupAddDialog(true);
+        }
 
         function submitDetails(data){
                 console.log("Submitting",data);
@@ -133,6 +145,8 @@ export default function GroupsDetail() {
         }
 
 
+
+
         return (
             <div >
                     <div  style={{marinLeft:"100px"}}>
@@ -153,7 +167,7 @@ export default function GroupsDetail() {
                                             </p>
                                     </CardHeader>
                                     <CardBody>
-                                            <CustomTable title="Groups' Details" columns={columnsHeading} data={dataDisplay}/>
+                                            <CustomTable title="Groups' Details" openDetails={openDetails} columns={columnsHeading} data={dataDisplay}/>
 
                                     </CardBody>
                             </Card>
@@ -171,6 +185,20 @@ export default function GroupsDetail() {
                         onClose={handleClose}
                     >
                             <AddGroupDialog submitFunc={submitDetails}/>
+
+                    </Dialog>
+                    <Dialog
+                        open={openDialog}
+                        PaperProps={{
+                                style: {
+                                        backgroundColor: 'transparent',
+                                        boxShadow: 'none',
+                                        scrollbarColor: "transparent"
+                                },
+                        }}
+                        onClose={handleDialogClose}
+                    >
+                            <GroupInfo closeFunc={handleDialogClose} data={selectedGroupDetails}/>
 
                     </Dialog>
                     <Snackbar open={succesAlert} autoHideDuration={6000} onClose={handleAlertClose}>

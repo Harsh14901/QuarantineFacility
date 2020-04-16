@@ -53,11 +53,11 @@ export default function UserProfile() {
                 { title: 'Name', field: 'name' },
                 { title: 'Age', field: 'age' },
                 { title: 'Group Members', field: 'member_count' },
-                { title: 'Facility', field: 'facility' },
+                { title: 'Facility', field: 'facility_name' },
                 { title: 'Risk',field: 'risk'},
                 {
                         title: 'Date Quarantined',
-                        field: 'date',
+                        field: 'doa',
                 },
         ];
         function getPeopleData() {
@@ -67,7 +67,7 @@ export default function UserProfile() {
                         let details=[];
                          result.map((data,j) =>{
                                  details.push({id:data.id,name:data.name,age:data.age,member_count:-1,gender: data.gender
-                                         ,facility:data.facility_name,risk: data.risk,date:data.doa,number: data.contact_num,email:data.email
+                                         ,facility_name:data.facility_name,risk: data.risk,doa:data.doa,number: data.contact_num,email:data.email
                                  ,vip: data.vip,facility_pk:data.facility_pk})
                          });
                         setDataDisplay(details);

@@ -145,7 +145,6 @@ export default function TableList() {
 
         return (
             <div>
-                    <h1>{latLong.lat}</h1>
                     <GridContainer justifyContent={"center"}>
                             <GridItem xs={12} sm={12} md={4}>
                                     <StatDetailCard graph title="Total Capacity" data={facilityTotalCapacity} status={"Just Updated"} />

@@ -142,11 +142,11 @@ export default function UserDetails(props) {
                                                     <SideButton onClick={handleWardChange} text={"Shift to Ward "+(props.data.risk==='high'?2:1)}/>
                                             </div>
                                             <div style={{display: "flex",marginTop:"10px"}}>
-                                                    <Para text={"Facility Enrolled:- " + props.data.facility}/>
+                                                    <Para text={"Facility Enrolled:- " + props.data.facility_name}/>
                                                     <Button size="small" variant="outlined" color="primary" style={{marginLeft: "auto",fontSize: "0.7rem"}}>Change Facility</Button>
                                             </div>
                                             <div style={{display: "flex",marginTop:"10px"}}>
-                                                    <Para text={"Group ID:- " + props.data.facility}/>
+                                                    <Para text={"Group ID:- " + props.data.group}/>
                                                     <Button size="small" variant="outlined" color="primary" style={{marginLeft: "auto",fontSize: "0.7rem"}}>View Group Details</Button>
                                             </div>
                                             <Para text={"Address:- " + props.data.address}/>
