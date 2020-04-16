@@ -130,9 +130,9 @@ function AddGroupDialog(props) {
                 const callback = res => {
                         console.log("Got the facilities",res);
                         let temp=[];
-                        for (let x in res){
-                                temp.push({value: x,label: x})
-                        }
+                        for(let x=0;x<res.length;x++)
+                                temp.push({value: res[x].id,label: res[x].name});
+
                         setFacilitiesList(temp)
                 };
 

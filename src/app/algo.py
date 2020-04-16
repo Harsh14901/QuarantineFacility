@@ -158,7 +158,11 @@ enter location in form of string or comma separated latitude and longitude
 eg : '49.932707,11.588051'
 '''
 def naive_distance(p1,p2):
-    return sqrt((p1[0]-p2[0])**2 + (p1[1]-p2[1])**2)
+    try:
+        temp = sqrt((p1[0]-p2[0])**2 + (p1[1]-p2[1])**2)
+        return temp
+    except:
+        return 99999999
 
 def sort_naively(p1):
     unsorted = []
