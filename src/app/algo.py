@@ -1,6 +1,9 @@
 from .models import *
 import random
 import requests
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+# from django.http import *
 
 INFINITY = 1000000000
 
@@ -220,3 +223,15 @@ def locate_persons():
         
 
 
+@api_view(['GET'])
+def getClosestFacilities(request):
+    dummy = Person(
+        latitude=request.GET['latitude'],
+        longitude=request.GET['longitude'],
+    )
+    a=get_all_distances(dummy)
+    print(a)
+    ans={}
+    for pair in a:
+        ans[pair[1].pk] = pair[0]
+    return Response(ans)
