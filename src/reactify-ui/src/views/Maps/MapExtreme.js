@@ -48,8 +48,7 @@ export default function MapExtreme(props) {
 
 
         function savePosition() {
-                props.setLatLong(marker);
-                console.log("HI",LatLong)
+                props.submitFunc({marker: marker,info: markerPopup});
         }
 
         function getFacilitiesData(){

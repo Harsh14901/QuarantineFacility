@@ -190,9 +190,7 @@ export default function TableList() {
                         }}
                         onClose={handleClose}
                     >
-                            <MapExtreme submitFunc={submitDetails} setLatLong={(data)=> {
-                                    setLatLong(data)
-                            }}/>
+                            <AddFacilityDialog submitFunc={submitDetails}/>
 
                     </Dialog>
                     <Snackbar open={successAlert} autoHideDuration={6000} onClose={handleAlertClose}>
