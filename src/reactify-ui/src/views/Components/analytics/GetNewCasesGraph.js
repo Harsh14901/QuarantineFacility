@@ -63,6 +63,6 @@ export function GenderGraph() {
 
 export function NewDischargesGraph(){
         return(
-            <BarGraph title="Daily People Discharged" url='http://127.0.0.1:8000/analytics/discharge_count/' color={"danger"}/>
+            <BarGraph title="Daily People Discharged" spaceLabels={2} url='http://127.0.0.1:8000/analytics/discharge_count/' color={"danger"}/>
         )
 }

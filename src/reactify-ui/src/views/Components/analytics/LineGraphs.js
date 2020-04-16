@@ -36,6 +36,17 @@ function LineGraphs(props) {
                                         if(result[x]>max)
                                                 max=result[x]
                                 }
+
+                                if(series.length>7){
+                                        let abcd=parseInt((series.length/10).toFixed(0));
+                                        console.log("abcd is ",abcd,series.length);
+                                        setOptions({...options,axisX: {...options.axisX,
+                                                        labelInterpolationFnc: function (value,index) {
+                                                                return (index%abcd===0)?value:''
+                                                        }}});
+
+                                }
+
                                 setOptions({...options,high: (1.5*max),height: (props.size==='large'?"40vh":"30vh")});
                                 setData({labels: labels,series: [series]});
                                 console.log({labels: labels,series:[series]})
@@ -62,7 +73,7 @@ function LineGraphs(props) {
                                             />
                                     </CardHeader>
                                     <CardBody>
-                                            <h2 className={classes.cardTitle}>{props.title}</h2>
+                                            <h3 className={classes.cardTitle}>{props.title}</h3>
                                    </CardBody>
                             </Card>
                     </GridItem>
