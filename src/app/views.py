@@ -184,7 +184,7 @@ def discharge_group(request):
         try:
             Discharged(person=person).save()
         except Exception as e:
-            if(str(e).find('UNIQUE CONSTRAINT')==-1):
+            if(str(e).find('UNIQUE constraint')==-1):
                 return Response("Error Occured")
     return Response('done')
 
