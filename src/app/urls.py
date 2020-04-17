@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^index/$',index,name="index"),
     url(r'^allocate/$',AllocateGroups,name="allocate"),
     url(r'^discharge/$',DischargedViewSet.as_view(),name="discharge"),
+    url(r'^discharge_group/$',discharge_group,name="discharge_group"),
     url(r'^person/search/$',searchPerson,name="search_user"),
     url(r'^facility/search/$',searchFacility,name="search_facility"),
 
