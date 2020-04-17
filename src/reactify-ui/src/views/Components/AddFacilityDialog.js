@@ -36,6 +36,8 @@ import Dialog from "@material-ui/core/Dialog";
 import {LocationCity} from "@material-ui/icons";
 import AddLocationIcon from '@material-ui/icons/AddLocation';
 import AreaIcon from "assets/img/icons/AreaIcon";
+import CapacityIcon from "assets/img/icons/CapacityIcon";
+import RoomIcon from "assets/img/icons/RoomIcon";
 
 const useStyles2 = makeStyles(styles2);
 
@@ -241,7 +243,7 @@ function AddFacilityDialog(props){
                                                                             type: "text",
                                                                             endAdornment: (
                                                                                 <InputAdornment position="end">
-                                                                                        <People className={classes2.inputIconsColor} />
+                                                                                        <RoomIcon className={classes2.inputIconsColor} />
                                                                                 </InputAdornment>
                                                                             )
                                                                     }}
@@ -277,8 +279,8 @@ function AddFacilityDialog(props){
                                                                             type: "number",
                                                                             endAdornment: (
                                                                                 <InputAdornment position="end">
-                                                                                        <PhoneIcon className={classes2.inputIconsColor}>
-                                                                                        </PhoneIcon>
+                                                                                        <CapacityIcon className={classes2.inputIconsColor}>
+                                                                                        </CapacityIcon>
 
                                                                                 </InputAdornment>
                                                                             )
