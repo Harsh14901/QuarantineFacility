@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -23,74 +23,57 @@ import styles from "assets/jss/material-kit-react/views/loginPage.js";
 
 import image from "assets/img/bg7.jpg";
 
+import HttpsOutlinedIcon from '@material-ui/icons/HttpsOutlined';
+import postData from "facility/postData";
+
 const useStyles = makeStyles(styles);
 
 export default function LoginPage(props) {
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
+
+  const [email,setEmail] = useState("");
+  const [name,setName] = useState("");
+  const [password,setPassword] = useState("");
+
+
+        function submitDetails(){
+                const callback = result => {
+                        console.log("And here I have the login token",result)
+                };
+
+                postData(callback,{username: name,email: email,password: password},'http://127.0.0.1:8000/rest-auth/login/')
+        }
+
+        const handleChange = (id) => (event) => {
+                if(id==='email')
+                        setEmail(event.target.value);
+                if(id==='name')
+                        setName(event.target.value);
+                if(id==='password')
+                        setPassword(event.target.value)
+        };
+
   setTimeout(function() {
     setCardAnimation("");
   }, 700);
   const classes = useStyles();
   const { ...rest } = props;
   return (
-    <div>
-      <Header
-        absolute
-        color="transparent"
-        brand="Material Kit React"
-        rightLinks={<HeaderLinks />}
-        {...rest}
-      />
-      <div
-        className={classes.pageHeader}
-        style={{
-          backgroundImage: "url(" + image + ")",
-          backgroundSize: "cover",
-          backgroundPosition: "top center"
-        }}
-      >
-        <div className={classes.container}>
-          <GridContainer justify="center">
-            <GridItem xs={12} sm={12} md={4}>
+    <div style={{backgroundImage: "url(" + image + ")",backgroundSize: "cover",display: "flex",justifyContent: "center",alignItems:"center",height: "100vh"}}>
+          <GridContainer justify="center" >
+            <GridItem xs={12} sm={12} md={6}>
               <Card className={classes[cardAnimaton]}>
                 <form className={classes.form}>
                   <CardHeader color="primary" className={classes.cardHeader}>
                     <h4>Login</h4>
-                    <div className={classes.socialLine}>
-                      <Button
-                        justIcon
-                        href="#pablo"
-                        target="_blank"
-                        color="transparent"
-                        onClick={e => e.preventDefault()}
-                      >
-                        <i className={"fab fa-twitter"} />
-                      </Button>
-                      <Button
-                        justIcon
-                        href="#pablo"
-                        target="_blank"
-                        color="transparent"
-                        onClick={e => e.preventDefault()}
-                      >
-                        <i className={"fab fa-facebook"} />
-                      </Button>
-                      <Button
-                        justIcon
-                        href="#pablo"
-                        target="_blank"
-                        color="transparent"
-                        onClick={e => e.preventDefault()}
-                      >
-                        <i className={"fab fa-google-plus-g"} />
-                      </Button>
-                    </div>
+
                   </CardHeader>
-                  <p className={classes.divider}>Or Be Classical</p>
                   <CardBody>
                     <CustomInput
-                      labelText="First Name..."
+                      labelText="User Name..."
                       id="first"
+                      value={name}
+                      onChange={handleChange('name')}
                       formControlProps={{
                         fullWidth: true
                       }}
@@ -106,6 +89,8 @@ export default function LoginPage(props) {
                     <CustomInput
                       labelText="Email..."
                       id="email"
+                      value={email}
+                      onChange={handleChange('email')}
                       formControlProps={{
                         fullWidth: true
                       }}
@@ -121,6 +106,8 @@ export default function LoginPage(props) {
                     <CustomInput
                       labelText="Password"
                       id="pass"
+                      value={password}
+                      onChange={handleChange('password')}
                       formControlProps={{
                         fullWidth: true
                       }}
@@ -128,27 +115,25 @@ export default function LoginPage(props) {
                         type: "password",
                         endAdornment: (
                           <InputAdornment position="end">
-                            <Icon className={classes.inputIconsColor}>
-                              lock_outline
-                            </Icon>
+                                  <HttpsOutlinedIcon className={classes.inputIconsColor} />
                           </InputAdornment>
                         ),
                         autoComplete: "off"
                       }}
                     />
                   </CardBody>
+                        <a href={"/reset_password"} style={{marginLeft: "15px",fontSize:"0.7rem"}}>
+                                Forgot Password
+                        </a>
                   <CardFooter className={classes.cardFooter}>
-                    <Button simple color="primary" size="lg">
-                      Get started
+                    <Button onClick={submitDetails} simple color="primary" size="lg">
+                      LOGIN
                     </Button>
                   </CardFooter>
                 </form>
               </Card>
             </GridItem>
           </GridContainer>
-        </div>
-        <Footer whiteFont />
-      </div>
     </div>
   );
 }

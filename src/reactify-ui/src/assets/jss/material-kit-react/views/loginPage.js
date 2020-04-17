@@ -7,6 +7,9 @@ const signupPageStyle = {
                 overflow: "hidden",
                 position: "sticky",
                 color: "#FFFFFF",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center"
         },
         cardHidden: {
                 opacity: "0",
