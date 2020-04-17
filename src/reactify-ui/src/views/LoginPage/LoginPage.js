@@ -25,6 +25,7 @@ import image from "assets/img/bg7.jpg";
 
 import HttpsOutlinedIcon from '@material-ui/icons/HttpsOutlined';
 import postData from "facility/postData";
+import loginUser from "facility/loginUser";
 
 const useStyles = makeStyles(styles);
 
@@ -41,7 +42,9 @@ export default function LoginPage(props) {
                         console.log("And here I have the login token",result)
                 };
 
-                postData(callback,{username: name,email: email,password: password},'http://127.0.0.1:8000/rest-auth/login/')
+                let data={username: name,email: email,password: password};
+                console.log("Here is the data",JSON.stringify(data));
+                loginUser(callback,data,'http://127.0.0.1:8000/rest-auth/login/')
         }
 
         const handleChange = (id) => (event) => {
@@ -78,6 +81,8 @@ export default function LoginPage(props) {
                         fullWidth: true
                       }}
                       inputProps={{
+                              onChange: handleChange("name"),
+                              value: name,
                         type: "text",
                         endAdornment: (
                           <InputAdornment position="end">
@@ -89,12 +94,12 @@ export default function LoginPage(props) {
                     <CustomInput
                       labelText="Email..."
                       id="email"
-                      value={email}
-                      onChange={handleChange('email')}
                       formControlProps={{
                         fullWidth: true
                       }}
                       inputProps={{
+                              onChange: handleChange("email"),
+                              value: email,
                         type: "email",
                         endAdornment: (
                           <InputAdornment position="end">
@@ -112,6 +117,8 @@ export default function LoginPage(props) {
                         fullWidth: true
                       }}
                       inputProps={{
+                              onChange: handleChange("password"),
+                              value: password,
                         type: "password",
                         endAdornment: (
                           <InputAdornment position="end">

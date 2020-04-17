@@ -5,6 +5,12 @@ from rest_framework.exceptions import ValidationError
 import random
 
 
+
+class CitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Luxury
+        fields = ['id', 'name','latitutde','longitude','admin']
+
 class LuxurySerializer(serializers.ModelSerializer):
     class Meta:
         model = Luxury
@@ -51,7 +57,10 @@ class PersonSerializer(serializers.ModelSerializer):
 
     def save(self, **kwargs):
         # print(self.validated_data)
-        set_location(self.validated_data)
+        try:
+            set_location(self.validated_data)
+        except:
+            raise ValidationError(detail="Could not allocate location",code='invalid_coordinates')
         
         return super().save(**kwargs)
 
@@ -62,9 +71,9 @@ class PersonSerializer(serializers.ModelSerializer):
                   'luxuries', 'group', 'latitude', 'longitude' ,'checkuprecords_set','room_pk','ward_pk','facility_pk','facility_name','doa','address']
 
     def is_valid(self, raise_exception=False):
-        code = "P" + str(random.randint(10000, 99999))
+        code = "P" + str(random.randint(10000000, 99999999))
         while(len(Person.objects.filter(code=code)) != 0):
-            code = "P" + str(random.randint(10000, 99999))
+            code = "P" + str(random.randint(10000000, 99999999))
         self.initial_data['code'] = code  
         a = super().is_valid(raise_exception=raise_exception)        
         return a
@@ -125,7 +134,7 @@ class FacilitySerializer(serializers.ModelSerializer):
 
     class Meta():
         model = Facility
-        fields = ['id', 'name', 'owner', 'address', 'capacity','occupant_count',
+        fields = ['id', 'name','admin', 'owner','city', 'address', 'capacity','occupant_count',
                   'room_count', 'ward_set', 'latitude', 'longitude']
 
 class DischargedSerializer(serializers.ModelSerializer):
@@ -140,3 +149,4 @@ class DischargedSerializer(serializers.ModelSerializer):
         person.room = None
         person.save()
         return super().create(validated_data)
+
