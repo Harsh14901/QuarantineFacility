@@ -217,7 +217,7 @@ export default function TableList() {
                         }}
                         onClose={handleDialogClose}
                     >
-                            <FacilityDetails closeFunc={handleDialogClose} data={selectedFacDetails}/>
+                            <FacilityDetails submitFunc={submitDetails} closeFunc={handleDialogClose} data={selectedFacDetails}/>
 
                     </Dialog>
                     <Snackbar open={successAlert} autoHideDuration={6000} onClose={handleAlertClose}>
