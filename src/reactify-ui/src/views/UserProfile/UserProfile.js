@@ -50,6 +50,7 @@ export default function UserProfile() {
         const [selectedUserDetails,setSelectedUserDetails] = useState({});
 
         const columnsHeading=[
+                { title: 'User ID', field: 'id'},
                 { title: 'Name', field: 'name' },
                 { title: 'Age', field: 'age' },
                 { title: 'Group Members', field: 'member_count' },
@@ -68,12 +69,13 @@ export default function UserProfile() {
                          result.map((data,j) =>{
                                  details.push({id:data.id,name:data.name,age:data.age,member_count:-1,gender: data.gender
                                          ,facility_name:data.facility_name,risk: data.risk,doa:data.doa,number: data.contact_num,email:data.email
-                                 ,vip: data.vip,facility_pk:data.facility_pk,group: data.group,address: data.address})
+                                 ,vip: data.vip,facility_pk:data.facility_pk,group: data.group,address: data.address,latitude:data.latitude,longitude:data.longitude})
                          });
                         setDataDisplay(details);
                 };
                 GetPeopleData(callback)
         }
+
 
         function handleDialogClose(){
                 setOpenDialog(false)

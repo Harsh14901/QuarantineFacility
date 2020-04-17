@@ -56,7 +56,7 @@ function AddGroupDialog(props) {
         const [category,setCategory] =useState(false);
         const [LocationPicker,setLocationPicker] = useState(false);
         const [address,setAddress] = useState("");
-        const [latLong,setLatLong] = useState([82,25]);
+        const [latLong,setLatLong] = useState([25,82]);
         const [facilitiesList,setFacilitiesList] = useState([]);
         const [selectedFacility,setSelectedFacility] = useState("");
 
@@ -136,7 +136,7 @@ function AddGroupDialog(props) {
                         setFacilitiesList(temp)
                 };
 
-                getFacilitiesList(callback,{latitude: data[0],longitude: data[0]})
+                getFacilitiesList(callback,{latitude: data[0],longitude: data[1]})
 
         }
 

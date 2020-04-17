@@ -30,6 +30,8 @@ import TootltipStyles from 'assets/jss/material-kit-react/tooltipsStyle'
 import getData from "facility/getData";
 import postData from "facility/postData";
 import GroupInfo from "views/Groups/GroupInfo";
+import changeUserFacility from "facility/changeUserFacility";
+import ChangeFacilityDialog from "views/Components/ChangeFacilityDialog";
 
 const useStyles2 = makeStyles(styles2);
 const useStyles = makeStyles(styles);
@@ -55,6 +57,8 @@ export default function UserDetails(props) {
 
         const [cardAnimation,setCardAnimation] =useState("cardHidden");
         const [open,setOpen] = useState(false);
+        const [facOpen,setFacOpen] = useState(false);
+
         const [dischargeDialogOpen,setDischargeDialogOpen] = useState(false);
         const [openDialog,setOpenDialog] = useState(false);
         const [selectedGroupDetails,setSelectedGroupDetails] = useState({});
@@ -90,6 +94,13 @@ export default function UserDetails(props) {
                 setOpen(true);
         }
 
+        function handleFacClose() {
+                setFacOpen(false)
+        }
+        function handleFacilityChange() {
+                setFacOpen(true);
+        }
+
         function changeWard(id) {
                 const callback = result => {
                         console.log("Seems to have changed ward",result)
@@ -97,6 +108,16 @@ export default function UserDetails(props) {
 
 
                 changeUserWard(callback,{id:props.data.id,ward_pk: id})
+        }
+
+
+        function changeFacility(pref){
+                const callback = result => {
+                        console.log("Seems to have changed facility",result)
+                };
+
+
+                changeUserFacility(callback,{id:props.data.id,facility_pk: pref})
         }
 
         function getPairWard() {
@@ -161,7 +182,7 @@ export default function UserDetails(props) {
                                             </div>
                                             <div style={{display: "flex",marginTop:"10px"}}>
                                                     <Para text={"Facility Enrolled:- " + props.data.facility_name}/>
-                                                    <Button size="small" variant="outlined" color="primary" style={{marginLeft: "auto",fontSize: "0.7rem"}}>Change Facility</Button>
+                                                    <Button size="small" onClick={handleFacilityChange} variant="outlined" color="primary" style={{marginLeft: "auto",fontSize: "0.7rem"}}>Change Facility</Button>
                                             </div>
                                             <div style={{display: "flex",marginTop:"10px"}}>
                                                     <Para text={"Group ID:- " + props.data.group}/>
@@ -275,6 +296,21 @@ export default function UserDetails(props) {
                         onClose={handleDialogClose}
                     >
                             <GroupInfo closeFunc={handleDialogClose} data={selectedGroupDetails}/>
+
+                    </Dialog>
+
+                    <Dialog
+                        open={facOpen}
+                        PaperProps={{
+                                style: {
+                                        backgroundColor: 'transparent',
+                                        boxShadow: 'none',
+                                        scrollbarColor: "transparent"
+                                },
+                        }}
+                        onClose={handleFacClose}
+                    >
+                            <ChangeFacilityDialog submitFunc={changeFacility} closeFunc={handleFacClose} data={[props.data.latitude,props.data.longitude]}/>
 
                     </Dialog>
 
