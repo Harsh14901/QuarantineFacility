@@ -91,7 +91,7 @@ export default function AdminNavbarLinks() {
                       onClick={handleCloseProfile}
                       className={classes.dropdownItem}
                     >
-                      Logout
+                      Log In
                     </MenuItem>
                   </MenuList>
                 </ClickAwayListener>
