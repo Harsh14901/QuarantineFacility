@@ -63,6 +63,7 @@ export default function GroupInfo(props) {
         const [dischargeDialogOpen,setDischargeDialogOpen] = useState(false);
         const [openDialog,setOpenDialog] = useState(false);
         const [selectedUserDetails,setSelectedUserDetails] = useState({});
+        const [active,setActive] = useState(0);
 
 
 
@@ -103,12 +104,25 @@ export default function GroupInfo(props) {
         function closeDialog() {
                 props.closeFunc();
         }
+
+        function checkActive(){
+                let active=0;
+                props.data.person_set.map((data) => {
+                        if(data.facility_name)
+                                active+=1
+                });
+                setActive(active);
+                console.log("YUHUHUHUHUHUHU",active)
+        }
+
         setTimeout(function() {
                 setCardAnimation("");
         }, 700);
 
+
         useEffect(() => {
-                console.log("hi",props.data)
+                console.log("hi",props.data);
+                checkActive();
         }, []);
 
         return(
@@ -169,7 +183,7 @@ export default function GroupInfo(props) {
                                             <Button onClick={closeDialog} className={classes.submitButton}>
                                                     CLOSE
                                             </Button>
-                                            <Button disabled={props.data.active===0} onClick={handleDischargeOpen} className={classes.submitButton}>
+                                            <Button disabled={active===0} onClick={handleDischargeOpen} className={classes.submitButton}>
                                                     DISCHARGE
                                             </Button>
                                     </CardFooter>
@@ -195,7 +209,7 @@ export default function GroupInfo(props) {
                                     <Button onClick={handleDischargeClose} color="primary">
                                             Cancel
                                     </Button>
-                                    <Button onClick={dischargeGroup} color="primary">
+                                    <Button  onClick={dischargeGroup} color="primary">
                                             Yes, Discharge
                                     </Button>
                             </DialogActions>
