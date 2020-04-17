@@ -8,7 +8,7 @@ import random
 
 class CitySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Luxury
+        model = City
         fields = ['id', 'name','latitutde','longitude','admin']
 
 class LuxurySerializer(serializers.ModelSerializer):

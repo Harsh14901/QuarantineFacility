@@ -144,7 +144,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 REST_FRAMEWORK = {
 	'DEFAULT_PERMISSION_CLASSES': (
-		'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+		'rest_framework.permissions.IsAuthenticated',
 	),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
@@ -160,7 +160,7 @@ AUTHENTICATION_BACKENDS = (
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = reverse_lazy(
     'account_confirm_complete')
