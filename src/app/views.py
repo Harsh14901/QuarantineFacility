@@ -18,7 +18,12 @@ import random
 import names
 # from random_word.random_word import RandomWords
 
-        
+def isCityAdmin(user):
+    return len(user.city_set.all()) != 0
+
+def isFacilityAdmin(user):
+    return len(user.facility_set.all()) != 0
+
 
 # Create your views here.
 def index(request):  
@@ -105,13 +110,43 @@ class FacilityViewSet(ModelViewSet):
     queryset = Facility.objects.all()
     serializer_class = FacilitySerializer
 
+    def get_queryset(self):
+        queryset = Facility.objects.none()
+        user = self.request._user
+        if(isCityAdmin(user)):
+            queryset = Facility.objects.all().filter(city__admin=user)
+        elif(isFacilityAdmin(user)):
+            queryset = Facility.objects.all().filter(admin=user)
+        return queryset
+        
+    
+
 class WardViewSet(ModelViewSet):
     queryset = Ward.objects.all()
     serializer_class = WardSerializer
+    
+    def get_queryset(self):
+        queryset = Ward.objects.none()
+        user = self.request._user
+        if(isCityAdmin(user)):
+            queryset = Ward.objects.all().filter(facility__city__admin=user)
+        elif(isFacilityAdmin(user)):
+            queryset = Ward.objects.all().filter(facility__admin=user)
+        return queryset
+    
 
 class RoomViewSet(ModelViewSet):
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
+
+    def get_queryset(self):
+        queryset = Room.objects.none()
+        user = self.request._user
+        if(isCityAdmin(user)):
+            queryset = Room.objects.all().filter(ward__facility__city__admin=user)
+        elif(isFacilityAdmin(user)):
+            queryset = Room.objects.all().filter(ward__facility__admin=user)
+        return queryset
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data,many=True)
@@ -124,6 +159,14 @@ class PersonViewSet(ModelViewSet):
     queryset = Person.objects.all()
     serializer_class = PersonSerializer
 
+    def get_queryset(self):
+        queryset = Person.objects.none()
+        user = self.request._user
+        if(isCityAdmin(user)):
+            queryset = Person.objects.all().filter(room__ward__facility__city__admin=user)
+        elif(isFacilityAdmin(user)):
+            queryset = Person.objects.all().filter(room__ward__facility__admin=user)
+        return queryset
 
 class LuxuryViewSet(ModelViewSet):
     queryset = Luxury.objects.all()
@@ -134,6 +177,15 @@ class PersonAccomodationViewSet(ModelViewSet):
     queryset = Person.objects.all()
     serializer_class = PersonAccomodationSerializer
 
+    def get_queryset(self):
+        queryset = Person.objects.none()
+        user = self.request._user
+        if(isCityAdmin(user)):
+            queryset = Person.objects.all().filter(room__ward__facility__city__admin=user)
+        elif(isFacilityAdmin(user)):
+            queryset = Person.objects.all().filter(room__ward__facility__admin=user)
+        return queryset
+
 class MedicineViewSet(ModelViewSet):
     queryset = Medicine.objects.all()
     serializer_class = MedicineSerializer
@@ -141,6 +193,15 @@ class MedicineViewSet(ModelViewSet):
 class CheckupViewSet(ModelViewSet):
     queryset = CheckupRecords.objects.all()
     serializer_class = CheckupSerializer
+
+    def get_queryset(self):
+        queryset = CheckupRecords.objects.none()
+        user = self.request._user
+        if(isCityAdmin(user)):
+            queryset = CheckupRecords.objects.all().filter(person__room__ward__facility__city__admin=user)
+        elif(isFacilityAdmin(user)):
+            queryset = CheckupRecords.objects.all().filter(person__room__ward__facility__admin=user)
+        return queryset
 
 
 class GroupViewSet(ModelViewSet):
