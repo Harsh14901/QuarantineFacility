@@ -5,6 +5,12 @@ from rest_framework.exceptions import ValidationError
 import random
 
 
+
+class CitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Luxury
+        fields = ['id', 'name','latitutde','longitude','admin']
+
 class LuxurySerializer(serializers.ModelSerializer):
     class Meta:
         model = Luxury
@@ -125,7 +131,7 @@ class FacilitySerializer(serializers.ModelSerializer):
 
     class Meta():
         model = Facility
-        fields = ['id', 'name', 'owner', 'address', 'capacity','occupant_count',
+        fields = ['id', 'name','admin', 'owner','city', 'address', 'capacity','occupant_count',
                   'room_count', 'ward_set', 'latitude', 'longitude']
 
 class DischargedSerializer(serializers.ModelSerializer):
@@ -140,3 +146,4 @@ class DischargedSerializer(serializers.ModelSerializer):
         person.room = None
         person.save()
         return super().create(validated_data)
+
