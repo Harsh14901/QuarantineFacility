@@ -45,7 +45,7 @@ const Para = ({text}) => {
 
 const SideButton = (props) => {
         return(
-            <Button onClick={props.onClick} size="small" variant="outlined" color="primary" style={{marginLeft: "auto",fontSize: "0.7rem"}}>{props.text}</Button>
+            <Button disabled={props.disabled} onClick={props.onClick} size="small" variant="outlined" color="primary" style={{marginLeft: "auto",fontSize: "0.7rem"}}>{props.text}</Button>
         )
 };
 
@@ -178,15 +178,15 @@ export default function UserDetails(props) {
                                             </GridContainer>
                                             <div style={{display: "flex"}}>
                                                     <Para text={"Ward Category:- " + ((props.data.risk==='high') ? 1 : 2)}/>
-                                                    <SideButton onClick={handleWardChange} text={"Shift to Ward "+(props.data.risk==='high'?2:1)}/>
+                                                    <SideButton disabled={props.data.facility_name==='Discharged'} onClick={handleWardChange} text={"Shift to Ward "+(props.data.risk==='high'?2:1)}/>
                                             </div>
                                             <div style={{display: "flex",marginTop:"10px"}}>
                                                     <Para text={"Facility Enrolled:- " + props.data.facility_name}/>
-                                                    <Button size="small" onClick={handleFacilityChange} variant="outlined" color="primary" style={{marginLeft: "auto",fontSize: "0.7rem"}}>Change Facility</Button>
+                                                    <SideButton  disabled={props.data.facility_name==='Discharged'} onClick={handleFacilityChange} text={"Change Facility"}/>
                                             </div>
                                             <div style={{display: "flex",marginTop:"10px"}}>
                                                     <Para text={"Group ID:- " + props.data.group}/>
-                                                    <Button onClick={openGroupDetails} size="small" variant="outlined" color="primary" style={{marginLeft: "auto",fontSize: "0.7rem"}}>View Group Details</Button>
+                                                    <SideButton onClick={openGroupDetails} text={"View Group Details"}/>
                                             </div>
                                             <Para text={"Address:- " + props.data.address}/>
                                             <Para text={"Date of Admission:- " + props.data.doa}/>
@@ -229,7 +229,7 @@ export default function UserDetails(props) {
                                     <Button onClick={closeDialog} className={classes.submitButton}>
                                             CLOSE
                                     </Button>
-                                    <Button onClick={handleDischargeOpen} className={classes.submitButton}>
+                                    <Button disabled={props.data.facility_name==='Discharged'} onClick={handleDischargeOpen} className={classes.submitButton}>
                                             DISCHARGE
                                     </Button>
                             </CardFooter>

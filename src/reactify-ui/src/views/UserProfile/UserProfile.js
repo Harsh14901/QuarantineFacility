@@ -66,10 +66,20 @@ export default function UserProfile() {
                         setPeopleData(result);
                         let details=[];
                          result.map((data,j) =>{
+                                 if(!data.facility_name)
+                                         data.facility_name='Discharged';
                                  details.push({code:data.code,id:data.id,name:data.name,age:data.age,member_count:-1,gender: data.gender
                                          ,facility_name:data.facility_name,risk: data.risk,doa:data.doa,number: data.contact_num,email:data.email
                                  ,vip: data.vip,facility_pk:data.facility_pk,group: data.group,address: data.address,latitude:data.latitude,longitude:data.longitude})
                          });
+                        console.log(details);
+                         details.sort(function(a,b) {if(a.facility_name==='Discharged')
+                         {
+                                 return 1
+                         }
+                         return -1;
+                         });
+                         console.log(details);
                         setDataDisplay(details);
                 };
                 GetPeopleData(callback)
