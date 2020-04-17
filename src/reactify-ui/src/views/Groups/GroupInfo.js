@@ -169,7 +169,7 @@ export default function GroupInfo(props) {
                                             <Button onClick={closeDialog} className={classes.submitButton}>
                                                     CLOSE
                                             </Button>
-                                            <Button onClick={handleDischargeOpen} className={classes.submitButton}>
+                                            <Button disabled={props.data.active===0} onClick={handleDischargeOpen} className={classes.submitButton}>
                                                     DISCHARGE
                                             </Button>
                                     </CardFooter>

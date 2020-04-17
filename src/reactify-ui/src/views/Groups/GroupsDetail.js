@@ -73,7 +73,8 @@ export default function GroupsDetail() {
         const columnsHeading=[
                 { title: 'ID', field: 'id' },
                 { title: 'Category', field: 'category' },
-                { title: 'Group Members', field: 'count' },
+                { title: 'Active Group Members', field: 'active' },
+                { title: 'All Group Members', field: 'count' },
                 { title: 'People with high Risk',field: 'risk'},
                 // {
                 //         title: 'Date Quarantined',
@@ -86,14 +87,18 @@ export default function GroupsDetail() {
                         setGroupData(result);
                         let details=[];
                         result.map((data) =>{
-                                let high=0
+                                let high=0;
+                                let active=0;
                                 data.person_set.map((data)=>{
+                                        if(data.facility_name)
+                                                active+=1;
                                         if(data.risk==="high")
                                                 high++
                                 });
                                 details.push({id:data.id,category:data.category,count:data.count
-                                        ,risk: high,date:"",person_set:data.person_set})
+                                        ,risk: high,date:"",person_set:data.person_set,active:active})
                         });
+                        details.sort(function(a,b){ return b.active-a.active});
                         setDataDisplay(details);
                 };
                 GetGroupData(callback)
