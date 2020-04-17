@@ -50,10 +50,9 @@ export default function UserProfile() {
         const [selectedUserDetails,setSelectedUserDetails] = useState({});
 
         const columnsHeading=[
-                { title: 'User ID', field: 'id'},
+                { title: 'User ID', field: 'code'},
                 { title: 'Name', field: 'name' },
                 { title: 'Age', field: 'age' },
-                { title: 'Group Members', field: 'member_count' },
                 { title: 'Facility', field: 'facility_name' },
                 { title: 'Risk',field: 'risk'},
                 {
@@ -67,7 +66,7 @@ export default function UserProfile() {
                         setPeopleData(result);
                         let details=[];
                          result.map((data,j) =>{
-                                 details.push({id:data.id,name:data.name,age:data.age,member_count:-1,gender: data.gender
+                                 details.push({code:data.code,id:data.id,name:data.name,age:data.age,member_count:-1,gender: data.gender
                                          ,facility_name:data.facility_name,risk: data.risk,doa:data.doa,number: data.contact_num,email:data.email
                                  ,vip: data.vip,facility_pk:data.facility_pk,group: data.group,address: data.address,latitude:data.latitude,longitude:data.longitude})
                          });

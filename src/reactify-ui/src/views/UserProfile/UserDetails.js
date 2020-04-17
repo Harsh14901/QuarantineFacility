@@ -167,7 +167,7 @@ export default function UserDetails(props) {
                                     <div>
                                             <GridContainer>
                                                     <GridItem xs={12}>
-                                                            <Para text={"User id:- " + props.data.id}/>
+                                                            <Para text={"User id:- " + props.data.code}/>
                                                     </GridItem>
                                                     <GridItem xs={6}>
                                                             <Para text={"Age:- " + props.data.age}/>
