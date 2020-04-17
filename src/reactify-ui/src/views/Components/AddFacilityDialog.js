@@ -172,8 +172,8 @@ function AddFacilityDialog(props){
                         setStep(2)
 
                 };
-
-                PostFacilityData(callback,facilityDetails)
+                let temp={...facilityDetails,latitude: 82,longitude: 26};
+                PostFacilityData(callback,temp)
         }
 
 

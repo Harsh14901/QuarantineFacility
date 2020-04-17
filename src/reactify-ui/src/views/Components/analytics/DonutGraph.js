@@ -46,6 +46,7 @@ function DonutGraph(props){
                         let a = result['Ward-1'];
                         let b= result['Ward-2'];
                         let c = result['vacant'];
+                        console.log("Result is ",result);
 
                         setData({
                                 labels: [
@@ -71,7 +72,12 @@ function DonutGraph(props){
                         }
                         );
                 };
-                getData(callback,'http://127.0.0.1:8000/analytics/ward_distribution/')
+                if(props.data){
+                        console.log(props.data)
+                        callback(props.data)
+                }
+                else
+                        getData(callback,'http://127.0.0.1:8000/analytics/ward_distribution/')
         }
 
         useEffect(() => {
@@ -79,7 +85,7 @@ function DonutGraph(props){
         }, []);
 
         return(
-            <GridItem xs={12} md={8}>
+            <GridItem xs={12} md={props.size==='large'?12:8}>
             <Card>
                     <CardHeader >
                     <Doughnut data={data} options={options}

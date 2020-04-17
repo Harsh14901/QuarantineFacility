@@ -162,7 +162,7 @@ def naive_distance(p1,p2):
         temp = sqrt((p1[0]-p2[0])**2 + (p1[1]-p2[1])**2)
         return temp
     except:
-        return 99999999
+        return INFINITY
 
 def sort_naively(p1):
     unsorted = []
