@@ -57,7 +57,10 @@ class PersonSerializer(serializers.ModelSerializer):
 
     def save(self, **kwargs):
         # print(self.validated_data)
-        set_location(self.validated_data)
+        try:
+            set_location(self.validated_data)
+        except:
+            raise ValidationError(detail="Could not allocate location",code='invalid_coordinates')
         
         return super().save(**kwargs)
 
