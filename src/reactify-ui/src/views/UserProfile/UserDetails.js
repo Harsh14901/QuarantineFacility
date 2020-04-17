@@ -168,7 +168,7 @@ export default function UserDetails(props) {
                                                     <Button onClick={openGroupDetails} size="small" variant="outlined" color="primary" style={{marginLeft: "auto",fontSize: "0.7rem"}}>View Group Details</Button>
                                             </div>
                                             <Para text={"Address:- " + props.data.address}/>
-                                            <Para text={"Date of Admission:- " + props.data.date}/>
+                                            <Para text={"Date of Admission:- " + props.data.doa}/>
                                     </div>
                                             {props.data.number?
                                             <div style={{display: "flex",marginTop:"10px"}}>
