@@ -104,7 +104,7 @@ class Group(models.Model):
     facility_preference = models.ForeignKey("Facility", on_delete=models.CASCADE,null=True)
     
     def __str__(self):
-        return f"{self.id} | {self.category} group of {self.count} members"
+        return f"{self.id} | {self.category} group of {self.count} members "
     
     @property
     def count(self):

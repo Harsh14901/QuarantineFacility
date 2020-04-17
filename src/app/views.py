@@ -171,3 +171,16 @@ def AllocateGroups(request):
 class DischargedViewSet(generics.ListCreateAPIView):
     queryset = Discharged.objects.all()
     serializer_class = DischargedSerializer
+
+@api_view(['POST'])
+def discharge_group(request):
+    print(request.data)
+    post_data = request.data
+    print(post_data)
+    group = Group.objects.get(id=post_data['group'])
+    for person in group.person_set.all():
+        person.room = None
+        person.save()
+        Discharged(person=person).save()
+    return Response('done')
+
