@@ -97,6 +97,9 @@ def searchFacility(request):
     return JsonResponse(FacilitySerializer(facilitySet,many=True).data,safe=False)
 
 
+class CityViewSet(ModelViewSet):
+    queryset = City.objects.all()
+    serializer_class = CitySerializer
 
 class FacilityViewSet(ModelViewSet):
     queryset = Facility.objects.all()
@@ -171,3 +174,13 @@ def AllocateGroups(request):
 class DischargedViewSet(generics.ListCreateAPIView):
     queryset = Discharged.objects.all()
     serializer_class = DischargedSerializer
+
+
+@api_view()
+def null_view(request):
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view()
+def complete_view(request):
+    return Response("Email account is activated")
