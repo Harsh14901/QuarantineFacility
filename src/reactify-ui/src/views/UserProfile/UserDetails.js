@@ -5,7 +5,7 @@ import Switch from "@material-ui/core/Switch";
 import CardFooter from "components/Card/CardFooter";
 import Button from "@material-ui/core/Button";
 import Card from "components/Card/Card";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import styles2 from "assets/jss/material-kit-react/views/loginPage";
 import styles from "assets/jss/homeStyles";
@@ -62,6 +62,8 @@ export default function UserDetails(props) {
         const [dischargeDialogOpen,setDischargeDialogOpen] = useState(false);
         const [openDialog,setOpenDialog] = useState(false);
         const [selectedGroupDetails,setSelectedGroupDetails] = useState({});
+
+        const [active,setActive] = useState(true);
 
 
 
@@ -147,9 +149,22 @@ export default function UserDetails(props) {
         function closeDialog() {
                 props.closeFunc();
         }
+
+        function checkActive(){
+                if(!props.data.facility_name)
+                        props.data.facility_name='Discharged';
+                if(props.data.facility_name==='Discharged')
+                        setActive(false);
+                console.log("Need backup",active)
+        }
+
         setTimeout(function() {
                 setCardAnimation("");
         }, 700);
+
+        useEffect(()=> {
+             checkActive();
+        });
 
         return(
             <div>
@@ -178,11 +193,11 @@ export default function UserDetails(props) {
                                             </GridContainer>
                                             <div style={{display: "flex"}}>
                                                     <Para text={"Ward Category:- " + ((props.data.risk==='high') ? 1 : 2)}/>
-                                                    <SideButton disabled={props.data.facility_name==='Discharged'} onClick={handleWardChange} text={"Shift to Ward "+(props.data.risk==='high'?2:1)}/>
+                                                    <SideButton disabled={!active} onClick={handleWardChange} text={"Shift to Ward "+(props.data.risk==='high'?2:1)}/>
                                             </div>
                                             <div style={{display: "flex",marginTop:"10px"}}>
                                                     <Para text={"Facility Enrolled:- " + props.data.facility_name}/>
-                                                    <SideButton  disabled={props.data.facility_name==='Discharged'} onClick={handleFacilityChange} text={"Change Facility"}/>
+                                                    <SideButton  disabled={!active} onClick={handleFacilityChange} text={"Change Facility"}/>
                                             </div>
                                             <div style={{display: "flex",marginTop:"10px"}}>
                                                     <Para text={"Group ID:- " + props.data.group}/>
@@ -229,7 +244,7 @@ export default function UserDetails(props) {
                                     <Button onClick={closeDialog} className={classes.submitButton}>
                                             CLOSE
                                     </Button>
-                                    <Button disabled={props.data.facility_name==='Discharged'} onClick={handleDischargeOpen} className={classes.submitButton}>
+                                    <Button disabled={!active} onClick={handleDischargeOpen} className={classes.submitButton}>
                                             DISCHARGE
                                     </Button>
                             </CardFooter>
