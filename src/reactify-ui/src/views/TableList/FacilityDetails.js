@@ -22,6 +22,8 @@ import {makeStyles} from "@material-ui/core/styles";
 import styles2 from "assets/jss/material-kit-react/views/loginPage";
 import DonutGraph from "views/Components/analytics/DonutGraph";
 import styles from "assets/jss/homeStyles";
+import AddRoomDialog from "views/Components/AddRoomDialog";
+import {func} from "prop-types";
 
 const useStyles2 = makeStyles(styles2);
 const useStyles = makeStyles(styles);
@@ -38,8 +40,13 @@ export default function FacilityDetails(props) {
         const classes = useStyles();
         const classes2 = useStyles2();
 
+
+
         const [cardAnimation,setCardAnimation] =useState("cardHidden");
         const [wardDetails,setWardDetails] = useState(null);
+        const [openDialog,setOpenDialog] = useState(false);
+        const [ward1Id,setWard1Id] = useState(-1);
+        const [ward2Id,setWard2Id] = useState(-1);
 
 
         function closeDialog(){
@@ -47,6 +54,16 @@ export default function FacilityDetails(props) {
         }
 
         function addRooms(){
+
+        }
+
+        function handleDialogClose(){
+                setOpenDialog(false)
+        }
+
+        function submitDetails(data){
+                props.submitFunc(data);
+                props.closeFunc()
 
         }
 
@@ -58,10 +75,13 @@ export default function FacilityDetails(props) {
                         if(res.category==="1"){
                                 totalWardCap+=res.capacity;
                                 totalWard1Occup+=res.occupant_count;
+                                setWard1Id(res.id)
                         }
                         else if(res.category==="2"){
                                 totalWardCap+=res.capacity;
                                 totalWard2Occup+=res.occupant_count;
+                                setWard2Id(res.id)
+
                         }
                 });
                 setWardDetails({"Ward-1":totalWard1Occup,"Ward-2": totalWard2Occup,"vacant":(totalWardCap-totalWard1Occup-totalWard2Occup)})
@@ -104,7 +124,7 @@ export default function FacilityDetails(props) {
                                                     <Button onClick={closeDialog} className={classes.submitButton}>
                                                             CLOSE
                                                     </Button>
-                                                    <Button onClick={addRooms} className={classes.submitButton}>
+                                                    <Button onClick={() => setOpenDialog(true)} className={classes.submitButton}>
                                                             Add Rooms
                                                     </Button>
                                             </CardFooter>
@@ -112,8 +132,23 @@ export default function FacilityDetails(props) {
                             </Card>
 
                     </div>
+                    <Dialog
+                        open={openDialog}
+                        PaperProps={{
+                                style: {
+                                        backgroundColor: 'transparent',
+                                        boxShadow: 'none',
+                                        scrollbarColor: "transparent"
+                                },
+                        }}
+                        onClose={handleDialogClose}
+                    >
+                            <AddRoomDialog submitFunc={submitDetails} closeFunc={handleDialogClose} ward1Id={ward1Id} ward2Id={ward2Id}/>
+
+                    </Dialog>
 
             </div>
+
         )
 
 
