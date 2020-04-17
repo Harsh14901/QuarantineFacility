@@ -97,7 +97,7 @@ export default function GroupInfo(props) {
                         props.closeFunc();
                 };
 
-                // postData(callback,{person: props.data.id},'http://127.0.0.1:8000/discharge/')
+                postData(callback,{group: props.data.id},'http://127.0.0.1:8000/discharge_group/')
         }
 
         function closeDialog() {
