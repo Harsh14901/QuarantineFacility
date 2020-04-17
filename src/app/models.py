@@ -1,6 +1,7 @@
 from django.db import models
 from phone_field import PhoneField
 import datetime as dt
+from django.contrib.auth.models import User
 
 HIGH_RISK = "high"
 LOW_RISK = "low"
@@ -11,6 +12,12 @@ RiskChoices=(
 
 
 # Create your models here.
+class City(models.Model):
+    admin = models.ForeignKey(User, on_delete=models.CASCADE,null=True,blank=True)
+    name = models.CharField(max_length=50)
+    latitude = models.FloatField( null=True, blank=True)
+    longitude = models.FloatField( null=True, blank=True)
+
 class Person(models.Model):
     MALE = 'M'
     FEMALE = 'F'
@@ -125,7 +132,9 @@ class Group(models.Model):
         return False
      
 
-class Facility(models.Model):   
+class Facility(models.Model): 
+    admin = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    city = models.ForeignKey("City", on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=500,blank=False,null=False)
     owner = models.CharField(max_length=100)
     address = models.TextField()
