@@ -32,6 +32,7 @@ import Typography from "views/Typography/Typography.js";
 import GroupsDetail from "views/Groups/GroupsDetail";
 import Maps from "views/Maps/Maps";
 import MapExtreme from "views/Maps/MapExtreme";
+import {Store} from "@material-ui/icons";
 // import Icons from "views/Icons/Icons.js";
 // import Maps from "views/Maps/Maps.js";
 // import NotificationsPage from "views/Notifications/Notifications.js";
@@ -55,7 +56,7 @@ const dashboardRoutes = [
   {
     path: "/facilities",
     name: "Facilities",
-    icon: "content_paste",
+    icon: Store,
     component: TableList,
     layout: "/admin"
   },

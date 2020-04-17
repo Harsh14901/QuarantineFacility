@@ -20,6 +20,8 @@ import styles from "assets/jss/homeStyles";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
 import RestoreIcon from "@material-ui/icons/Restore";
+import AddLocationIcon from '@material-ui/icons/AddLocation';
+
 
 import styles2 from "assets/jss/material-kit-react/views/loginPage.js";
 import CustomInput from "components/CustomInput/CustomInput";
@@ -36,6 +38,7 @@ import {func} from "prop-types";
 import {LocationCity} from "@material-ui/icons";
 import getData from "facility/getData";
 import getFacilitiesList from "facility/getFacilitiesList";
+import AgeIcon from "assets/img/icons/AgeIcon";
 
 const useStyles2 = makeStyles(styles2);
 
@@ -243,8 +246,8 @@ function AddGroupDialog(props) {
                                                                         type: "number",
                                                                         endAdornment: (
                                                                             <InputAdornment position="end">
-                                                                                    <PhoneIcon className={classes2.inputIconsColor}>
-                                                                                    </PhoneIcon>
+                                                                                    <AgeIcon className={classes2.inputIconsColor}>
+                                                                                    </AgeIcon>
 
                                                                             </InputAdornment>
                                                                         )
@@ -373,7 +376,7 @@ function AddGroupDialog(props) {
                                                                             type: "text",
                                                                             endAdornment: (
                                                                                 <InputAdornment position="end">
-                                                                                        <LocationCity onClick={pickLocation} className={classes2.inputIconsColor} />
+                                                                                        <AddLocationIcon onClick={pickLocation} className={classes2.inputIconsColor} />
                                                                                 </InputAdornment>
                                                                             ),
                                                                             autoComplete: "off"
