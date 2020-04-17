@@ -10,6 +10,7 @@ import random
 
 
 router = DefaultRouter()
+router.register(r'cities',CityViewSet)
 router.register(r'facilities',FacilityViewSet)
 router.register(r'wards',WardViewSet)
 router.register(r'rooms',RoomViewSet)
