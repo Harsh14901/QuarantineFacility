@@ -181,6 +181,10 @@ def discharge_group(request):
     for person in group.person_set.all():
         person.room = None
         person.save()
-        Discharged(person=person).save()
+        try:
+            Discharged(person=person).save()
+        except Exception as e:
+            if(str(e).find('UNIQUE CONSTRAINT')==-1):
+                return Response("Error Occured")
     return Response('done')
 
