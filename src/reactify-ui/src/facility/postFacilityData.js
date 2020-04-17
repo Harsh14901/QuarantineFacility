@@ -13,7 +13,7 @@ const PostFacilityData = (callback,data) => {
                         'Accept': 'application/json'
                 }
         };
-        axios.post(endpt, data,lookupOpts). then(r => callback(r.data)).catch(function(error){console.log("hi",error)})
+        axios.post(endpt, data,lookupOpts). then(r => callback(r.data)).catch(function(error){console.log("hi",error.data)})
 
 };
 

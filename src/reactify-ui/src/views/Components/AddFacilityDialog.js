@@ -31,6 +31,9 @@ import RestoreIcon from "@material-ui/icons/Restore";
 import GetFacilityData from "facility/GetFacilityData";
 import PostFacilityData from "facility/postFacilityData";
 import PostData from "facility/postData";
+import MapExtreme from "views/Maps/MapExtreme";
+import Dialog from "@material-ui/core/Dialog";
+import {LocationCity} from "@material-ui/icons";
 
 const useStyles2 = makeStyles(styles2);
 
@@ -58,6 +61,13 @@ function AddFacilityDialog(props){
                 { icon: <RestoreIcon />, name: 'Reset Room Details' },
         ];
 
+
+
+        const [LocationPicker,setLocationPicker] = useState(false);
+        const [address,setAddress] = useState("");
+        const [latLong,setLatLong] = useState([25,82]);
+
+
         const wardCateg = [
                 {
                         value: 2,
@@ -71,6 +81,31 @@ function AddFacilityDialog(props){
 
 
         const [fabOpen, setFabOpen] = React.useState(false);
+
+
+        function pickLocation() {
+                setLocationPicker(true)
+        }
+
+        function handleLocationClose(){
+                setLocationPicker(false)
+        }
+
+        function submitLocationDetails(data){
+                setAddress(data.info);
+                setLatLong(data.marker);
+                handleLocationClose();
+                console.log(data.marker);
+                console.log(data.info);
+                if(!data.info){
+                        setAddress(data.marker[0]+"N , "+data.marker[1]+"S")
+                }
+
+        }
+
+        const handleAddressChange = event => {
+                setAddress(event.target.value)
+        };
 
 
         function addRoom() {
@@ -172,7 +207,8 @@ function AddFacilityDialog(props){
                         setStep(2)
 
                 };
-                let temp={...facilityDetails,latitude: 82,longitude: 26};
+                let temp={...facilityDetails,latitude: latLong[0],longitude: latLong[1],address:address};
+                console.log(temp);
                 PostFacilityData(callback,temp)
         }
 
@@ -344,18 +380,20 @@ function AddFacilityDialog(props){
                                                                 <CustomInput
                                                                     labelText="Address..."
                                                                     id="address"
+                                                                    required
                                                                     formControlProps={{
                                                                             fullWidth: true
                                                                     }}
                                                                     inputProps={{
-                                                                            value: facilityDetails.address,
-                                                                            onChange: handleFacilityChange("address"),
+                                                                            value: address,
+                                                                            onChange: handleAddressChange,
                                                                             type: "text",
                                                                             endAdornment: (
                                                                                 <InputAdornment position="end">
-                                                                                        <People className={classes2.inputIconsColor} />
+                                                                                        <LocationCity onClick={pickLocation} className={classes2.inputIconsColor} />
                                                                                 </InputAdornment>
-                                                                            )
+                                                                            ),
+                                                                            autoComplete: "off"
                                                                     }}
                                                                 />
                                                         </CardBody>
@@ -371,6 +409,21 @@ function AddFacilityDialog(props){
 
                             </GridItem>
                     </GridContainer>
+
+                    <Dialog
+                        open={LocationPicker}
+                        PaperProps={{
+                                style: {
+                                        backgroundColor: 'transparent',
+                                        boxShadow: 'none',
+                                        scrollbarColor: "transparent"
+                                },
+                        }}
+                        onClose={handleLocationClose}
+                    >
+                            <MapExtreme center={latLong} submitFunc={submitLocationDetails}/>
+
+                    </Dialog>
 
 
 
