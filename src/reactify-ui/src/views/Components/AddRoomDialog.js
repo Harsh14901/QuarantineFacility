@@ -20,6 +20,9 @@ import RestoreIcon from "@material-ui/icons/Restore";
 import {makeStyles} from "@material-ui/core/styles";
 import styles2 from "assets/jss/material-kit-react/views/loginPage";
 import styles from "assets/jss/homeStyles";
+import AreaIcon from "assets/img/icons/AreaIcon";
+import CapacityIcon from "assets/img/icons/CapacityIcon";
+import RoomIcon from "assets/img/icons/RoomIcon";
 
 
 const useStyles2 = makeStyles(styles2);
@@ -147,7 +150,7 @@ export default function AddRoomDialog(props) {
                                                                         type: "text",
                                                                         endAdornment: (
                                                                             <InputAdornment position="end">
-                                                                                    <People className={classes2.inputIconsColor} />
+                                                                                    <RoomIcon color={"black"} />
                                                                             </InputAdornment>
                                                                         )
                                                                 }}
@@ -164,8 +167,8 @@ export default function AddRoomDialog(props) {
                                                                         type: "number",
                                                                         endAdornment: (
                                                                             <InputAdornment position="end">
-                                                                                    <PhoneIcon className={classes2.inputIconsColor}>
-                                                                                    </PhoneIcon>
+                                                                                    <AreaIcon className={classes2.inputIconsColor}>
+                                                                                    </AreaIcon>
 
                                                                             </InputAdornment>
                                                                         )
@@ -183,8 +186,8 @@ export default function AddRoomDialog(props) {
                                                                         type: "number",
                                                                         endAdornment: (
                                                                             <InputAdornment position="end">
-                                                                                    <PhoneIcon className={classes2.inputIconsColor}>
-                                                                                    </PhoneIcon>
+                                                                                    <CapacityIcon size={"large"} className={classes2.inputIconsColor}>
+                                                                                    </CapacityIcon>
 
                                                                             </InputAdornment>
                                                                         )

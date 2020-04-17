@@ -34,6 +34,8 @@ import PostData from "facility/postData";
 import MapExtreme from "views/Maps/MapExtreme";
 import Dialog from "@material-ui/core/Dialog";
 import {LocationCity} from "@material-ui/icons";
+import AddLocationIcon from '@material-ui/icons/AddLocation';
+import AreaIcon from "assets/img/icons/AreaIcon";
 
 const useStyles2 = makeStyles(styles2);
 
@@ -256,8 +258,8 @@ function AddFacilityDialog(props){
                                                                             type: "number",
                                                                             endAdornment: (
                                                                                 <InputAdornment position="end">
-                                                                                        <PhoneIcon className={classes2.inputIconsColor}>
-                                                                                        </PhoneIcon>
+                                                                                        <AreaIcon className={classes2.inputIconsColor}>
+                                                                                        </AreaIcon>
 
                                                                                 </InputAdornment>
                                                                             )
@@ -390,7 +392,7 @@ function AddFacilityDialog(props){
                                                                             type: "text",
                                                                             endAdornment: (
                                                                                 <InputAdornment position="end">
-                                                                                        <LocationCity onClick={pickLocation} className={classes2.inputIconsColor} />
+                                                                                        <AddLocationIcon onClick={pickLocation} className={classes2.inputIconsColor} />
                                                                                 </InputAdornment>
                                                                             ),
                                                                             autoComplete: "off"
