@@ -21,6 +21,8 @@ import Fab from "@material-ui/core/Fab";
 import AddFacilityDialog from "views/Components/AddFacilityDialog";
 import PostData from "facility/postData";
 import MapExtreme from "views/Maps/MapExtreme";
+import GroupInfo from "views/Groups/GroupInfo";
+import FacilityDetails from "views/TableList/FacilityDetails";
 
 const styles = {
   cardCategoryWhite: {
@@ -69,7 +71,19 @@ export default function TableList() {
         const [successAlert,setSuccessAlert] =useState(false);
         const [latLong,setLatLong] = useState({lat:31,lng:80});
 
+        const [openDialog,setOpenDialog] = useState(false);
 
+        const [selectedFacDetails,setSelectedFacDetails] = useState({});
+
+
+        function handleDialogClose(){
+                setOpenDialog(false)
+        }
+
+        function openDetails(data){
+                setSelectedFacDetails(data);
+                setOpenDialog(true)
+        }
 
         const columnsHeading=[
                 { title: 'Facility Name', field: 'name' },
@@ -115,7 +129,7 @@ export default function TableList() {
                                 });
                                 totalCap+=data.capacity;
                                 totalOccup+=data.occupant_count;
-                                details.push({name:data.name,owner:data.owner,address:data.address,capacity:data.occupant_count+"/"+data.capacity})
+                                details.push({name:data.name,owner:data.owner,address:data.address,capacity:data.occupant_count+"/"+data.capacity,id:data.id,ward_set:data.ward_set})
                         });
                         setFacilityTotalCapacity(totalOccup+" / "+totalCap);
                         setWard1TotalCapacity(totalWard1Occup+"/"+totalWard1Cap);
@@ -133,7 +147,7 @@ export default function TableList() {
         function submitDetails(data){
                 const callback = result => {
                         console.log("this is result",result);
-                        setSuccessAlert(true)
+                        setSuccessAlert(true);
                         handleClose();
                 };
                 console.log("submit detaisl",JSON.stringify(data));
@@ -172,7 +186,7 @@ export default function TableList() {
             </p>
           </CardHeader>
           <CardBody>
-                  <CustomTable title="Facility Details" columns={columnsHeading} data={dataDisplay}/>
+                  <CustomTable title="Facility Details" openDetails={openDetails} columns={columnsHeading} data={dataDisplay}/>
 
           </CardBody>
         </Card>
@@ -190,6 +204,20 @@ export default function TableList() {
                         onClose={handleClose}
                     >
                             <AddFacilityDialog submitFunc={submitDetails}/>
+
+                    </Dialog>
+                    <Dialog
+                        open={openDialog}
+                        PaperProps={{
+                                style: {
+                                        backgroundColor: 'transparent',
+                                        boxShadow: 'none',
+                                        scrollbarColor: "transparent"
+                                },
+                        }}
+                        onClose={handleDialogClose}
+                    >
+                            <FacilityDetails closeFunc={handleDialogClose} data={selectedFacDetails}/>
 
                     </Dialog>
                     <Snackbar open={successAlert} autoHideDuration={6000} onClose={handleAlertClose}>
