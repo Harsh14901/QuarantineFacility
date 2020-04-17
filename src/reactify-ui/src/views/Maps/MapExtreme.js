@@ -145,7 +145,12 @@ export default function MapExtreme(props) {
 
 
                             {  geojsonFeature.map((data,idx) =>
-                                    <Marker key={`marker-${idx}`} position={position} >
+                                    <Marker key={`marker-${idx}`} position={data.geometry.coordinates} onMouseOver={(e) => {
+                                            e.target.openPopup();
+                                    }}
+                                            onMouseOut={(e) => {
+                                                    e.target.closePopup();
+                                            }} >
                                             <Popup>
                                                     <span>{"Name:- "+data.properties.name}<br/> {data.properties.popupContent}</span>
                                             </Popup>
