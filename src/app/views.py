@@ -251,10 +251,12 @@ def discharge_group(request):
     post_data = request.data
     print(post_data)
     group = Group.objects.get(id=post_data['group'])
+    user = request.user
     for person in group.person_set.all():
-        person.room = None
-        person.save()
-        Discharged(person=person).save()
+        if (isCityAdmin(user) and person.room.ward.facility.city.admin == user) or (isFacilityAdmin(user) and person.room.ward.facility.admin == user):
+            person.room = None
+            person.save()
+            Discharged(person=person).save()
     return Response('done')
 
 
