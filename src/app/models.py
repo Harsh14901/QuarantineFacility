@@ -140,6 +140,7 @@ class Facility(models.Model):
     address = models.TextField()
     latitude = models.FloatField(null=True)
     longitude = models.FloatField(null=True)
+    isVIP = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
