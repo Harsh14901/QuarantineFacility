@@ -49,7 +49,7 @@ function AddFacilityDialog(props){
         const classes2=useStyles2();
         const classes=useStyles();
 
-        const defaultRoomState={ward: 0,category: 2,room_number: "",area: 0,capacity: 1};
+        const defaultRoomState={ward: 0,category: 2,room_number: "",area: 0,capacity: 1,type: 0};
 
         const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
 
@@ -70,6 +70,10 @@ function AddFacilityDialog(props){
         const [LocationPicker,setLocationPicker] = useState(false);
         const [address,setAddress] = useState("");
         const [latLong,setLatLong] = useState([25,82]);
+        const [VIPStatus,setVipStatus] = useState(false);
+        function handleVIP(){
+                setVipStatus(!VIPStatus)
+        }
 
 
         const wardCateg = [
@@ -80,6 +84,16 @@ function AddFacilityDialog(props){
                 {
                         value: 1,
                         label: 'Ward 1',
+                }
+        ];
+        const roomCateg = [
+                {
+                        value: 0,
+                        label: 'Economy',
+                },
+                {
+                        value: 1,
+                        label: 'Deluxe',
                 }
         ];
 
@@ -179,7 +193,7 @@ function AddFacilityDialog(props){
                                 numbers.push(num);
                         numbers.map((data2) => {
                                 const id =(data.category===1)?ward1Id:ward2Id;
-                                details.push({ward: id,category: data.category+"",room_num: parseInt(data2),floor: 0,area:data.area,capacity:data.capacity})
+                                details.push({ward: id,category: data.category+"",type: data.type,room_num: parseInt(data2),floor: 0,area:data.area,capacity:data.capacity})
                         })
                 });
                 props.submitFunc(details);
@@ -304,7 +318,24 @@ function AddFacilityDialog(props){
                                                                             </MenuItem>
                                                                         ))}
                                                                 </TextField>
+                                                                <TextField
+                                                                    style={{marginTop: "6px"}}
+                                                                    id="roomType"
+                                                                    select
+                                                                    label="Room Type"
+                                                                    value={roomDetails[j].type}
+                                                                    onChange={handleChange('type',j)}
+                                                                    fullWidth={true}
+                                                                    InputProps={{style: {fontSize: "0.9rem"}}}
 
+
+                                                                >
+                                                                        {roomCateg.map((option) => (
+                                                                            <MenuItem  key={option.value} value={option.value}>
+                                                                                    {option.label}
+                                                                            </MenuItem>
+                                                                        ))}
+                                                                </TextField>
 
                                                                 <div style={{position: "relative",padding: "20px",display: "flex",justifyContent: "center",alignItems: "center", width:"100%"}}>
                                                                         <Button onClick={submitDetails} className={classes.submitButton}>
@@ -399,6 +430,17 @@ function AddFacilityDialog(props){
                                                                             ),
                                                                             autoComplete: "off"
                                                                     }}
+                                                                />
+                                                                <FormControlLabel
+                                                                    control={
+                                                                            <Switch
+                                                                                checked={VIPStatus}
+                                                                                onChange={handleVIP}
+                                                                                name="VIP Status"
+                                                                                color="primary"
+                                                                            />
+                                                                    }
+                                                                    label="Enable VIP Status"
                                                                 />
                                                         </CardBody>
                                                         <CardFooter className={classes2.cardFooter}>
