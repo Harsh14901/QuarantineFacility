@@ -14,10 +14,7 @@ def get_sorted_rooms(person,facility):
         if((person.risk == HIGH_RISK and ward.category == Ward.WARD1) or (person.risk == LOW_RISK and ward.category == Ward.WARD2)):
             for room in ward.room_set.all():
                 room_list.append(room)
-    if person.vip:
-        room_list.sort(key=lambda x: x.category,reverse=True)
-    else:
-        random.shuffle(room_list)
+    room_list.sort(key=lambda x: x.category,reverse=True)
     return room_list
 
 
@@ -203,6 +200,10 @@ def get_all_distances(patient):
     else:
         all_facilities = half_sorted
         print('API call failed ... using point to point distances')
+
+    all_facilities.sort(key = lambda x:x.isVIP)
+    if patient.vip:
+        all_facilities.reverse()
     return all_facilities
 
 
@@ -234,7 +235,11 @@ def getClosestFacilities(request):
     dummy = Person(
         latitude=request.GET['latitude'],
         longitude=request.GET['longitude'],
+        vip = request.GET['vip']!='0' or request.GET['vip']==0,
     )
     a=get_all_distances(dummy)
-    # print(a)
-    return Response({'id':f.id,'name':f.name} for f in a)
+    if dummy.vip:
+        a=filter(lambda x:x.isVIP,a)
+    else:
+        a=filter(lambda x: not x.isVIP,a)
+    return Response({'id':f.id,'name':f.name,'vip':f.isVIP} for f in a)
