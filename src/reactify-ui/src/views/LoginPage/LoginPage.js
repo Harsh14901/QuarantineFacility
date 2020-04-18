@@ -25,9 +25,11 @@ import image from "assets/img/login_back.jpg";
 
 import HttpsOutlinedIcon from '@material-ui/icons/HttpsOutlined';
 import postData from "facility/postData";
-import loginUser from "facility/loginUser";
 import checkUserAuthenticated from "facility/checkUserAuthenticated";
 import getData from "facility/getData";
+import { useHistory } from 'react-router-dom';
+import loginUser from "facility/loginUser";
+
 
 const useStyles = makeStyles(styles);
 
@@ -38,23 +40,29 @@ export default function LoginPage(props) {
   const [name,setName] = useState("");
   const [password,setPassword] = useState("");
 
+        const history = useHistory();
+
+
 
         function submitDetails(){
                 const callback = result => {
+
                         console.log("And here I have the login token",result)
+                        history.push('/admin')
                 };
 
                 let data={username: name,email: email,password: password};
                 console.log("Here is the data",JSON.stringify(data));
-                checkUserAuthenticated(callback,'http://127.0.0.1:8000/rest-auth/user/')
+                loginUser(callback,data,'http://127.0.0.1:8000/rest-auth/login/')
         }
 
         function isAuthenticated(){
                 const callback = res => {
-                        console.log("Lets see if logged in",res)
+                        if(res.username)
+                                history.push('/admin')
                 };
                 console.log("YOYYOOYOHBJHBJ");
-                postData(callback,{},'http://127.0.0.1:8000/rest-auth/user/')
+                checkUserAuthenticated(callback,{},'http://127.0.0.1:8000/rest-auth/user/')
         }
 
         const handleChange = (id) => (event) => {

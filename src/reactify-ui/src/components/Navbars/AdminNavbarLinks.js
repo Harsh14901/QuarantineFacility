@@ -1,6 +1,8 @@
 import React from "react";
 import classNames from "classnames";
 // @material-ui/core components
+import { Switch, Route, Redirect ,useHistory} from "react-router-dom";
+
 import { makeStyles } from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
@@ -20,6 +22,9 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 import Button from "components/CustomButtons/Button.js";
 
 import styles from "assets/jss/material-dashboard-react/components/headerLinksStyle.js";
+import logOutUser from "facility/logOutUser";
+import postData from "facility/postData";
+
 
 const useStyles = makeStyles(styles);
 
@@ -47,6 +52,16 @@ export default function AdminNavbarLinks() {
   const handleCloseProfile = () => {
     setOpenProfile(null);
   };
+
+        const history = useHistory();
+  function logOut(){
+          const callback =  res => {
+                console.log("shud have logged out",res);
+                  history.push('/login');
+          };
+        logOutUser(callback)
+  }
+
   return (
     <div>
       <div className={classes.manager}>
@@ -88,10 +103,10 @@ export default function AdminNavbarLinks() {
                 <ClickAwayListener onClickAway={handleCloseProfile}>
                   <MenuList role="menu">
                     <MenuItem
-                      onClick={handleCloseProfile}
+                      onClick={logOut}
                       className={classes.dropdownItem}
                     >
-                      Log In
+                      Log Out
                     </MenuItem>
                   </MenuList>
                 </ClickAwayListener>
