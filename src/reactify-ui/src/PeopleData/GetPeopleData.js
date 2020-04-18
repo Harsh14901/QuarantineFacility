@@ -6,7 +6,8 @@ const getPeopleData = callback => {
                 method: 'GET',
                 headers:{
                         'Content-Type':'application/json'
-                }
+                },
+                withCredentials: true
         };
         axios.get(endpt,lookupOpts).then(function(response){
                 return response.data

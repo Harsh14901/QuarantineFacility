@@ -9,9 +9,9 @@ const PostGroupData = (callback,data) => {
                 method:'POST',
                 headers:{
                         'Content-Type':'application/json',
-                        'Authorization': 'Basic YWRtaW46YWRtaW4xMjM0',
                         'Accept': 'application/json'
-                }
+                },
+                withCredentials: true
         };
         axios.post(endpt, data,lookupOpts). then(r => callback(data)).catch(function(error){console.log("hi",error)})
 
