@@ -37,7 +37,7 @@ ReactDOM.render(
     <Switch>
             <Route path="/login" component={LoginPage}/>
             <Route path="/admin" component={Admin} />
-            <Redirect from="/" to="/login" />
+            <Redirect from="/" to="/admin" />
     </Switch>
   </Router>
 </CookiesProvider>,

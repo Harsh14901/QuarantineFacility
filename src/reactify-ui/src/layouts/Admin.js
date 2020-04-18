@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route, Redirect ,useHistory} from "react-router-dom";
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
@@ -17,6 +17,7 @@ import styles from "assets/jss/material-dashboard-react/layouts/adminStyle.js";
 
 import bgImage from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/reactlogo.png";
+import checkUserAuthenticated from "facility/checkUserAuthenticated";
 
 let ps;
 
@@ -50,6 +51,7 @@ export default function Admin({ ...rest }) {
   const [color, setColor] = React.useState("blue");
   const [fixedClasses, setFixedClasses] = React.useState("dropdown show");
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const history = useHistory();
   const handleImageClick = image => {
     setImage(image);
   };
@@ -76,6 +78,14 @@ export default function Admin({ ...rest }) {
   };
   // initialize and destroy the PerfectScrollbar plugin
   React.useEffect(() => {
+          const callback = res => {
+                  if(!res.username)
+                        history.push('/login');
+
+
+          };
+          checkUserAuthenticated(callback,{},'http://127.0.0.1:8000/rest-auth/user/');
+
     if (navigator.platform.indexOf("Win") > -1) {
       ps = new PerfectScrollbar(mainPanel.current, {
         suppressScrollX: true,
