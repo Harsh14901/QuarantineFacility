@@ -11,9 +11,9 @@ const changeUserWard = (callback,data) => {
                 method:'PATCH',
                 headers:{
                         'Content-Type':'application/json',
-                        'Authorization': 'Basic YWRtaW46YWRtaW4xMjM0',
                         'Accept': 'application/json'
-                }
+                },
+                withCredentials: true
         };
         axios.patch(endpt,dataToPatch, lookupOpts). then(r => callback(data)).catch(function(error){console.log("hi",error)})
 

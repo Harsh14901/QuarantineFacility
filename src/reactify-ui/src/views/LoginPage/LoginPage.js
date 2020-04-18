@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -26,6 +26,8 @@ import image from "assets/img/login_back.jpg";
 import HttpsOutlinedIcon from '@material-ui/icons/HttpsOutlined';
 import postData from "facility/postData";
 import loginUser from "facility/loginUser";
+import checkUserAuthenticated from "facility/checkUserAuthenticated";
+import getData from "facility/getData";
 
 const useStyles = makeStyles(styles);
 
@@ -44,7 +46,15 @@ export default function LoginPage(props) {
 
                 let data={username: name,email: email,password: password};
                 console.log("Here is the data",JSON.stringify(data));
-                loginUser(callback,data,'http://127.0.0.1:8000/rest-auth/login/')
+                checkUserAuthenticated(callback,'http://127.0.0.1:8000/rest-auth/user/')
+        }
+
+        function isAuthenticated(){
+                const callback = res => {
+                        console.log("Lets see if logged in",res)
+                };
+                console.log("YOYYOOYOHBJHBJ");
+                postData(callback,{},'http://127.0.0.1:8000/rest-auth/user/')
         }
 
         const handleChange = (id) => (event) => {
@@ -55,6 +65,10 @@ export default function LoginPage(props) {
                 if(id==='password')
                         setPassword(event.target.value)
         };
+
+        useEffect(() => {
+                isAuthenticated();
+        }, []);
 
   setTimeout(function() {
     setCardAnimation("");
