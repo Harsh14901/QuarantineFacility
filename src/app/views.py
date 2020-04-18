@@ -175,7 +175,6 @@ class DischargedViewSet(generics.ListCreateAPIView):
     queryset = Discharged.objects.all()
     serializer_class = DischargedSerializer
 
-
 @api_view()
 def null_view(request):
     return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -184,3 +183,17 @@ def null_view(request):
 @api_view()
 def complete_view(request):
     return Response("Email account is activated")
+
+@api_view(['POST'])
+def discharge_group(request):
+    print(request.data)
+    post_data = request.data
+    print(post_data)
+    group = Group.objects.get(id=post_data['group'])
+    for person in group.person_set.all():
+        person.room = None
+        person.save()
+        Discharged(person=person).save()
+    return Response('done')
+
+
