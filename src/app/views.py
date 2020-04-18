@@ -29,14 +29,14 @@ def isFacilityAdmin(user):
 def index(request):  
     print('important')          
     groups = Group.objects.all()
-    tbd=[]
-    for group in groups:
-        if len(list(group.person_set.all()))==0:
-            tbd.append(group.id)
-    for i in tbd:
-        print(group)
-        Group.objects.get(id=i).delete()
-    groups = Group.objects.all()
+    # tbd=[]
+    # for group in groups:
+    #     if len(list(group.person_set.all()))==0:
+    #         tbd.append(group.id)
+    # for i in tbd:
+    #     print(group)
+    #     Group.objects.get(id=i).delete()
+    # groups = Group.objects.all()
     # a = get_sorted_list(groups)
     # b=[]
     # for per in a:
@@ -208,6 +208,25 @@ class GroupViewSet(ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
+    def get_queryset(self):
+        groups = Group.objects.all()
+        queryset = Group.objects.none()
+        user = self.request._user
+        for group in groups:
+            valid = False
+            for person in group.person_set.all():
+                if person.room is None:
+                    valid = True
+                    break
+                if not ((isCityAdmin(user) and person.room.ward.facility.city.admin == user) or (isFacilityAdmin(user) and person.room.ward.facility.admin == user)):
+                    continue
+                valid = True
+                break
+            if(valid):
+                queryset = queryset | Group.objects.all().filter(id=group.id)
+        return queryset
+    
+
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
 
@@ -220,9 +239,9 @@ class GroupViewSet(ModelViewSet):
 
         user = request.user
         for group in serializer.data:
-            person_set = group['person_set']
+            
             temp = []
-            for person in person_set:
+            for person in group['person_set']:
                 facilty_pk = person['facility_pk']
                 if facilty_pk == "None":
                     temp.append(person)
@@ -230,7 +249,7 @@ class GroupViewSet(ModelViewSet):
                     temp.append(person)
                 elif(isFacilityAdmin(user) and Facility.objects.get(id=facilty_pk).admin == user):
                     temp.append(person)
-            person_set = temp
+            group['person_set'] = temp
         return Response(serializer.data)
 
 @api_view(['POST'])
