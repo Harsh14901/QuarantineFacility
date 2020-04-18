@@ -208,6 +208,31 @@ class GroupViewSet(ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        
+        serializer = self.get_serializer(queryset, many=True)
+
+        user = request.user
+        for group in serializer.data:
+            person_set = group['person_set']
+            temp = []
+            for person in person_set:
+                facilty_pk = person['facility_pk']
+                if facilty_pk == "None":
+                    temp.append(person)
+                elif(isCityAdmin(user) and Facility.objects.get(id=facilty_pk).city.admin == user):
+                    temp.append(person)
+                elif(isFacilityAdmin(user) and Facility.objects.get(id=facilty_pk).admin == user):
+                    temp.append(person)
+            person_set = temp
+        return Response(serializer.data)
+
 @api_view(['POST'])
 def AllocateGroups(request):
     if request.method == "POST":

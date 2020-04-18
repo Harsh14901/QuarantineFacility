@@ -109,7 +109,6 @@ class GroupSerializer(serializers.ModelSerializer):
         else:
             return super().create(validated_data)
 
-  
     class Meta():
         model = Group
         fields = ['id', 'category', 'count', 'facility_preference', 'person_set']
@@ -148,7 +147,7 @@ class FacilitySerializer(serializers.ModelSerializer):
 
     class Meta():
         model = Facility
-        fields = ['id', 'name','admin', 'owner','city','vip', 'address', 'capacity','occupant_count',
+        fields = ['id', 'name','admin', 'owner','city','isVIP', 'address', 'capacity','occupant_count',
                   'room_count', 'ward_set', 'latitude', 'longitude']
 
 class DischargedSerializer(serializers.ModelSerializer):
