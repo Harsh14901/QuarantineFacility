@@ -140,6 +140,7 @@ class Facility(models.Model):
     address = models.TextField()
     latitude = models.FloatField(null=True)
     longitude = models.FloatField(null=True)
+    isVIP = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -215,7 +216,7 @@ class Room(models.Model):
         (SUPER_DELUXE,"Super Deluxe"),
     )
     category = models.CharField(choices=RoomChoices,max_length=50)
-    room_num = models.PositiveSmallIntegerField()
+    room_num = models.CharField(max_length=10)
     floor = models.PositiveSmallIntegerField()
     area = models.FloatField(null=True,blank=True)
     ward = models.ForeignKey("Ward", on_delete=models.CASCADE) 
