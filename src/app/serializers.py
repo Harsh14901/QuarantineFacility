@@ -11,6 +11,16 @@ class CitySerializer(serializers.ModelSerializer):
         model = City
         fields = ['id', 'name','latitutde','longitude','admin']
 
+    def save(self, **kwargs):
+        # print(self.validated_data)
+        try:
+            set_location(self.validated_data)
+        except:
+            raise ValidationError(
+                detail="Could not allocate location", code='invalid_coordinates')
+
+        return super().save(**kwargs)
+
 class LuxurySerializer(serializers.ModelSerializer):
     class Meta:
         model = Luxury
@@ -19,7 +29,7 @@ class LuxurySerializer(serializers.ModelSerializer):
 class MedicineSerializer(serializers.ModelSerializer):
     class Meta():
         model = Medicine
-        fields = ['name','cost']
+        fields = ['id','name','cost']
 
 class CheckupSerializer(serializers.ModelSerializer):
     class Meta():
@@ -127,14 +137,18 @@ class FacilitySerializer(serializers.ModelSerializer):
     ward_set = WardSerializer(many=True,read_only=True)
 
     def save(self, **kwargs):
-        print(self.validated_data)
-        set_location(self.validated_data)
-        
+        # print(self.validated_data)
+        try:
+            set_location(self.validated_data)
+        except:
+            raise ValidationError(
+                detail="Could not allocate location", code='invalid_coordinates')
+
         return super().save(**kwargs)
 
     class Meta():
         model = Facility
-        fields = ['id', 'name','admin', 'owner','city', 'address', 'capacity','occupant_count',
+        fields = ['id', 'name','admin', 'owner','city','vip', 'address', 'capacity','occupant_count',
                   'room_count', 'ward_set', 'latitude', 'longitude']
 
 class DischargedSerializer(serializers.ModelSerializer):

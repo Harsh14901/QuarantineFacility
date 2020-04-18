@@ -26,7 +26,7 @@ def check_allocation_possible(person, **kwargs):
     if "ward_pk" in kwargs:
         ward_pk = kwargs.pop("ward_pk")
         risk_initial = person.risk
-        person.risk = HIGH_RISK if (risk_initial == LOW_RISK) else LOW_RISK
+        person.risk = HIGH_RISK if Ward.objects.get(id=ward_pk).category == Ward.WARD1 else LOW_RISK
         person.save()
 
         room_pk = check_allocation_possible(person,facility_pk=Ward.objects.get(id=ward_pk).facility.id)
@@ -40,7 +40,6 @@ def check_allocation_possible(person, **kwargs):
     elif "facility_pk" in kwargs:
         facility_pk = kwargs.pop("facility_pk")
         facility = Facility.objects.get(id=facility_pk)
-
         sorted_rooms = get_sorted_rooms(person,facility)
 
         for room in sorted_rooms:
@@ -88,7 +87,6 @@ def make_allocation(patient):
         patient = family[i]
         
         try:
-            fac_pref = 8
             fac_pref = patient.group.facility_preference.id
         except:
             allocated = False
