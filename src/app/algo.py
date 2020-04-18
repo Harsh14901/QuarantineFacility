@@ -237,7 +237,11 @@ def getClosestFacilities(request):
     dummy = Person(
         latitude=request.GET['latitude'],
         longitude=request.GET['longitude'],
+        vip = request.GET['vip']!='0' or request.GET['vip']==0,
     )
     a=get_all_distances(dummy)
-    # print(a)
+    if dummy.vip:
+        a=filter(lambda x:x.isVIP,a)
+    else:
+        a=filter(lambda x: not x.isVIP,a)
     return Response({'id':f.id,'name':f.name,'vip':f.isVIP} for f in a)
