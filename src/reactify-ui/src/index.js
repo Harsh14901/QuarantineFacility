@@ -26,16 +26,19 @@ import Admin from "layouts/Admin.js";
 
 import "assets/css/material-dashboard-react.css?v=1.8.0";
 import LoginPage from "views/LoginPage/LoginPage";
+import {CookiesProvider} from "react-cookie";
 
 const hist = createBrowserHistory();
 
 ReactDOM.render(
-  <Router history={hist}>
+<CookiesProvider>
+    <Router history={hist}>
     <Switch>
             <Route path="/login" component={LoginPage}/>
             <Route path="/admin" component={Admin} />
             <Redirect from="/" to="/admin/dashboard" />
     </Switch>
-  </Router>,
+  </Router>
+</CookiesProvider>,
   document.getElementById("root")
 );

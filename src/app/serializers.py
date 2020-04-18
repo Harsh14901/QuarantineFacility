@@ -19,7 +19,7 @@ class LuxurySerializer(serializers.ModelSerializer):
 class MedicineSerializer(serializers.ModelSerializer):
     class Meta():
         model = Medicine
-        fields = ['name','cost']
+        fields = ['name','cost','id']
 
 class CheckupSerializer(serializers.ModelSerializer):
     class Meta():

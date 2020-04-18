@@ -32,6 +32,7 @@ import postData from "facility/postData";
 import GroupInfo from "views/Groups/GroupInfo";
 import changeUserFacility from "facility/changeUserFacility";
 import ChangeFacilityDialog from "views/Components/ChangeFacilityDialog";
+import CheckupRecords from "views/Components/CheckupRecords";
 
 const useStyles2 = makeStyles(styles2);
 const useStyles = makeStyles(styles);
@@ -64,8 +65,13 @@ export default function UserDetails(props) {
         const [selectedGroupDetails,setSelectedGroupDetails] = useState({});
 
         const [active,setActive] = useState(true);
+        const [checkupOpen,setCheckupOpen] = useState(false);
 
 
+
+        function handleCheckupClose(){
+                setCheckupOpen(false)
+        }
 
         const handleDialogClose= () => {
                 setOpenDialog(false);
@@ -183,6 +189,8 @@ export default function UserDetails(props) {
                                             <GridContainer>
                                                     <GridItem xs={12}>
                                                             <Para text={"User id:- " + props.data.code}/>
+                                                            <SideButton onClick={() => setCheckupOpen(true)} text={"View Medical Records"}/>
+
                                                     </GridItem>
                                                     <GridItem xs={6}>
                                                             <Para text={"Age:- " + props.data.age}/>
@@ -247,6 +255,7 @@ export default function UserDetails(props) {
                                     <Button disabled={!active} onClick={handleDischargeOpen} className={classes.submitButton}>
                                             DISCHARGE
                                     </Button>
+
                             </CardFooter>
                     </form>
             </Card>
@@ -328,7 +337,19 @@ export default function UserDetails(props) {
                             <ChangeFacilityDialog submitFunc={changeFacility} closeFunc={handleFacClose} data={[props.data.latitude,props.data.longitude]}/>
 
                     </Dialog>
-
+                    <Dialog
+                        open={checkupOpen}
+                        PaperProps={{
+                                style: {
+                                        backgroundColor: 'transparent',
+                                        boxShadow: 'none',
+                                        scrollbarColor: "transparent"
+                                },
+                        }}
+                        onClose={handleCheckupClose}
+                    >
+                        <CheckupRecords  data={props.data} closeFunc={() => setCheckupOpen(false)}/>
+                    </Dialog>
             </div>
         )
 };

@@ -9,9 +9,9 @@ const loginUser = (callback,data,url) => {
                 headers:{
                         'Content-Type':'application/json',
                         'Accept': 'application/json'
-                }
+                },
         };
-        axios.post(url, data,lookupOpts). then(r => callback(r.data)).catch(function(error){console.log("hi",error.data)})
+        axios.post(url, data,lookupOpts). then(r => callback(r)).catch(function(error){console.log("hi",error.data)})
 
 };
 

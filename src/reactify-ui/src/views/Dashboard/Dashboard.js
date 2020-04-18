@@ -48,6 +48,9 @@ import {AgeGraph, GenderGraph, NewCasesGraph, NewDischargesGraph} from "views/Co
 import LineGraphs from "views/Components/analytics/LineGraphs";
 import DonutGraph from "views/Components/analytics/DonutGraph";
 import ActiveVsDischargeGraph from "views/Components/analytics/ActiveVsDischargeGraph";
+import {TextField} from "@material-ui/core";
+import { useCookies } from 'react-cookie';
+
 
 
 const useStyles = makeStyles(styles);
@@ -55,10 +58,21 @@ const useStyles = makeStyles(styles);
 export default function Dashboard() {
   const classes = useStyles();
 
-  console.log(emailsSubscriptionChart.data);
+        const [cookies, setCookie] = useCookies(['name']);
+
+        function onChange(newName) {
+                setCookie('name', newName.target.value, { path: '/' ,httpOnly: false});
+                console.log(newName.target.value)
+        }
+
+
+        console.log(emailsSubscriptionChart.data);
   return (
     <div>
     <GridContainer style={{justifyContent: "center"}}>
+
+            <TextField value={cookies.name} onChange={onChange} />
+            {cookies.name && <h3>Hello {cookies.name}!</h3>}
 
             <TotalCasesGraph/>
             <ActiveCasesGraph/>
