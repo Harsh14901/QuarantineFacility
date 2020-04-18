@@ -193,7 +193,7 @@ function AddFacilityDialog(props){
                                 numbers.push(num);
                         numbers.map((data2) => {
                                 const id =(data.category===1)?ward1Id:ward2Id;
-                                details.push({ward: id,category: data.category+"",type: data.type,room_num: parseInt(data2),floor: 0,area:data.area,capacity:data.capacity})
+                                details.push({ward: id,category: data.category+"",type: VIPStatus?data.type+2:data.type,room_num: parseInt(data2),floor: 0,area:data.area,capacity:data.capacity})
                         })
                 });
                 props.submitFunc(details);
