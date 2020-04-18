@@ -16,25 +16,35 @@ from cryptography.hazmat.primitives.serialization import *
 import datetime
 import os
 from django.urls import reverse_lazy
+import django_heroku
+django_heroku.settings(locals())
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'ksy0*&5)&=lxwj-7g+$zepz3#2*vt#os^nbi5o&2#k_s5s6ee@'
+# SECRET_KEY = 'ksy0*&5)&=lxwj-7g+$zepz3#2*vt#os^nbi5o&2#k_s5s6ee@'
+from decouple import config
+SECRET_KEY = config('SECRET_KEY')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = ['*']
-
-
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Application definition
 
 INSTALLED_APPS = [
+    'whitenoise.runserver_nostatic',
     'rest_framework',
     'phone_field',
     'django.contrib.admin',
@@ -58,10 +68,11 @@ INSTALLED_APPS = [
 SITE_ID = 1
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -86,7 +97,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'MainSystem.wsgi.application'
+# WSGI_APPLICATION = 'MainSystem.wsgi.application'
 
 
 # Database
@@ -146,7 +157,8 @@ STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static-cdn-local')
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = [
-    'localhost:3000' # Here was the problem indeed and it has to be http://localhost:3000, not http://localhost:3000/
+    '127.0.0.1:8000',
+    '127.0.0.1:3000', # Here was the problem indeed and it has to be http://localhost:3000, not http://localhost:3000/
 ]
 
 REST_FRAMEWORK = {
@@ -179,7 +191,6 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'djangotestinhell@gmail.com'
-EMAIL_HOST_PASSWORD = 'help_inbent!23'
 
 
 SETTINGS_PATH = os.path.normpath(os.path.dirname(__file__))
