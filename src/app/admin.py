@@ -22,11 +22,11 @@ class FacilityAdmin(admin.ModelAdmin):
 
 @admin.register(Person)
 class PersonAdmin(admin.ModelAdmin):
-    list_display = ['name','age','risk','address','room','vip']
+    list_display = ['id','name','age','risk','address','room','vip']
 
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
-    list_display = ['category','count','facility_preference']
+    list_display = ['id','category','count','facility_preference']
 
 
 @admin.register(Medicine)

@@ -111,7 +111,7 @@ class Group(models.Model):
     facility_preference = models.ForeignKey("Facility", on_delete=models.CASCADE,null=True)
     
     def __str__(self):
-        return f"{self.id} | {self.category} group of {self.count} members"
+        return f"{self.id} | {self.category} group of {self.count} members "
     
     @property
     def count(self):
@@ -140,6 +140,7 @@ class Facility(models.Model):
     address = models.TextField()
     latitude = models.FloatField(null=True)
     longitude = models.FloatField(null=True)
+    isVIP = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
