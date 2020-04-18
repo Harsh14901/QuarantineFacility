@@ -10,6 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
+from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import serialization
+import datetime
 import os
 from django.urls import reverse_lazy
 
@@ -147,6 +151,7 @@ REST_FRAMEWORK = {
 		'rest_framework.permissions.IsAuthenticated',
 	),
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     )
 }
@@ -179,3 +184,16 @@ TEMPLATE_DIRS = (
     os.path.join(SETTINGS_PATH, 'templates'),
 )
 
+REST_USE_JWT = True
+
+with open("private.pem",'rb') as private:
+	private_key = serialization.load_pem_private_key(private.read(),password=None,backend=default_backend())
+JWT_AUTH = {
+	'JWT_ISSUER' : "someone",
+	'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=12),
+	'JWT_PRIVATE_KEY': private_key,
+	'JWT_PUBLIC_KEY': private_key.public_key(),
+	'JWT_ALGORITHM': 'RS256',
+	'JWT_AUTH_COOKIE': "token"
+
+}
