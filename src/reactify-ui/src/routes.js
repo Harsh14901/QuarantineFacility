@@ -34,6 +34,7 @@ import Maps from "views/Maps/Maps";
 import MapExtreme from "views/Maps/MapExtreme";
 import {Store} from "@material-ui/icons";
 import LoginPage from "views/LoginPage/LoginPage";
+import MedicinesDetails from "views/Medicines/MedicinesDetails";
 // import Icons from "views/Icons/Icons.js";
 // import Maps from "views/Maps/Maps.js";
 // import NotificationsPage from "views/Notifications/Notifications.js";
@@ -68,6 +69,13 @@ const dashboardRoutes = [
     component: GroupsDetail,
     layout: "/admin"
   },
+        {
+                path: "/medicines",
+                name: "Medicines",
+                icon: LibraryBooks,
+                component: MedicinesDetails,
+                layout: "/admin"
+        },
 
   // {
   //   path: "/icons",
