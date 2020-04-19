@@ -136,7 +136,6 @@ class FacilitySerializer(serializers.ModelSerializer):
     ward_set = WardSerializer(many=True,read_only=True)
 
     def save(self, **kwargs):
-        # print(self.validated_data)
         try:
             set_location(self.validated_data)
         except:

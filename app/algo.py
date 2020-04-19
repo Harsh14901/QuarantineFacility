@@ -4,7 +4,7 @@ import requests
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from math import *
-# from django.http import *
+from MainSystem.settings import API_KEY
 
 INFINITY = 1000000000
 
@@ -61,7 +61,7 @@ def get_sorted_list(all_groups):
     for group in all_groups:
         if group.category == Group.ADULTS:
             all_dummy_patients += list(group.person_set.all())
-        else:
+        elif(len(group.person_set.all() != 0)):
             all_dummy_patients.append( group.person_set.latest('age') )
 
     all_dummy_patients.sort(key=lambda  x:x.priority())
@@ -176,9 +176,9 @@ def get_all_distances(patient):
     all_facilities = []
 
     list_facility_location = ['{},{}'.format(facility.latitude,facility.longitude) for facility in half_sorted]
-    list_facility_location=list_facility_location[0:10]
+    list_facility_location=list_facility_location[0:5]
 
-    key='efe1c6b8-2b70-4252-a030-7d7f9ae2be5c'
+    key=API_KEY
     url='https://graphhopper.com/api/1/matrix'
     params={
         'from_point':p1, 
@@ -199,8 +199,8 @@ def get_all_distances(patient):
         print(all_distances)
         all_facilities = [pair[1] for pair in all_distances]
 
-        if len(half_sorted)>10:
-            all_facilities += half_sorted[10:]
+        if len(half_sorted)>5:
+            all_facilities += half_sorted[5:]
     else:
         all_facilities = half_sorted
         print('API call failed ... using point to point distances')
