@@ -9,10 +9,9 @@ import random
 class CitySerializer(serializers.ModelSerializer):
     class Meta:
         model = City
-        fields = ['id', 'name','latitutde','longitude','admin']
+        fields = ['id', 'name','latitude','longitude','admin']
 
     def save(self, **kwargs):
-        # print(self.validated_data)
         try:
             set_location(self.validated_data)
         except:

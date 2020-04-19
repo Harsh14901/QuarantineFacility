@@ -36,7 +36,7 @@ urlpatterns = [
         confirm_email, name='account_confirm_email'),
     url(r'^rest-auth/registration/complete/$', complete_view,
         name='account_confirm_complete'),
-    url(r'^rest-auth/password/reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', PasswordResetConfirmView.as_view(),
+    url(r'^password/reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', PasswordResetConfirmView.as_view(),
             name='password_reset_confirm'),
 
 
