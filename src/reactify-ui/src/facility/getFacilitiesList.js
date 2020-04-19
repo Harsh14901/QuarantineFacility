@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const getFacilitiesList = (callback,data) => {
         const endpt = 'http://127.0.0.1:8000/get_nearest_facilities/';
-        console.log(JSON.stringify(data));
+        console.log("hi its pranjal here",JSON.stringify(data));
         let lookupOpts = {
                 method: 'GET',
                 params: data,
