@@ -111,13 +111,18 @@ class FacilityViewSet(ModelViewSet):
     serializer_class = FacilitySerializer
 
     def get_queryset(self):
+        
         queryset = Facility.objects.none()
         user = self.request._user
+        if user.is_staff:
+            return super().get_queryset()
         if(isCityAdmin(user)):
             queryset = Facility.objects.all().filter(city__admin=user)
         elif(isFacilityAdmin(user)):
             queryset = Facility.objects.all().filter(admin=user)
         return queryset
+        
+    
         
     
 
@@ -128,6 +133,8 @@ class WardViewSet(ModelViewSet):
     def get_queryset(self):
         queryset = Ward.objects.none()
         user = self.request._user
+        if user.is_staff:
+            return super().get_queryset()
         if(isCityAdmin(user)):
             queryset = Ward.objects.all().filter(facility__city__admin=user)
         elif(isFacilityAdmin(user)):
@@ -142,6 +149,8 @@ class RoomViewSet(ModelViewSet):
     def get_queryset(self):
         queryset = Room.objects.none()
         user = self.request._user
+        if user.is_staff:
+            return super().get_queryset()
         if(isCityAdmin(user)):
             queryset = Room.objects.all().filter(ward__facility__city__admin=user)
         elif(isFacilityAdmin(user)):
@@ -162,6 +171,8 @@ class PersonViewSet(ModelViewSet):
     def get_queryset(self):
         queryset = Person.objects.none()
         user = self.request._user
+        if user.is_staff:
+            return super().get_queryset()
         if(isCityAdmin(user)):
             queryset = Person.objects.all().filter(room__ward__facility__city__admin=user)
         elif(isFacilityAdmin(user)):
@@ -180,6 +191,8 @@ class PersonAccomodationViewSet(ModelViewSet):
     def get_queryset(self):
         queryset = Person.objects.none()
         user = self.request._user
+        if user.is_staff:
+            return super().get_queryset()
         if(isCityAdmin(user)):
             queryset = Person.objects.all().filter(room__ward__facility__city__admin=user)
         elif(isFacilityAdmin(user)):
@@ -197,6 +210,8 @@ class CheckupViewSet(ModelViewSet):
     def get_queryset(self):
         queryset = CheckupRecords.objects.none()
         user = self.request._user
+        if user.is_staff:
+            return super().get_queryset()
         if(isCityAdmin(user)):
             queryset = CheckupRecords.objects.all().filter(person__room__ward__facility__city__admin=user)
         elif(isFacilityAdmin(user)):
@@ -212,6 +227,8 @@ class GroupViewSet(ModelViewSet):
         groups = Group.objects.all()
         queryset = Group.objects.none()
         user = self.request._user
+        if user.is_staff:
+            return super().get_queryset()
         for group in groups:
             valid = False
             for person in group.person_set.all():
@@ -238,6 +255,8 @@ class GroupViewSet(ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
 
         user = request.user
+        if user.is_staff:
+            return Response(serializer.data)
         for group in serializer.data:
             
             temp = []
@@ -297,6 +316,10 @@ def discharge_group(request):
     group = Group.objects.get(id=post_data['group'])
     user = request.user
     for person in group.person_set.all():
+        if(person.room is None):
+            continue
+        if not((isCityAdmin(user) and person.room.ward.facility.city.admin == user) or (isFacilityAdmin(user) and person.room.ward.facility.admin == user) or (user.is_staff)):
+            continue
         person.room = None
         person.save()
         try:
