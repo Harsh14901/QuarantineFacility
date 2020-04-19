@@ -59,14 +59,10 @@ const useStyles = makeStyles(styles);
 export default function Dashboard() {
   const classes = useStyles();
 
-  const [notif,setNotif] = useState(false);
-
         console.log(emailsSubscriptionChart.data);
-        const [messageOpen,setMessageOpen] = useState(true);
   return (
     <div>
     <GridContainer style={{justifyContent: "center"}}>
-            <button onClick={()=> setNotif(true)}>hihiadjisn</button>
 
             <TotalCasesGraph/>
             <ActiveCasesGraph/>
