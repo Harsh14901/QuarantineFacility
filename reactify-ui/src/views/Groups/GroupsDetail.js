@@ -28,6 +28,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
 import UserDetails from "views/UserProfile/UserDetails";
 import GroupInfo from "views/Groups/GroupInfo";
+import SnacbarNotification from "views/Components/SnacbarNotification";
 
 
 const styles = {
@@ -59,10 +60,12 @@ export default function GroupsDetail() {
         const [succesAlert,setSuccessAlert] = useState(false);
         const [openDialog,setOpenDialog] = useState(false);
         const [selectedGroupDetails,setSelectedGroupDetails] = useState({});
+        const [notif,setNotif] = useState(false);
 
 
         function handleDialogClose(){
-                setOpenDialog(false)
+                setOpenDialog(false);
+
         }
 
         function openDetails(data){
@@ -211,6 +214,8 @@ export default function GroupsDetail() {
                                     Group Added Successfully
                             </Alert>
                     </Snackbar>
+                    <SnacbarNotification setOpen={setNotif} text={"Group has been discharged Successfully"} open={notif}/>
+
             </div>
         );
 }

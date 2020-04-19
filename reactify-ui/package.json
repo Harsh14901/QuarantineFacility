@@ -29,8 +29,8 @@
     "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
-    "react-scripts": "1.1.4",
     "copyfiles": "^2.0.0",
+    "react-scripts": "2.1.8",
     "renamer": "^0.7.0"
   },
   "scripts": {
@@ -48,5 +48,11 @@
     "copy-build-js": "copyfiles -f 'build/static/js/*.js' '../staticfiles/js/'",
     "copy-build-css": "copyfiles -f 'build/static/css/*.css' '../staticfiles/css/'",
     "collectstatic": "python ../manage.py collectstatic --no-input"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

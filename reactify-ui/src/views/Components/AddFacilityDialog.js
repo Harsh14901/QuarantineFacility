@@ -38,6 +38,9 @@ import AddLocationIcon from '@material-ui/icons/AddLocation';
 import AreaIcon from "assets/img/icons/AreaIcon";
 import CapacityIcon from "assets/img/icons/CapacityIcon";
 import RoomIcon from "assets/img/icons/RoomIcon";
+import {DOMAIN} from "variables/Constants";
+import Alert from "@material-ui/lab/Alert";
+import Snackbar from "@material-ui/core/Snackbar";
 
 const useStyles2 = makeStyles(styles2);
 
@@ -59,6 +62,7 @@ function AddFacilityDialog(props){
         const [roomDetails,setRoomDetails] = useState([defaultRoomState]);
         const [step,setStep] = useState(1);
         const [facilityDetails,setFacilityDetails] = useState({name: "",address: "",owner: ""});
+        const [reqDet,setReqDet] = useState(false);
         const actions = [
                 { icon: <AddIcon />, name: 'Add Room' },
                 { icon: <DeleteIcon />, name: 'Delete Room' },
@@ -213,7 +217,7 @@ function AddFacilityDialog(props){
                 };
                 const data={facility: id,category:cat+""};
                 console.log("ward detailsss",data);
-                PostData(callback,data,'http://127.0.0.1:8000/wards/')
+                PostData(callback,data,DOMAIN + '/wards/')
         }
 
         function postFacility(){
@@ -225,8 +229,11 @@ function AddFacilityDialog(props){
                         setStep(2)
 
                 };
-                let temp={...facilityDetails,latitude: latLong[0],longitude: latLong[1],address:address};
-                console.log(temp);
+                if(facilityDetails.name==="" || facilityDetails.address==="" || facilityDetails.address==="")
+                {       setReqDet(true)
+                return}
+                let temp={...facilityDetails,isVIP: VIPStatus,latitude: latLong[0],longitude: latLong[1],address:address};
+                console.log("posting fac",temp);
                 PostFacilityData(callback,temp)
         }
 
@@ -379,7 +386,7 @@ function AddFacilityDialog(props){
                                                         </CardHeader>
                                                         <CardBody>
                                                                 <CustomInput
-                                                                    labelText="Name..."
+                                                                    labelText="Name*..."
                                                                     id="name"
                                                                     formControlProps={{
                                                                             fullWidth: true
@@ -396,7 +403,7 @@ function AddFacilityDialog(props){
                                                                     }}
                                                                 />
                                                                 <CustomInput
-                                                                    labelText="Owner..."
+                                                                    labelText="Owner*..."
                                                                     id="owner"
                                                                     formControlProps={{
                                                                             fullWidth: true
@@ -413,9 +420,8 @@ function AddFacilityDialog(props){
                                                                     }}
                                                                 />
                                                                 <CustomInput
-                                                                    labelText="Address..."
+                                                                    labelText="Address*..."
                                                                     id="address"
-                                                                    required
                                                                     formControlProps={{
                                                                             fullWidth: true
                                                                     }}
@@ -471,6 +477,11 @@ function AddFacilityDialog(props){
 
                     </Dialog>
 
+                    <Snackbar open={reqDet} autoHideDuration={6000} onClose={() => setReqDet(false)}>
+                            <Alert onClose={() => setReqDet(false)} severity="error">
+                                    Please Fill all Required Details
+                            </Alert>
+                    </Snackbar>
 
 
             </div>
