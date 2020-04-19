@@ -39,9 +39,17 @@ export default function LoginPage(props) {
   const [email,setEmail] = useState("");
   const [name,setName] = useState("");
   const [password,setPassword] = useState("");
+  const [step,setStep] = useState(1);
 
         const history = useHistory();
 
+
+        function resetPassword(){
+                const callback = res => {
+                        console.log("Password reset successful",res)
+                };
+                postData(callback,{email: email},'http://127.0.0.1:8000/rest-auth/password/reset/')
+        }
 
 
         function submitDetails(){
@@ -86,10 +94,10 @@ export default function LoginPage(props) {
   return (
     <div style={{backgroundImage: "url(" + image + ")",backgroundSize: "cover",display: "flex",justifyContent: "center",alignItems:"center",height: "100vh"}}>
           <GridContainer justify="center" >
-            <GridItem xs={12} sm={12} md={6}>
-              <Card className={classes[cardAnimaton]}>
+            <GridItem xs={12} sm={12} md={10}>
+                    { step===1?<Card className={classes[cardAnimaton]}>
                 <form className={classes.form}>
-                  <CardHeader color="primary" className={classes.cardHeader}>
+                        <CardHeader color="primary" className={classes.cardHeader}>
                     <h4>Login</h4>
 
                   </CardHeader>
@@ -151,7 +159,7 @@ export default function LoginPage(props) {
                       }}
                     />
                   </CardBody>
-                        <a href={"/reset_password"} style={{marginLeft: "15px",fontSize:"0.7rem"}}>
+                        <a  onClick={() => setStep(2)} style={{marginLeft: "15px",fontSize:"0.7rem"}}>
                                 Forgot Password
                         </a>
                   <CardFooter className={classes.cardFooter}>
@@ -160,7 +168,45 @@ export default function LoginPage(props) {
                     </Button>
                   </CardFooter>
                 </form>
-              </Card>
+              </Card>:
+                    <Card>
+                            <form className={classes.form}>
+                                    <CardHeader color="primary" className={classes.cardHeader}>
+                                            <h4>FORGOT PASSWORD</h4>
+
+                                    </CardHeader>
+                                    <CardBody>
+                                            <CustomInput
+                                                labelText="Email..."
+                                                id="email"
+                                                formControlProps={{
+                                                        fullWidth: true
+                                                }}
+                                                inputProps={{
+                                                        onChange: handleChange("email"),
+                                                        value: email,
+                                                        type: "email",
+                                                        endAdornment: (
+                                                            <InputAdornment position="end">
+                                                                    <Email className={classes.inputIconsColor} />
+                                                            </InputAdornment>
+                                                        )
+                                                }}
+                                            />
+
+                                    </CardBody>
+
+                                    <CardFooter className={classes.cardFooter}>
+                                            <Button onClick={() => setStep(1)} simple color="primary" size="lg">
+                                                    BACK
+                                            </Button>
+                                            <Button onClick={resetPassword} simple color="primary" size="lg">
+                                                    RESET PASSWORD
+                                            </Button>
+                                    </CardFooter>
+                            </form>
+
+                    </Card>}
             </GridItem>
           </GridContainer>
     </div>
