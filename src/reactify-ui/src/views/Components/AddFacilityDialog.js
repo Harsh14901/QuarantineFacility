@@ -38,6 +38,7 @@ import AddLocationIcon from '@material-ui/icons/AddLocation';
 import AreaIcon from "assets/img/icons/AreaIcon";
 import CapacityIcon from "assets/img/icons/CapacityIcon";
 import RoomIcon from "assets/img/icons/RoomIcon";
+import {DOMAIN} from "variables/Constants";
 
 const useStyles2 = makeStyles(styles2);
 
@@ -213,7 +214,7 @@ function AddFacilityDialog(props){
                 };
                 const data={facility: id,category:cat+""};
                 console.log("ward detailsss",data);
-                PostData(callback,data,'http://127.0.0.1:8000/wards/')
+                PostData(callback,data,DOMAIN + '/wards/')
         }
 
         function postFacility(){

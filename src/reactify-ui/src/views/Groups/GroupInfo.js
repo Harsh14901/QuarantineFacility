@@ -34,6 +34,7 @@ import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import LaunchIcon from "@material-ui/icons/Launch";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import UserDetails from "views/UserProfile/UserDetails";
+import {DOMAIN} from "variables/Constants";
 
 
 const useStyles2 = makeStyles(styles2);
@@ -98,7 +99,7 @@ export default function GroupInfo(props) {
                         props.closeFunc();
                 };
 
-                postData(callback,{group: props.data.id},'http://127.0.0.1:8000/discharge_group/')
+                postData(callback,{group: props.data.id},DOMAIN + '/discharge_group/')
         }
 
         function closeDialog() {

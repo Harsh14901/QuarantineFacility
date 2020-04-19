@@ -1,10 +1,11 @@
 import cookie from "react-cookies";
 import axios from 'axios';
 import {func} from "prop-types";
+import {DOMAIN} from "variables/Constants";
 
 const PostFacilityData = (callback,data) => {
 
-        const endpt = 'http://127.0.0.1:8000/facilities/';
+        const endpt = DOMAIN + '/facilities/';
         let lookupOpts = {
                 method:'POST',
                 headers:{

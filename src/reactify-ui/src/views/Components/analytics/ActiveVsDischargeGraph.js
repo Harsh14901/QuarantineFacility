@@ -8,6 +8,7 @@ import React, {useEffect, useState} from "react";
 import getData from "facility/getData";
 import {makeStyles} from "@material-ui/core/styles";
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle";
+import {DOMAIN} from "variables/Constants";
 
 
 
@@ -59,12 +60,12 @@ function ActiveVsDischargeGraph() {
 
                         };
 
-                        getData(callback2,'http://127.0.0.1:8000/analytics/active_cases/')
+                        getData(callback2,DOMAIN + '/analytics/active_cases/')
 
 
                 };
 
-                getData(callback,'http://127.0.0.1:8000/analytics/total_discharges/')
+                getData(callback,DOMAIN + '/analytics/total_discharges/')
 
         }
 

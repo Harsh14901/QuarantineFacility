@@ -1,10 +1,11 @@
 import cookie from "react-cookies";
 import axios from 'axios';
 import {func} from "prop-types";
+import {DOMAIN} from "variables/Constants";
 
 const changeUserWard = (callback,data) => {
 
-        const endpt = 'http://127.0.0.1:8000/person-accomodation/'+data.id+'/';
+        const endpt = DOMAIN + '/person-accomodation/'+data.id+'/';
         let dataToPatch={ward_pk: data.ward_pk};
         console.log(JSON.stringify(dataToPatch));
         let lookupOpts = {

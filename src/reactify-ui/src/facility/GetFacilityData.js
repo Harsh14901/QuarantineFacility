@@ -1,7 +1,8 @@
 import axios from 'axios'
+import {DOMAIN} from "variables/Constants";
 
 const getFacilityData = callback => {
-        const endpt = 'http://127.0.0.1:8000/facilities/';
+        const endpt = DOMAIN + '/facilities/';
         let lookupOpts = {
                 method: 'GET',
                 headers:{

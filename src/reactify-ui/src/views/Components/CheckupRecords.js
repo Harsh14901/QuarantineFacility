@@ -34,6 +34,7 @@ import IconButton from "@material-ui/core/IconButton";
 import FolderIcon from '@material-ui/icons/Folder';
 import DeleteIcon from '@material-ui/icons/Delete';
 import postData from "facility/postData";
+import {DOMAIN} from "variables/Constants";
 
 
 const useStyles2 = makeStyles(styles2);
@@ -107,7 +108,7 @@ export default function CheckupRecords(props){
                 });
                 let data={person: props.data.id,doctor:checkupDetails.doctor,date:checkupDetails.date,health_status: checkupDetails.healthDetails
                 , next_checkup_date: checkupDetails.next_checkup_date,medicines: med};
-                postData(callback,data,'http://127.0.0.1:8000/checkup-records/')
+                postData(callback,data,DOMAIN + '/checkup-records/')
 
 
         }
@@ -124,7 +125,7 @@ export default function CheckupRecords(props){
                         }
                         setUserMedicineList(temp);
                 };
-                getData(callback,'http://127.0.0.1:8000/medicines/')
+                getData(callback,DOMAIN + '/medicines/')
         }
 
 

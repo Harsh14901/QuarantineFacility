@@ -11,6 +11,7 @@ import AccessTime from "@material-ui/icons/AccessTime";
 import CardHeader from "components/Card/CardHeader";
 import {makeStyles} from "@material-ui/core/styles";
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle";
+import {DOMAIN} from "variables/Constants";
 const useStyles = makeStyles(styles);
 
 function DonutGraph(props){
@@ -77,7 +78,7 @@ function DonutGraph(props){
                         callback(props.data)
                 }
                 else
-                        getData(callback,'http://127.0.0.1:8000/analytics/ward_distribution/')
+                        getData(callback,DOMAIN + '/analytics/ward_distribution/')
         }
 
         useEffect(() => {
