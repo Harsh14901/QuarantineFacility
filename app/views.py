@@ -127,7 +127,7 @@ class FacilityViewSet(ModelViewSet):
     serializer_class = FacilitySerializer
 
     def create(self, request, *args, **kwargs):
-        if(isCityAdmin(request.user)):
+        if(isCityAdmin(request.user) or request.user.is_staff):
             return super().create(request, *args, **kwargs)
         else:
             return Response("Insufficient Access Rights",status=status.HTTP_401_UNAUTHORIZED)
