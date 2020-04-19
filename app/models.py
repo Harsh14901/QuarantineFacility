@@ -15,8 +15,8 @@ RiskChoices=(
 class City(models.Model):
     admin = models.ForeignKey(User, on_delete=models.CASCADE,null=True,blank=True)
     name = models.CharField(max_length=50)
-    latitude = models.FloatField( null=True, blank=True)
-    longitude = models.FloatField( null=True, blank=True)
+    latitude = models.FloatField( null=True, blank=True,default=0)
+    longitude = models.FloatField( null=True, blank=True,default=0)
 
     def __str__(self):
         return self.name
