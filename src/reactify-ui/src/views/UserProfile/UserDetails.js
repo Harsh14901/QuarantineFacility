@@ -112,7 +112,9 @@ export default function UserDetails(props) {
 
         function changeWard(id) {
                 const callback = result => {
-                        console.log("Seems to have changed ward",result)
+                        console.log("Seems to have changed ward",result);
+                        handleClose();
+                        
                 };
 
 

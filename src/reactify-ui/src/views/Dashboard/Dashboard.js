@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 // react plugin for creating charts
 import ChartistGraph from "react-chartist";
 // @material-ui/core
@@ -50,6 +50,7 @@ import DonutGraph from "views/Components/analytics/DonutGraph";
 import ActiveVsDischargeGraph from "views/Components/analytics/ActiveVsDischargeGraph";
 import {TextField} from "@material-ui/core";
 import { useCookies } from 'react-cookie';
+import SnacbarNotification from "views/Components/SnacbarNotification";
 
 
 
@@ -58,11 +59,14 @@ const useStyles = makeStyles(styles);
 export default function Dashboard() {
   const classes = useStyles();
 
+  const [notif,setNotif] = useState(false);
+
         console.log(emailsSubscriptionChart.data);
+        const [messageOpen,setMessageOpen] = useState(true);
   return (
     <div>
     <GridContainer style={{justifyContent: "center"}}>
-
+            <button onClick={()=> setNotif(true)}>hihiadjisn</button>
 
             <TotalCasesGraph/>
             <ActiveCasesGraph/>
