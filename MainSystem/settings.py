@@ -97,7 +97,7 @@ TEMPLATES = [
     },
 ]
 
-# WSGI_APPLICATION = 'MainSystem.wsgi.application'
+WSGI_APPLICATION = 'MainSystem.wsgi.application'
 
 
 # Database
@@ -154,8 +154,6 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'staticfiles')
 STATIC_TMP = os.path.join(BASE_DIR, 'static')
 
-os.makedirs(STATIC_TMP, exist_ok=True)
-os.makedirs(STATIC_ROOT, exist_ok=True)
 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
@@ -226,8 +224,10 @@ JWT_AUTH = {
     'JWT_AUTH_COOKIE': "token"
 
 }
+
+# Always at the end
 import dj_database_url 
 prod_db  =  dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(prod_db)
-# Always at the end
+
 django_heroku.settings(locals())
