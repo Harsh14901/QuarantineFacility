@@ -35,6 +35,7 @@ import FolderIcon from '@material-ui/icons/Folder';
 import DeleteIcon from '@material-ui/icons/Delete';
 import postData from "facility/postData";
 import {DOMAIN} from "variables/Constants";
+import SnacbarNotification from "views/Components/SnacbarNotification";
 
 
 const useStyles2 = makeStyles(styles2);
@@ -49,7 +50,7 @@ export default function CheckupRecords(props){
         const classes2= useStyles2();
 
         const [cardAnimation, setCardAnimation] = React.useState("cardHidden");
-
+        const [notif,setNotif] = useState(false);
 
         const [checkupDetails,setCheckupDetails] = useState({doctor: "",date: "",next_checkup_date: "",health_staus: "Average"});
         const [medicinesList,setMedicinesList] = useState([]);
@@ -99,7 +100,9 @@ export default function CheckupRecords(props){
         function submitDetails(){
 
                 const callback = res =>{
-                        console.log("Checkup details edited",res)
+                        console.log("Checkup details edited",res);
+                        setNotif(true)
+
                 };
                 let med=[];
                 userMedicineList.map((data) =>
@@ -273,6 +276,7 @@ export default function CheckupRecords(props){
                                             </Card>
                                     </GridItem>
                             </GridContainer>
+                            <SnacbarNotification open={notif} text={"Checkup Record Added Successfully"}/>
                     </div>
 
 
