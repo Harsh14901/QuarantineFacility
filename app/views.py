@@ -106,10 +106,31 @@ class CityViewSet(ModelViewSet):
     queryset = City.objects.all()
     serializer_class = CitySerializer
 
+    def create(self, request, *args, **kwargs):
+        if(request.user.is_staff):
+            return super().create(request, *args, **kwargs)
+        else:
+            return Response("Insufficient Access Rights", status=status.HTTP_401_UNAUTHORIZED)
+
+    def get_queryset(self):
+        queryset = City.objects.none()
+        user = self.request.user
+        if(user.is_staff):
+            return super().get_queryset()
+        if(isCityAdmin(user)):
+            return user.city_set.all()
+        return queryset
+    
+
 class FacilityViewSet(ModelViewSet):
     queryset = Facility.objects.all()
     serializer_class = FacilitySerializer
 
+    def create(self, request, *args, **kwargs):
+        if(isCityAdmin(request.user)):
+            return super().create(request, *args, **kwargs)
+        else:
+            return Response("Insufficient Access Rights",status=status.HTTP_401_UNAUTHORIZED)
     def get_queryset(self):
         
         queryset = Facility.objects.none()
@@ -121,15 +142,12 @@ class FacilityViewSet(ModelViewSet):
         elif(isFacilityAdmin(user)):
             queryset = Facility.objects.all().filter(admin=user)
         return queryset
-        
-    
-        
-    
+  
 
 class WardViewSet(ModelViewSet):
     queryset = Ward.objects.all()
     serializer_class = WardSerializer
-    
+  
     def get_queryset(self):
         queryset = Ward.objects.none()
         user = self.request._user

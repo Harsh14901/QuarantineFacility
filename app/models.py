@@ -142,8 +142,8 @@ class Facility(models.Model):
     name = models.CharField(max_length=500,blank=False,null=False)
     owner = models.CharField(max_length=100)
     address = models.TextField()
-    latitude = models.FloatField(null=True)
-    longitude = models.FloatField(null=True)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
     isVIP = models.BooleanField(default=False)
 
     def __str__(self):
