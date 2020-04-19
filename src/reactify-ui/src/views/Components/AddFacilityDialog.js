@@ -21,7 +21,7 @@ import CardBody from "components/Card/CardBody";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import CardFooter from "components/Card/CardFooter";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import styles2 from "assets/jss/material-kit-react/views/loginPage";
 import styles from "assets/jss/homeStyles";
@@ -41,6 +41,7 @@ import RoomIcon from "assets/img/icons/RoomIcon";
 import {DOMAIN} from "variables/Constants";
 import Alert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
+import getData from "facility/getData";
 
 const useStyles2 = makeStyles(styles2);
 
@@ -63,6 +64,9 @@ function AddFacilityDialog(props){
         const [step,setStep] = useState(1);
         const [facilityDetails,setFacilityDetails] = useState({name: "",address: "",owner: ""});
         const [reqDet,setReqDet] = useState(false);
+        const [selectedCity,setSelectedCity] = useState (-1);
+        const [citiesList,setCitiesList] = useState([]);
+
         const actions = [
                 { icon: <AddIcon />, name: 'Add Room' },
                 { icon: <DeleteIcon />, name: 'Delete Room' },
@@ -119,14 +123,17 @@ function AddFacilityDialog(props){
                 handleLocationClose();
                 console.log(data.marker);
                 console.log(data.info);
+                console.log(!data.info);
                 if(!data.info){
                         setAddress(data.marker[0]+"N , "+data.marker[1]+"S")
+                        console.log(!data.info)
                 }
 
         }
 
         const handleAddressChange = event => {
                 setAddress(event.target.value)
+                console.log(event.target.value)
         };
 
 
@@ -229,12 +236,22 @@ function AddFacilityDialog(props){
                         setStep(2)
 
                 };
-                if(facilityDetails.name==="" || facilityDetails.address==="" || facilityDetails.address==="")
-                {       setReqDet(true)
+                if(facilityDetails.name==="" || address==="" || facilityDetails.owner==="")
+                {       setReqDet(true);
+                console.log(facilityDetails.address);
                 return}
-                let temp={...facilityDetails,isVIP: VIPStatus,latitude: latLong[0],longitude: latLong[1],address:address};
+                let temp={...facilityDetails,isVIP: VIPStatus,latitude: latLong[0],longitude: latLong[1],address:address,city: selectedCity};
                 console.log("posting fac",temp);
                 PostFacilityData(callback,temp)
+        }
+
+        function getCities(){
+                const callback = res => {
+                        setCitiesList(res);
+                        console.log("Got cities list",res)
+                };
+
+                getData(callback,DOMAIN+'/cities/')
         }
 
 
@@ -242,6 +259,10 @@ function AddFacilityDialog(props){
         setTimeout(function() {
                 setCardAnimation("");
         }, 700);
+
+        useEffect(() => {
+                getCities();
+        }, []);
 
         return(
             <div className={classes.formDiv}>
@@ -437,6 +458,24 @@ function AddFacilityDialog(props){
                                                                             autoComplete: "off"
                                                                     }}
                                                                 />
+                                                                <TextField
+                                                                    style={{marginTop: "12px"}}
+                                                                    id="city"
+                                                                    select
+                                                                    label="Chose city"
+                                                                    value={selectedCity}
+                                                                    onChange={(e) =>{setSelectedCity(e.target.value)}}
+                                                                    fullWidth={true}
+                                                                    InputProps={{style: {fontSize: "0.9rem"}}}
+
+
+                                                                >
+                                                                        {citiesList.map((option) => (
+                                                                            <MenuItem  key={option.id} value={option.id}>
+                                                                                    {option.name}
+                                                                            </MenuItem>
+                                                                        ))}
+                                                                </TextField>
                                                                 <FormControlLabel
                                                                     control={
                                                                             <Switch

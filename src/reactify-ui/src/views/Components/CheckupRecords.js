@@ -36,6 +36,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import postData from "facility/postData";
 import {DOMAIN} from "variables/Constants";
 import SnacbarNotification from "views/Components/SnacbarNotification";
+import MedicineIcon from "assets/img/icons/MedicineIcon";
 
 
 const useStyles2 = makeStyles(styles2);
@@ -44,6 +45,13 @@ const useStyles2 = makeStyles(styles2);
 
 const useStyles = makeStyles(styles);
 
+const Para = ({text}) => {
+        return(
+            <p style={{fontSize:"1rem",fontWeight: "300"}}>{text}</p>
+        )
+};
+
+
 export default function CheckupRecords(props){
 
         const classes= useStyles();
@@ -51,8 +59,8 @@ export default function CheckupRecords(props){
 
         const [cardAnimation, setCardAnimation] = React.useState("cardHidden");
         const [notif,setNotif] = useState(false);
-
-        const [checkupDetails,setCheckupDetails] = useState({doctor: "",date: "",next_checkup_date: "",health_staus: "Average"});
+        const defaultCheckup = {doctor: "",date: "",next_checkup_date: "",health_staus: "Average"};
+        const [checkupDetails,setCheckupDetails] = useState([defaultCheckup]);
         const [medicinesList,setMedicinesList] = useState([]);
         const [userMedicineList,setUserMedicineList] = useState([]);
 
@@ -139,13 +147,12 @@ export default function CheckupRecords(props){
 
         useEffect(() => {
                 getMedicinesList();
-                console.log("Look boyssss",props.data.checkuprecords_set);
-
                 if(!props.data.checkuprecords_set[0]){
                          console.log("HAHAHHAHAH")
                 }
-                else
-                        setCheckupDetails(props.data.checkuprecords_set[0]);
+                else {
+                        setCheckupDetails(props.data.checkuprecords_set.push([defaultCheckup]));
+                }
                 console.log(props.data.checkuprecords_set)
         }, []);
 
@@ -161,6 +168,8 @@ export default function CheckupRecords(props){
                                                             <CardHeader color="primary" className={classes2.cardHeader}>
                                                                     <h4>{props.data.name+" records"}</h4>
                                                             </CardHeader>
+                                                            { checkupDetails.map((data,id)=>
+                                                                id===(checkupDetails.length-1)?
                                                             <CardBody>
 
                                                                     <CustomInput
@@ -263,7 +272,49 @@ export default function CheckupRecords(props){
                                                                                     </List>
                                                                             </ExpansionPanelDetails>
                                                                     </ExpansionPanel>
-                                                            </CardBody>
+                                                            </CardBody>:
+                                                                    <CardBody>
+
+                                                                            <Para text={data.doctor}/>
+                                                                            <Para text={data.date}/>
+                                                                            <Para text={data.health_staus}/>
+                                                                            <Para text={data.next_checkup_date}/>
+                                                                            <ExpansionPanel>
+                                                                                    <ExpansionPanelSummary
+                                                                                        expandIcon={<ExpandMoreIcon />}
+                                                                                        aria-controls="panel1a-content"
+                                                                                        id="panel1a-header"
+                                                                                    >
+                                                                                            Medicines
+                                                                                    </ExpansionPanelSummary>
+                                                                                    <ExpansionPanelDetails>
+
+                                                                                            <List style={{width: "100%"}}>
+                                                                                                    {userMedicineList.map((data,idx) =>
+                                                                                                        <ListItem>
+                                                                                                                <ListItemAvatar>
+                                                                                                                        <Avatar>
+                                                                                                                                <MedicineIcon />
+                                                                                                                        </Avatar>
+                                                                                                                </ListItemAvatar>
+                                                                                                                <ListItemText
+                                                                                                                    primary={data.name}
+                                                                                                                    secondary={'Cost:- ' +data.cost}
+                                                                                                                />
+                                                                                                                <ListItemSecondaryAction>
+                                                                                                                        <IconButton onClick={deleteMed(idx)} edge="end" aria-label="delete">
+                                                                                                                                <DeleteIcon />
+                                                                                                                        </IconButton>
+                                                                                                                </ListItemSecondaryAction>
+                                                                                                        </ListItem>,
+                                                                                                    )}
+                                                                                            </List>
+                                                                                    </ExpansionPanelDetails>
+                                                                            </ExpansionPanel>
+                                                                    </CardBody>
+
+
+                                                            )}
                                                             <CardFooter className={classes2.cardFooter}>
                                                                     <Button onClick={() => props.closeFunc()} className={classes.submitButton}>
                                                                             {"BACK"}

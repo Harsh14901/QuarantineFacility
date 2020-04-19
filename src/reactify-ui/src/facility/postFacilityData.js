@@ -10,7 +10,6 @@ const PostFacilityData = (callback,data) => {
                 method:'POST',
                 headers:{
                         'Content-Type':'application/json',
-                        'Authorization': 'Basic YWRtaW46YWRtaW4xMjM0',
                         'Accept': 'application/json'
                 },
                 withCredentials: true
