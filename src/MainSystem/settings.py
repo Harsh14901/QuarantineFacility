@@ -60,6 +60,7 @@ SITE_ID = 1
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django_samesite_none.middleware.SameSiteNoneMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -146,7 +147,7 @@ STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static-cdn-local')
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = [
-    '127.0.0.1:3000','127.0.0.1:8000' # Here was the problem indeed and it has to be http://localhost:3000, not http://localhost:3000/
+    '127.0.0.1:3000','127.0.0.1:8000','covid-quarantine-manager.web.app','quarantine-facility.web.app' # Here was the problem indeed and it has to be http://localhost:3000, not http://localhost:3000/
 ]
 
 REST_FRAMEWORK = {

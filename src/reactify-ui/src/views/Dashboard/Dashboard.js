@@ -58,21 +58,11 @@ const useStyles = makeStyles(styles);
 export default function Dashboard() {
   const classes = useStyles();
 
-        const [cookies, setCookie] = useCookies(['name']);
-
-        function onChange(newName) {
-                setCookie('name', newName.target.value, { path: '/' ,httpOnly: false});
-                console.log(newName.target.value)
-        }
-
-
         console.log(emailsSubscriptionChart.data);
   return (
     <div>
     <GridContainer style={{justifyContent: "center"}}>
 
-            <TextField value={cookies.name} onChange={onChange} />
-            {cookies.name && <h3>Hello {cookies.name}!</h3>}
 
             <TotalCasesGraph/>
             <ActiveCasesGraph/>

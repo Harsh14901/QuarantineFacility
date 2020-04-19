@@ -225,8 +225,8 @@ function AddFacilityDialog(props){
                         setStep(2)
 
                 };
-                let temp={...facilityDetails,latitude: latLong[0],longitude: latLong[1],address:address};
-                console.log(temp);
+                let temp={...facilityDetails,isVIP: VIPStatus,latitude: latLong[0],longitude: latLong[1],address:address};
+                console.log("posting fac",temp);
                 PostFacilityData(callback,temp)
         }
 

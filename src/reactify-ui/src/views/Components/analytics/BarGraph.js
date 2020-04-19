@@ -65,7 +65,7 @@ function BarGraph(props) {
 
                         }
 
-                        props.horizontal?setOptions({...options,horizontalBars: true}):null
+                        let xyzw =props.horizontal?setOptions({...options,horizontalBars: true}):null
                         setOptions({...options,high: (1.5*max)});
                         setData({labels: labels,series: [series]});
                         setIncrease((now/last -1)*100);
