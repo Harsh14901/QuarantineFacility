@@ -161,7 +161,8 @@ CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = [
     '127.0.0.1:8000',
-    '127.0.0.1:3000', # Here was the problem indeed and it has to be http://localhost:3000, not http://localhost:3000/
+    '127.0.0.1:3000',
+    'covid-quarantine-manager.web.app',
 ]
 
 REST_FRAMEWORK = {
