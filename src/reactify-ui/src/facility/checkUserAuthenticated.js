@@ -1,6 +1,7 @@
 import cookie from "react-cookies";
 import axios from 'axios';
 import {func} from "prop-types";
+import {DOMAIN} from "variables/Constants";
 
 const checkUserAuthenticated = (callback) => {
 
@@ -12,7 +13,7 @@ const checkUserAuthenticated = (callback) => {
                 },
                 withCredentials: true
         };
-        axios.get('http://127.0.0.1:8000/rest-auth/user/',lookupOpts). then(r => callback(r.data)).catch(function(error){callback({username: null})})
+        axios.get(DOMAIN + '/rest-auth/user/',lookupOpts). then(r => callback(r.data)).catch(function(error){callback({username: null})})
 
 };
 

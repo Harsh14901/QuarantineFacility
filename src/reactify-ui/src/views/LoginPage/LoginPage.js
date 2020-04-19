@@ -29,6 +29,7 @@ import checkUserAuthenticated from "facility/checkUserAuthenticated";
 import getData from "facility/getData";
 import { useHistory } from 'react-router-dom';
 import loginUser from "facility/loginUser";
+import {DOMAIN} from "variables/Constants";
 
 
 const useStyles = makeStyles(styles);
@@ -48,7 +49,7 @@ export default function LoginPage(props) {
                 const callback = res => {
                         console.log("Password reset successful",res)
                 };
-                postData(callback,{email: email},'http://127.0.0.1:8000/rest-auth/password/reset/')
+                postData(callback,{email: email},DOMAIN + '/rest-auth/password/reset/')
         }
 
 
@@ -61,7 +62,7 @@ export default function LoginPage(props) {
 
                 let data={username: name,email: email,password: password};
                 console.log("Here is the data",JSON.stringify(data));
-                loginUser(callback,data,'http://127.0.0.1:8000/rest-auth/login/')
+                loginUser(callback,data,DOMAIN + '/rest-auth/login/')
         }
 
         function isAuthenticated(){
@@ -70,7 +71,7 @@ export default function LoginPage(props) {
                                 history.push('/admin')
                 };
                 console.log("YOYYOOYOHBJHBJ");
-                checkUserAuthenticated(callback,{},'http://127.0.0.1:8000/rest-auth/user/')
+                checkUserAuthenticated(callback,{},DOMAIN + '/rest-auth/user/')
         }
 
         const handleChange = (id) => (event) => {

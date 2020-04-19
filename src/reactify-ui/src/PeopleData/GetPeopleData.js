@@ -1,7 +1,8 @@
 import axios from 'axios'
+import {DOMAIN} from "variables/Constants";
 
 const getPeopleData = callback => {
-        const endpt = 'http://127.0.0.1:8000/people/';
+        const endpt = DOMAIN + '/people/';
         let lookupOpts = {
                 method: 'GET',
                 headers:{

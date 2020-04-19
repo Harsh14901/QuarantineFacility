@@ -44,6 +44,7 @@ import ArrowDownward from "@material-ui/icons/ArrowDownward";
 import Remove from "@material-ui/icons/Remove";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import {Add} from "@material-ui/icons";
+import {DOMAIN} from "variables/Constants";
 
 const styles = {
         cardCategoryWhite: {
@@ -115,7 +116,7 @@ export default function MedicinesDetails() {
                         console.log(details);
                         setDataDisplay(details);
                 };
-                getData(callback,'http://127.0.0.1:8000/medicines/')
+                getData(callback,DOMAIN + '/medicines/')
         }
 
 
@@ -130,7 +131,7 @@ export default function MedicinesDetails() {
                         handleDialogClose();
 
                 };
-                postData(callback,{name: newMedName,cost: newMedCost},'http://127.0.0.1:8000/medicines/')
+                postData(callback,{name: newMedName,cost: newMedCost},DOMAIN + '/medicines/')
         }
 
         useEffect(() => {

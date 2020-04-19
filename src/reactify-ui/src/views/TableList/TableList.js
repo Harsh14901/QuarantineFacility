@@ -23,6 +23,7 @@ import PostData from "facility/postData";
 import MapExtreme from "views/Maps/MapExtreme";
 import GroupInfo from "views/Groups/GroupInfo";
 import FacilityDetails from "views/TableList/FacilityDetails";
+import {DOMAIN} from "variables/Constants";
 
 const styles = {
   cardCategoryWhite: {
@@ -151,7 +152,7 @@ export default function TableList() {
                         handleClose();
                 };
                 console.log("submit detaisl",JSON.stringify(data));
-                PostData(callback,data,'http://127.0.0.1:8000/rooms/')
+                PostData(callback,data,DOMAIN + '/rooms/')
 
         }
 

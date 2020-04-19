@@ -1,6 +1,7 @@
 import cookie from "react-cookies";
 import axios from 'axios';
 import {func} from "prop-types";
+import {DOMAIN} from "variables/Constants";
 
 const logOutUser = (callback) => {
 
@@ -12,7 +13,7 @@ const logOutUser = (callback) => {
                 },
                 withCredentials: true
         };
-        axios.post('http://127.0.0.1:8000/rest-auth/logout/',{},lookupOpts). then(r => callback(r.data)).catch(function(error){console.log("hi",error.data)})
+        axios.post(DOMAIN + '/rest-auth/logout/',{},lookupOpts). then(r => callback(r.data)).catch(function(error){console.log("hi",error.data)})
 
 };
 
