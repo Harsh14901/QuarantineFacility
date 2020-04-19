@@ -34,6 +34,8 @@ import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import LaunchIcon from "@material-ui/icons/Launch";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import UserDetails from "views/UserProfile/UserDetails";
+import {DOMAIN} from "variables/Constants";
+import SnacbarNotification from "views/Components/SnacbarNotification";
 
 
 const useStyles2 = makeStyles(styles2);
@@ -64,7 +66,7 @@ export default function GroupInfo(props) {
         const [openDialog,setOpenDialog] = useState(false);
         const [selectedUserDetails,setSelectedUserDetails] = useState({});
         const [active,setActive] = useState(0);
-
+        const [notif,setNotif] = useState(false);
 
 
         const handleDialogClose= () => {
@@ -94,11 +96,12 @@ export default function GroupInfo(props) {
         function dischargeGroup() {
                 const callback= result =>{
                         console.log("Shud have discharged",result);
+                        setNotif(true);
                         setDischargeDialogOpen(false);
                         props.closeFunc();
                 };
 
-                postData(callback,{group: props.data.id},'http://127.0.0.1:8000/discharge_group/')
+                postData(callback,{group: props.data.id},DOMAIN + '/discharge_group/')
         }
 
         function closeDialog() {
@@ -229,6 +232,7 @@ export default function GroupInfo(props) {
                             <UserDetails closeFunc={handleDialogClose} data={selectedUserDetails}/>
 
                     </Dialog>
+
 
             </div>
         )

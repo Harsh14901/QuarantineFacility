@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 // react plugin for creating charts
 import ChartistGraph from "react-chartist";
 // @material-ui/core
@@ -50,6 +50,7 @@ import DonutGraph from "views/Components/analytics/DonutGraph";
 import ActiveVsDischargeGraph from "views/Components/analytics/ActiveVsDischargeGraph";
 import {TextField} from "@material-ui/core";
 import { useCookies } from 'react-cookie';
+import SnacbarNotification from "views/Components/SnacbarNotification";
 
 
 
@@ -58,21 +59,10 @@ const useStyles = makeStyles(styles);
 export default function Dashboard() {
   const classes = useStyles();
 
-        const [cookies, setCookie] = useCookies(['name']);
-
-        function onChange(newName) {
-                setCookie('name', newName.target.value, { path: '/' ,httpOnly: false});
-                console.log(newName.target.value)
-        }
-
-
         console.log(emailsSubscriptionChart.data);
   return (
     <div>
     <GridContainer style={{justifyContent: "center"}}>
-
-            <TextField value={cookies.name} onChange={onChange} />
-            {cookies.name && <h3>Hello {cookies.name}!</h3>}
 
             <TotalCasesGraph/>
             <ActiveCasesGraph/>

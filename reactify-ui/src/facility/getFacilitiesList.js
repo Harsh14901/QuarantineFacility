@@ -1,14 +1,16 @@
 import axios from 'axios'
+import {DOMAIN} from "variables/Constants";
 
 const getFacilitiesList = (callback,data) => {
-        const endpt = 'http://127.0.0.1:8000/get_nearest_facilities/';
-        console.log(JSON.stringify(data));
+        const endpt = DOMAIN + '/get_nearest_facilities/';
+        console.log("hi its pranjal here",JSON.stringify(data));
         let lookupOpts = {
                 method: 'GET',
                 params: data,
                 headers:{
                         'Content-Type':'application/json'
-                }
+                },
+                withCredentials: true
         };
         axios.get(endpt,lookupOpts).then(function(response){
                 return response.data

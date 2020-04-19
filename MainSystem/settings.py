@@ -76,6 +76,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django_samesite_none.middleware.SameSiteNoneMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -161,9 +162,13 @@ STATIC_TMP = os.path.join(BASE_DIR, 'static')
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = [
+<<<<<<< HEAD:MainSystem/settings.py
     '127.0.0.1:8000',
     '127.0.0.1:3000',
     'covid-quarantine-manager.web.app',
+=======
+    '127.0.0.1:3000','127.0.0.1:8000','covid-quarantine-manager.web.app','quarantine-facility.web.app' # Here was the problem indeed and it has to be http://localhost:3000, not http://localhost:3000/
+>>>>>>> e4b9113f146396d20bc1445766d87707e470f49f:src/MainSystem/settings.py
 ]
 
 REST_FRAMEWORK = {

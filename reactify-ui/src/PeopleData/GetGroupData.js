@@ -1,7 +1,8 @@
 import axios from 'axios'
+import {DOMAIN} from "variables/Constants";
 
 const GetGroupData = callback => {
-        const endpt = 'http://127.0.0.1:8000/groups/';
+        const endpt = DOMAIN + '/groups/';
         let lookupOpts = {
                 method: 'GET',
                 headers:{

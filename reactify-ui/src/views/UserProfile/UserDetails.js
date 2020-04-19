@@ -33,6 +33,7 @@ import GroupInfo from "views/Groups/GroupInfo";
 import changeUserFacility from "facility/changeUserFacility";
 import ChangeFacilityDialog from "views/Components/ChangeFacilityDialog";
 import CheckupRecords from "views/Components/CheckupRecords";
+import {DOMAIN} from "variables/Constants";
 
 const useStyles2 = makeStyles(styles2);
 const useStyles = makeStyles(styles);
@@ -82,8 +83,8 @@ export default function UserDetails(props) {
                 setSelectedGroupDetails(res);
                 setOpenDialog(true);
                 };
-                console.log("Hi good night",'http://127.0.0.1:8000/groups/'+props.data.group+'/');
-                getData(callback,'http://127.0.0.1:8000/groups/'+props.data.group+'/')
+                console.log("Hi good night",DOMAIN + '/groups/'+props.data.group+'/');
+                getData(callback,DOMAIN + '/groups/'+props.data.group+'/')
         };
 
 
@@ -111,7 +112,9 @@ export default function UserDetails(props) {
 
         function changeWard(id) {
                 const callback = result => {
-                        console.log("Seems to have changed ward",result)
+                        console.log("Seems to have changed ward",result);
+                        handleClose();
+
                 };
 
 
@@ -139,7 +142,7 @@ export default function UserDetails(props) {
                                 changeWard(a);
 
                 };
-                getData(callback,'http://127.0.0.1:8000/facilities/'+props.data.facility_pk+"/")
+                getData(callback,DOMAIN + '/facilities/'+props.data.facility_pk+"/")
         }
 
         function dischargeUser() {
@@ -149,7 +152,7 @@ export default function UserDetails(props) {
                         props.closeFunc();
                 };
 
-                postData(callback,{person: props.data.id},'http://127.0.0.1:8000/discharge/')
+                postData(callback,{person: props.data.id},DOMAIN + '/discharge/')
         }
 
         function closeDialog() {

@@ -39,6 +39,8 @@ import {LocationCity} from "@material-ui/icons";
 import getData from "facility/getData";
 import getFacilitiesList from "facility/getFacilitiesList";
 import AgeIcon from "assets/img/icons/AgeIcon";
+import Alert from "@material-ui/lab/Alert";
+import Snackbar from "@material-ui/core/Snackbar";
 
 const useStyles2 = makeStyles(styles2);
 
@@ -62,6 +64,7 @@ function AddGroupDialog(props) {
         const [latLong,setLatLong] = useState([25,82]);
         const [facilitiesList,setFacilitiesList] = useState([]);
         const [selectedFacility,setSelectedFacility] = useState("");
+        const [reqDet,setReqDet] = useState(false);
 
 
         defaultUserDetail['latitude'] = Math.random()+22;
@@ -139,7 +142,7 @@ function AddGroupDialog(props) {
                         setFacilitiesList(temp)
                 };
 
-                getFacilitiesList(callback,{latitude: data[0],longitude: data[1]})
+                getFacilitiesList(callback,{latitude: data[0],longitude: data[1],vip: VIPStatus?1:0})
 
         }
 
@@ -177,10 +180,23 @@ function AddGroupDialog(props) {
                         if(userDetails[j].age<18)
                                 category='family'
                 });
+
                 props.submitFunc([{facility_preference: selectedFacility,category:category,person_set: temp}])
         }
 
         function goNext(){
+                if(step===1)
+                {
+                        let flag=false;
+                        userDetails.map((data,idx) => {
+                                if(userDetails[idx].name==='' || userDetails[idx].age===''){
+                                        setReqDet(true);
+                                        flag=true
+                                }
+                        });
+                        if(flag)
+                                return
+                }
                 setStep((step===1)?2:1)
         }
 
@@ -218,7 +234,7 @@ function AddGroupDialog(props) {
                                                 tabName: "Member "+(j+1),
                                                 tabContent: (<div className={classes2.container}>
                                                             <CustomInput
-                                                                labelText="Name..."
+                                                                labelText="Name*..."
                                                                 id="name"
                                                                 formControlProps={{
                                                                         fullWidth: true
@@ -235,7 +251,7 @@ function AddGroupDialog(props) {
                                                                 }}
                                                             />
                                                             <CustomInput
-                                                                labelText="Age..."
+                                                                labelText="Age*..."
                                                                 id="age"
                                                                 formControlProps={{
                                                                         fullWidth: true
@@ -258,7 +274,7 @@ function AddGroupDialog(props) {
                                                                 style={{marginTop: "6px"}}
                                                                 id="severity"
                                                                 select
-                                                                label="Severity"
+                                                                label="Severity*"
                                                                 value={userDetails[j].risk}
                                                                 onChange={handleChange('risk',j)}
                                                                 fullWidth={true}
@@ -431,6 +447,12 @@ function AddGroupDialog(props) {
                             <MapExtreme center={latLong} submitFunc={submitLocationDetails}/>
 
                     </Dialog>
+
+                    <Snackbar open={reqDet} autoHideDuration={6000} onClose={() => setReqDet(false)}>
+                            <Alert onClose={() => setReqDet(false)} severity="error">
+                                    Please Fill all Required Details
+                            </Alert>
+                    </Snackbar>
 
 
             </div>
