@@ -41,3 +41,7 @@ class CheckupRecordsAdmin(admin.ModelAdmin):
 @admin.register(Discharged)
 class DischargedAdmin(admin.ModelAdmin):
     list_display = ['person','date_discharged']
+
+@admin.register(City)
+class CityAdmin(admin.ModelAdmin):
+    list_display = ['name','admin']    

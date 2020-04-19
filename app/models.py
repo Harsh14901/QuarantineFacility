@@ -18,6 +18,10 @@ class City(models.Model):
     latitude = models.FloatField( null=True, blank=True)
     longitude = models.FloatField( null=True, blank=True)
 
+    def __str__(self):
+        return self.name
+    
+
 class Person(models.Model):
     MALE = 'M'
     FEMALE = 'F'
