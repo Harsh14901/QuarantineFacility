@@ -51,7 +51,7 @@ export default function ChangeFacilityDialog(props) {
                         setFacilitiesList(temp)
                 };
 
-                getFacilitiesList(callback,{latitude: data[0],longitude: data[1]})
+                getFacilitiesList(callback,{latitude: data[0],longitude: data[1],vip: props.data.vip?1:0})
 
         }
 
