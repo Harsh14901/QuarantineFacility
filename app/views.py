@@ -16,6 +16,8 @@ from .algo import *
 
 import random
 import names
+
+from rest_auth.views import LoginView
 # from random_word.random_word import RandomWords
 
 def isCityAdmin(user):
@@ -348,4 +350,8 @@ def discharge_group(request):
     return Response('done')
 
 
-
+class LoginAuth(LoginView):
+    def get_response(self):
+        response = super().get_response()
+        response.cookies['token']['Secure'] = True
+        return response
