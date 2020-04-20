@@ -27,6 +27,7 @@ from rest_auth.views import PasswordResetConfirmView
 urlpatterns = [
     
    
+    url(r'^rest-auth/login/$',LoginAuth.as_view(),name='login-auth' ),
     url(r'^rest-auth/', include('rest_auth.urls')),
 
 
