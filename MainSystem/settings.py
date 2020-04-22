@@ -80,7 +80,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django_cookies_samesite.middleware.CookiesSameSite',
 ]
 
 ROOT_URLCONF = 'MainSystem.urls'
@@ -229,8 +228,6 @@ JWT_AUTH = {
     'JWT_AUTH_COOKIE': "token"
 
 }
-SESSION_COOKIE_SAMESITE = 'lax'
-SESSION_COOKIE_SAMESITE_FORCE_ALL = True
 
 # Always at the end
 # import dj_database_url 
