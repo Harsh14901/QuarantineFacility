@@ -63,13 +63,14 @@ class PersonAccomodationSerializer(serializers.ModelSerializer):
 
 class PersonSerializer(serializers.ModelSerializer):
     checkuprecords_set = CheckupSerializer(many=True,read_only=True)
-
+    # luxuries_pk = serializers.PrimaryKeyRelatedField(many=True,read_only=False,queryset=Luxury.objects.all(),source='luxuries')
     def save(self, **kwargs):
         # print(self.validated_data)
-        try:
-            set_location(self.validated_data)
-        except:
-            raise ValidationError(detail="Could not allocate location",code='invalid_coordinates')
+        if('latitude' in self.validated_data.keys() or 'longitude' in self.validated_data.keys()):
+            try:
+                set_location(self.validated_data)
+            except:
+                raise ValidationError(detail="Could not allocate location",code='invalid_coordinates')
         
         return super().save(**kwargs)
 
@@ -80,10 +81,11 @@ class PersonSerializer(serializers.ModelSerializer):
                   'luxuries', 'group', 'latitude', 'longitude' ,'checkuprecords_set','room_pk','ward_pk','facility_pk','facility_name','doa','address']
 
     def is_valid(self, raise_exception=False):
-        code = "P" + str(random.randint(10000000, 99999999))
-        while(len(Person.objects.filter(code=code)) != 0):
+        if('code' not in self.initial_data.keys() and self.context['request'].method == 'POST'):
             code = "P" + str(random.randint(10000000, 99999999))
-        self.initial_data['code'] = code  
+            while(len(Person.objects.filter(code=code)) != 0):
+                code = "P" + str(random.randint(10000000, 99999999))
+            self.initial_data['code'] = code  
         a = super().is_valid(raise_exception=raise_exception)        
         return a
 
