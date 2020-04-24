@@ -50,6 +50,7 @@ import {Earth} from "leaflet/src/geo/crs/CRS.Earth";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import {Add} from "@material-ui/icons";
+import LuxuriesIcon from "assets/img/icons/LuxuriesIcon";
 
 
 const useStyles2 = makeStyles(styles2);
@@ -65,43 +66,21 @@ const Para = ({text}) => {
 };
 
 
-export default function CheckupRecords(props){
+export default function LuxuriesDetails(props){
 
         const classes= useStyles();
         const classes2= useStyles2();
 
         const [cardAnimation, setCardAnimation] = React.useState("cardHidden");
         const [notif,setNotif] = useState(false);
-        const defaultCheckup = {id: -1,person: -1,doctor: "",date: "",next_checkup_date: "",health_staus: "Average",medicines: []};
-        const [checkupDetails,setCheckupDetails] = useState([defaultCheckup]);
-        const [medicinesList,setMedicinesList] = useState([]);
-        const [userMedicineList,setUserMedicineList] = useState([[]]);
-        const [medicinePicker,setMedicinePicker] = useState(false);
-        const [selectedMed,setSelectedMed] = useState(1);
-        const healthCateg = [
-                {
-                        value: 'Excellent',
-                },
-                {
-                        value: 'Good',
-                },
-                {
-                        value: 'Average',
-                },
-                {
-                        value: 'Risky',
-                },
-                {
-                        value: 'Critical',
-                },
-        ];
+        const [luxuriesList,setLuxuriesList] = useState([]);
+        const [luxuryPicker,setLuxuryPicker] = useState(false);
+        const [selectedLux,setSelectedLux] = useState(1);
 
 
-        function handleClose() {
-                // props.closeFunc();
-        }
 
-        const deleteMed = (idx) => event =>{
+
+        const deleteLuxury = (idx) => event =>{
                 let temp=[...checkupDetails];
                 temp[checkupDetails.length-1].medicines=temp[checkupDetails.length-1].medicines.filter(function(value,id){ console.log(id,"hi",idx); return id!==idx});
                 console.log("medicinesList is", temp[checkupDetails.length-1].medicines);
@@ -109,32 +88,6 @@ export default function CheckupRecords(props){
                 console.log("I have deleted this",idx)
 
         };
-
-        const handleChange = (prop) => (event) => {
-
-                        console.log(event.target.value);
-                        console.log(checkupDetails[checkupDetails.length-1]);
-                        console.log(checkupDetails);
-                        console.log(checkupDetails[1]);
-
-                        let temp = [];
-                        checkupDetails.map((data)=>
-                                temp.push(data)
-                        );
-                        console.log(temp);
-                        // let len = checkupDetails.length;
-                        temp[checkupDetails.length-1] = {...checkupDetails[checkupDetails.length-1], [prop]: event.target.value};
-                        console.log(temp);
-
-                setCheckupDetails(temp)
-
-
-
-
-
-        };
-
-
 
 
         function submitDetails(){
@@ -245,71 +198,14 @@ export default function CheckupRecords(props){
                     <div className={classes.formDiv}>
                             <GridContainer>
                                     <GridItem xs={12}>
-                                            <CustomTabs headerColor="primary" tabs={ checkupDetails.map((data,id)=>({
-                                                tabName: "Record  "+(id+1),
-                                                    tabContent:(
 
-                                                // <Card className={classes2[cardAnimation]}>
-                                                    <form className={classes2.form}>
-                                                            {/*<CardHeader color="primary" className={classes2.cardHeader}>*/}
-                                                            {/*        <h4>{props.data.name+" records"}</h4>*/}
-                                                            {/*</CardHeader>*/}
-                                                            {/*<CardBody>*/}
-
-                                                            {id===(checkupDetails.length-1)?
-<div>
-                                                            <CustomInput
-                                                                        labelText="Doctor..."
-                                                                        id="doctor"
-                                                                        formControlProps={{
-                                                                                fullWidth: true
-                                                                        }}
-                                                                        inputProps={{
-                                                                                value: data.doctor,
-                                                                                onChange: handleChange("doctor"),
-                                                                                type: "text",
-                                                                                endAdornment: (
-                                                                                    <InputAdornment position="end">
-                                                                                            <People className={classes2.inputIconsColor} />
-                                                                                    </InputAdornment>
-                                                                                )
-                                                                        }}
-                                                                    />
-                                                                    <TextField
-                                                                        style={{marginTop: "6px"}}
-                                                                        id="severity"
-                                                                        select
-                                                                        label="Severity"
-                                                                        value={data.health_status}
-                                                                        onChange={handleChange('health_status')}
-                                                                        fullWidth={true}
-                                                                        InputProps={{style: {fontSize: "0.9rem"}}}
+                                                 <Card className={classes2[cardAnimation]}>
+                                                            <CardHeader color="primary" className={classes2.cardHeader}>
+                                                                    <h4>{props.data.name+" records"}</h4>
+                                                            </CardHeader>
+                                                            <CardBody>
 
 
-                                                                    >
-                                                                            {healthCateg.map((option) => (
-                                                                                <MenuItem  key={option.value} value={option.value}>
-                                                                                        {option.value}
-                                                                                </MenuItem>
-                                                                            ))}
-                                                                    </TextField>
-                                                                    <CustomInput
-                                                                        labelText="Next Checkup Date..."
-                                                                        id="check_date"
-                                                                        formControlProps={{
-                                                                                fullWidth: true
-                                                                        }}
-                                                                        inputProps={{
-                                                                                value: data.next_checkup_date,
-                                                                                onChange: handleChange("next_checkup_date"),
-                                                                                type: "text",
-                                                                                endAdornment: (
-                                                                                    <InputAdornment position="end">
-                                                                                            <People className={classes2.inputIconsColor} />
-                                                                                    </InputAdornment>
-                                                                                )
-                                                                        }}
-                                                                    />
                                                                     <ExpansionPanel>
                                                                             <ExpansionPanelSummary
                                                                                 expandIcon={<ExpandMoreIcon />}
@@ -334,7 +230,7 @@ export default function CheckupRecords(props){
                                                                                                 <ListItem>
                                                                                                         <ListItemAvatar>
                                                                                                                 <Avatar>
-                                                                                                                        <MedicineIcon />
+                                                                                                                        <LuxuriesIcon />
                                                                                                                 </Avatar>
                                                                                                         </ListItemAvatar>
                                                                                                         <ListItemText
@@ -350,42 +246,6 @@ export default function CheckupRecords(props){
                                                                                             )}</List>
                                                                             </ExpansionPanelDetails>
                                                                     </ExpansionPanel>
-</div>
-                                                                :
-<div>
-                                                                            <Para text={data.doctor}/>
-                                                                            <Para text={data.health_status}/>
-                                                                            <Para text={data.next_checkup_date}/>
-                                                                            <ExpansionPanel>
-                                                                                    <ExpansionPanelSummary
-                                                                                        expandIcon={<ExpandMoreIcon />}
-                                                                                        aria-controls="panel1a-content"
-                                                                                        id="panel1a-header"
-                                                                                    >
-                                                                                            Medicines
-                                                                                    </ExpansionPanelSummary>
-                                                                                    <ExpansionPanelDetails>
-
-                                                                                            <List style={{width: "100%"}}>
-                                                                                                    {data.medicines.map((data,idx) =>
-                                                                                                        <ListItem>
-                                                                                                                <ListItemAvatar>
-                                                                                                                        <Avatar>
-                                                                                                                                <MedicineIcon />
-                                                                                                                        </Avatar>
-                                                                                                                </ListItemAvatar>
-                                                                                                                <ListItemText
-                                                                                                                    primary={getMedName(data)}
-                                                                                                                    secondary={'Cost:- ' +getMedCost(data)}
-                                                                                                                />
-                                                                                                        </ListItem>,
-                                                                                                    )}
-                                                                                            </List>
-                                                                                    </ExpansionPanelDetails>
-                                                                            </ExpansionPanel>
-
-</div>}
-
 
                                                                     <Button onClick={() => props.closeFunc()} className={classes.submitButton}>
                                                                             {"BACK"}
@@ -393,9 +253,8 @@ export default function CheckupRecords(props){
                                                                     <Button onClick={submitDetails} className={classes.submitButton}>
                                                                             {"SAVE CHANGES"}
                                                                     </Button>
-                                                    </form>
-                                            )}))}>
-                                            </CustomTabs>
+                                                            </CardBody>
+                                                 </Card>
                                     </GridItem>
                             </GridContainer>
                             {/*<SnacbarNotification open={notif} text={"Checkup Record Added Successfully"}/>*/}

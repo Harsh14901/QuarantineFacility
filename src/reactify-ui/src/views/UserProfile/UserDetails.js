@@ -67,11 +67,16 @@ export default function UserDetails(props) {
 
         const [active,setActive] = useState(true);
         const [checkupOpen,setCheckupOpen] = useState(false);
+        const [luxuriesOpen,setLuxuriesOpen] = useState(false);
 
 
 
         function handleCheckupClose(){
                 setCheckupOpen(false)
+        }
+
+        function handleLuxuriesClose(){
+                setLuxuriesOpen(false)
         }
 
         const handleDialogClose= () => {
@@ -193,6 +198,8 @@ export default function UserDetails(props) {
                                                     <GridItem xs={12}>
                                                             <Para text={"User id:- " + props.data.code}/>
                                                             <SideButton onClick={() => setCheckupOpen(true)} text={"View Medical Records"}/>
+                                                            <SideButton onClick={() => setLuxuriesOpen(true)} text={"View Luxuries"}/>
+
 
                                                     </GridItem>
                                                     <GridItem xs={6}>
@@ -352,6 +359,20 @@ export default function UserDetails(props) {
                         onClose={handleCheckupClose}
                     >
                         <CheckupRecords  data={props.data} closeFunc={() => setCheckupOpen(false)}/>
+                    </Dialog>
+
+                    <Dialog
+                        open={luxuriesOpen}
+                        PaperProps={{
+                                style: {
+                                        backgroundColor: 'transparent',
+                                        boxShadow: 'none',
+                                        scrollbarColor: "transparent"
+                                },
+                        }}
+                        onClose={handleLuxuriesClose}
+                    >
+                            <CheckupRecords  data={props.data} closeFunc={() => setLuxuriesOpen(false)}/>
                     </Dialog>
             </div>
         )
