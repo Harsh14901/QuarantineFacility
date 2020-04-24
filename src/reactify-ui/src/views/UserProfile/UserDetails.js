@@ -34,6 +34,8 @@ import changeUserFacility from "facility/changeUserFacility";
 import ChangeFacilityDialog from "views/Components/ChangeFacilityDialog";
 import CheckupRecords from "views/Components/CheckupRecords";
 import {DOMAIN} from "variables/Constants";
+import Luxuries from "views/Luxuries/Luxuries";
+import LuxuriesDetails from "views/Components/LuxuriesDetails";
 
 const useStyles2 = makeStyles(styles2);
 const useStyles = makeStyles(styles);
@@ -372,7 +374,7 @@ export default function UserDetails(props) {
                         }}
                         onClose={handleLuxuriesClose}
                     >
-                            <CheckupRecords  data={props.data} closeFunc={() => setLuxuriesOpen(false)}/>
+                            <LuxuriesDetails  data={props.data} closeFunc={() => setLuxuriesOpen(false)}/>
                     </Dialog>
             </div>
         )

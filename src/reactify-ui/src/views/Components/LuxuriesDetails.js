@@ -51,6 +51,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import {Add} from "@material-ui/icons";
 import LuxuriesIcon from "assets/img/icons/LuxuriesIcon";
+import PatchData from "PeopleData/PatchData";
 
 
 const useStyles2 = makeStyles(styles2);
@@ -74,6 +75,7 @@ export default function LuxuriesDetails(props){
         const [cardAnimation, setCardAnimation] = React.useState("cardHidden");
         const [notif,setNotif] = useState(false);
         const [luxuriesList,setLuxuriesList] = useState([]);
+        const [userList,setUserList] = useState([]);
         const [luxuryPicker,setLuxuryPicker] = useState(false);
         const [selectedLux,setSelectedLux] = useState(1);
 
@@ -81,10 +83,10 @@ export default function LuxuriesDetails(props){
 
 
         const deleteLuxury = (idx) => event =>{
-                let temp=[...checkupDetails];
-                temp[checkupDetails.length-1].medicines=temp[checkupDetails.length-1].medicines.filter(function(value,id){ console.log(id,"hi",idx); return id!==idx});
-                console.log("medicinesList is", temp[checkupDetails.length-1].medicines);
-                setCheckupDetails(temp);
+                let temp=[...userList];
+                temp=temp.filter(function(value,id){return id!==idx});
+                //console.log("medicinesList is", temp[checkupDetails.length-1].medicines);
+                setUserList(temp);
                 console.log("I have deleted this",idx)
 
         };
@@ -97,31 +99,19 @@ export default function LuxuriesDetails(props){
                         setNotif(true)
 
                 };
-                let med=[];
-
-                let len =checkupDetails.length-1;
-                 let data={person: props.data.id,doctor:checkupDetails[len].doctor,
-                         health_status: checkupDetails[len].health_staus
-                 , next_checkup_date: checkupDetails[len].next_checkup_date,medicines: checkupDetails[len].medicines};
-                 console.log("I am going to post this data",JSON.stringify(data));
-                 postData(callback,data,DOMAIN + '/checkup-records/')
+                let data={luxuries: userList,id: props.data.id};
+                console.log("I am going to patch this data",JSON.stringify(data));
+                PatchData(callback,data,DOMAIN + '/checkup-records/')
 
 
         }
 
-        function getMedicinesList(){
+        function getLuxuriesList(){
                 const callback = res => {
-                        setMedicinesList(res);
-                        let temp=[];
-                        for(let i=0;i<props.data.checkuprecords_set[0].medicines.length;i++){
-                                res.map((data)=>{
-                                        if(data.id===props.data.checkuprecords_set[0].medicines[i])
-                                                temp.push(data)
-                                })
-                        }
-                        setUserMedicineList(temp);
+                        console.log('lux list',res);
+                        setLuxuriesList(res);
                 };
-                getData(callback,DOMAIN + '/medicines/')
+                getData(callback,DOMAIN + '/luxuries/')
         }
 
 
@@ -129,23 +119,20 @@ export default function LuxuriesDetails(props){
                 setCardAnimation("");
         }, 700);
 
-        function addMedicineToList(){
-                let temp=checkupDetails[checkupDetails.length-1].medicines
-                if(!temp.includes(selectedMed)) {
-                        temp.push(selectedMed);
-                        setSelectedMed(1)
+        function addLuxuryToList(){
+                let temp = [...userList];
+                if(!temp.includes(selectedLux)){
+                        temp.push(selectedLux);
+                        setUserList(temp)
                 }
-
-
-
         }
 
-        function getMedName(id){
+        function getLuxName(id){
                 let name="";
-                medicinesList.map((data)=> {
+                luxuriesList.map((data)=> {
                         // console.log("ids are here",data.id,id);
                         if(data.id===id) {
-                                name = data.name;
+                                name = data.category;
                                 //console.log("name is here",name)
                         }
                         return name
@@ -154,9 +141,9 @@ export default function LuxuriesDetails(props){
                 return name;
         }
 
-        function getMedCost(id){
+        function getLuxCost(id){
                 let cost="";
-                medicinesList.map((data)=> {
+                luxuriesList.map((data)=> {
                         if(data.id===id)
                                 cost=data.cost;
                         return cost
@@ -164,31 +151,13 @@ export default function LuxuriesDetails(props){
                 return cost;
         }
 
-        const handleMedChange = (prop) => (event) => {
-
-                                //setSelectedMed(event.target.value);
-                                console.log(prop,event.target.value)
-
-        };
-
-        function handleMedicinePickerChange(){
-                setMedicinePicker(true)
+        function handleLuxuryPickerChange(){
+                setLuxuryPicker(true)
         }
 
         useEffect(() => {
-                getMedicinesList();
-                // if(!props.data.checkuprecords_set[0]){
-                //          console.log("HAHAHHAHAH")
-                // }
-                 {
-                         let temp=[...props.data.checkuprecords_set];
-                         temp.push({...defaultCheckup,person:props.data.id});
-                        setCheckupDetails(temp);
-                }
-                console.log("checkup details",checkupDetails);
-                checkupDetails.map((data) => {
-                        console.log(data)
-                })
+                getLuxuriesList();
+                setUserList(props.data.luxuries);
         }, []);
 
 
@@ -201,7 +170,7 @@ export default function LuxuriesDetails(props){
 
                                                  <Card className={classes2[cardAnimation]}>
                                                             <CardHeader color="primary" className={classes2.cardHeader}>
-                                                                    <h4>{props.data.name+" records"}</h4>
+                                                                    <h4>{props.data.name+" Luxuries"}</h4>
                                                             </CardHeader>
                                                             <CardBody>
 
@@ -216,17 +185,17 @@ export default function LuxuriesDetails(props){
                                                                                     <FormControlLabel
                                                                                         aria-label="Acknowledge"
                                                                                         onClick={(event) => {event.stopPropagation();
-                                                                                                handleMedicinePickerChange()
+                                                                                                handleLuxuryPickerChange()
                                                                                         }
                                                                                         }
                                                                                         onFocus={(event) => event.stopPropagation()}
                                                                                         control={<Add />}
-                                                                                        label="Medicines"
+                                                                                        label="Luxuries"
                                                                                     />
                                                                             </ExpansionPanelSummary>
                                                                             <ExpansionPanelDetails>
                                                                                     <List style={{width: "100%"}}>
-                                                                                            {data.medicines.map((data,idx) =>
+                                                                                            {userList.map((data,idx) =>
                                                                                                 <ListItem>
                                                                                                         <ListItemAvatar>
                                                                                                                 <Avatar>
@@ -234,11 +203,11 @@ export default function LuxuriesDetails(props){
                                                                                                                 </Avatar>
                                                                                                         </ListItemAvatar>
                                                                                                         <ListItemText
-                                                                                                            primary={getMedName(data)}
-                                                                                                            secondary={'Cost:- ' +getMedCost(data)}
+                                                                                                            primary={getLuxName(data)}
+                                                                                                            secondary={'Cost:- ' +getLuxCost(data)}
                                                                                                         />
                                                                                                         <ListItemSecondaryAction>
-                                                                                                                <IconButton onClick={deleteMed(idx)} edge="end" aria-label="delete">
+                                                                                                                <IconButton onClick={deleteLuxury(idx)} edge="end" aria-label="delete">
                                                                                                                         <DeleteIcon />
                                                                                                                 </IconButton>
                                                                                                         </ListItemSecondaryAction>
@@ -261,36 +230,36 @@ export default function LuxuriesDetails(props){
 
 
 
-                            <Dialog open={medicinePicker} onClose={()=> setMedicinePicker(false)}>
-                                    <DialogTitle>Add Medicine</DialogTitle>
+                            <Dialog open={luxuryPicker} onClose={()=> setLuxuryPicker(false)}>
+                                    <DialogTitle>Add Luxury</DialogTitle>
                                     <DialogContent>
                                                     <TextField
                                                         style={{marginTop: "6px"}}
                                                         id="severity"
                                                         select
-                                                        label="Medicine Name"
-                                                        value={selectedMed}
-                                                        onChange={(event) => setSelectedMed(event.target.value)}
+                                                        label="Luxury Name"
+                                                        value={selectedLux}
+                                                        onChange={(event) => setSelectedLux(event.target.value)}
                                                         fullWidth={true}
                                                         InputProps={{style: {fontSize: "0.9rem"}}}
 
 
                                                     >
-                                                            {medicinesList.map((option,id) => (
-                                                                <MenuItem  key={option.name+""+id} value={option.id}>
-                                                                        {option.name}
+                                                            {luxuriesList.map((option,id) => (
+                                                                <MenuItem  key={option.category+""+id} value={option.id}>
+                                                                        {option.category}
                                                                 </MenuItem>
                                                             ))}
                                                     </TextField>
 
                                     </DialogContent>
                                     <DialogActions>
-                                            <Button onClick={() => setMedicinePicker(false)} color="primary">
+                                            <Button onClick={() => setLuxuryPicker(false)} color="primary">
                                                     Cancel
                                             </Button>
                                             <Button onClick={() => {
-                                                    addMedicineToList();
-                                                    setMedicinePicker(false);
+                                                    addLuxuryToList();
+                                                    setLuxuryPicker(false);
                                             }} color="primary">
                                                     Ok
                                             </Button>
