@@ -126,7 +126,9 @@ export default function Luxuries() {
                         handleDialogClose();
 
                 };
-                postData(callback,{category: newMedName,cost: newMedCost},DOMAIN + '/luxuries/')
+                let data = {category: newMedName,cost: parseInt(newMedCost)};
+                console.log(data);
+                postData(callback,data,DOMAIN + '/luxuries/')
         }
 
         useEffect(() => {
