@@ -38,8 +38,8 @@ API_KEY = config('API_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 ALLOWED_HOSTS = ['*']
-SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_BROWSER_XSS_FILTER = True
+# SECURE_CONTENT_TYPE_NOSNIFF = True
+# SECURE_BROWSER_XSS_FILTER = True
 # SESSION_COOKIE_SECURE = True
 # CSRF_COOKIE_SECURE = True
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
