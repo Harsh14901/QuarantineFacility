@@ -141,7 +141,8 @@ export default function CheckupRecords(props){
 
                 const callback = res =>{
                         console.log("Checkup details edited",res);
-                        setNotif(true)
+                        setNotif(true);
+                        props.closeFunc()
 
                 };
                 let med=[];

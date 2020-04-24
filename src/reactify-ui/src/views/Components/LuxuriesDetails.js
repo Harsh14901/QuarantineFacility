@@ -96,12 +96,13 @@ export default function LuxuriesDetails(props){
 
                 const callback = res =>{
                         console.log("Checkup details edited",res);
-                        setNotif(true)
+                        setNotif(true);
+                        props.closeFunc()
 
                 };
-                let data={luxuries: userList,id: props.data.id};
+                let data={luxuries: userList};
                 console.log("I am going to patch this data",JSON.stringify(data));
-                PatchData(callback,data,DOMAIN + '/checkup-records/')
+                PatchData(callback,data,DOMAIN + '/people/'+props.data.id+"/")
 
 
         }
