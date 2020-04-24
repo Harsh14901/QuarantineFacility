@@ -37,6 +37,7 @@ import LoginPage from "views/LoginPage/LoginPage";
 import MedicinesDetails from "views/Medicines/MedicinesDetails";
 import MedicineIcon from "assets/img/icons/MedicineIcon";
 import Luxuries from "views/Luxuries/Luxuries";
+import LuxuriesIcon from "assets/img/icons/LuxuriesIcon";
 // import Icons from "views/Icons/Icons.js";
 // import Maps from "views/Maps/Maps.js";
 // import NotificationsPage from "views/Notifications/Notifications.js";
@@ -81,7 +82,7 @@ const dashboardRoutes = [
         {
                 path: "/luxuries",
                 name: "Luxuries",
-                icon: MedicineIcon,
+                icon: LuxuriesIcon,
                 component: Luxuries,
                 layout: "/admin"
         },
