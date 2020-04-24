@@ -46,6 +46,10 @@ import Input from "@material-ui/core/Input";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import MapExtreme from "views/Maps/MapExtreme";
+import {Earth} from "leaflet/src/geo/crs/CRS.Earth";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import {Add} from "@material-ui/icons";
 
 
 const useStyles2 = makeStyles(styles2);
@@ -98,9 +102,11 @@ export default function CheckupRecords(props){
         }
 
         const deleteMed = (idx) => event =>{
-                let temp=[...userMedicineList];
-                setUserMedicineList(temp.filter(function(value,id){ return id!==idx}));
-                console.log("I have deleted this",temp)
+                let temp=[...checkupDetails];
+                temp[checkupDetails.length-1].medicines=temp[checkupDetails.length-1].medicines.filter(function(value,id){ console.log(id,"hi",idx); return id!==idx});
+                console.log("medicinesList is", temp[checkupDetails.length-1].medicines);
+                setCheckupDetails(temp);
+                console.log("I have deleted this",idx)
 
         };
 
@@ -143,7 +149,7 @@ export default function CheckupRecords(props){
                 let len =checkupDetails.length-1;
                  let data={person: props.data.id,doctor:checkupDetails[len].doctor,
                          health_status: checkupDetails[len].health_staus
-                 , next_checkup_date: checkupDetails[len].next_checkup_date,medicines: [1]};
+                 , next_checkup_date: checkupDetails[len].next_checkup_date,medicines: checkupDetails[len].medicines};
                  console.log("I am going to post this data",JSON.stringify(data));
                  postData(callback,data,DOMAIN + '/checkup-records/')
 
@@ -169,6 +175,17 @@ export default function CheckupRecords(props){
         setTimeout(function() {
                 setCardAnimation("");
         }, 700);
+
+        function addMedicineToList(){
+                let temp=checkupDetails[checkupDetails.length-1].medicines
+                if(!temp.includes(selectedMed)) {
+                        temp.push(selectedMed);
+                        setSelectedMed(1)
+                }
+
+
+
+        }
 
         function getMedName(id){
                 let name="";
@@ -200,6 +217,10 @@ export default function CheckupRecords(props){
                                 console.log(prop,event.target.value)
 
         };
+
+        function handleMedicinePickerChange(){
+                setMedicinePicker(true)
+        }
 
         useEffect(() => {
                 getMedicinesList();
@@ -254,22 +275,6 @@ export default function CheckupRecords(props){
                                                                                 )
                                                                         }}
                                                                     />
-                                                                    <CustomInput
-                                                                        labelText="Date..."
-                                                                        id="date"
-                                                                        formControlProps={{
-                                                                                fullWidth: true
-                                                                        }}
-                                                                        inputProps={{
-                                                                                value: data.date,
-                                                                                type: "text",
-                                                                                endAdornment: (
-                                                                                    <InputAdornment position="end">
-                                                                                            <People className={classes2.inputIconsColor} />
-                                                                                    </InputAdornment>
-                                                                                )
-                                                                        }}
-                                                                    />
                                                                     <TextField
                                                                         style={{marginTop: "6px"}}
                                                                         id="severity"
@@ -309,12 +314,21 @@ export default function CheckupRecords(props){
                                                                             <ExpansionPanelSummary
                                                                                 expandIcon={<ExpandMoreIcon />}
                                                                                 aria-controls="panel1a-content"
+                                                                                aria-label="Expand"
                                                                                 id="panel1a-header"
                                                                             >
-                                                                                    Medicines
+                                                                                    <FormControlLabel
+                                                                                        aria-label="Acknowledge"
+                                                                                        onClick={(event) => {event.stopPropagation();
+                                                                                                handleMedicinePickerChange()
+                                                                                        }
+                                                                                        }
+                                                                                        onFocus={(event) => event.stopPropagation()}
+                                                                                        control={<Add />}
+                                                                                        label="Medicines"
+                                                                                    />
                                                                             </ExpansionPanelSummary>
                                                                             <ExpansionPanelDetails>
-
                                                                                     <List style={{width: "100%"}}>
                                                                                             {data.medicines.map((data,idx) =>
                                                                                                 <ListItem>
@@ -333,9 +347,7 @@ export default function CheckupRecords(props){
                                                                                                                 </IconButton>
                                                                                                         </ListItemSecondaryAction>
                                                                                                 </ListItem>,
-                                                                                            )}
-                                                                                            <button onClick={() => setMedicinePicker(true)}>Add</button>
-                                                                                    </List>
+                                                                                            )}</List>
                                                                             </ExpansionPanelDetails>
                                                                     </ExpansionPanel>
 </div>
@@ -390,31 +402,42 @@ export default function CheckupRecords(props){
 
 
 
-                            {/*<Dialog open={medicinePicker} onClose={()=> setMedicinePicker(false)}>*/}
-                            {/*        <DialogTitle>Add Medicine</DialogTitle>*/}
-                            {/*        <DialogContent>*/}
-                            {/*                        /!*<TextField*!/*/}
-                            {/*                        /!*    style={{marginTop: "6px"}}*!/*/}
-                            {/*                        /!*    id="severity"*!/*/}
-                            {/*                        /!*    select*!/*/}
-                            {/*                        /!*    label="Severity*"*!/*/}
-                            {/*                        /!*    value={"Average"}*!/*/}
-                            {/*                        /!*    onChange={handleChange('health_status')}*!/*/}
-                            {/*                        /!*    fullWidth={true}*!/*/}
-                            {/*                        /!*    InputProps={{style: {fontSize: "0.9rem"}}}*!/*/}
+                            <Dialog open={medicinePicker} onClose={()=> setMedicinePicker(false)}>
+                                    <DialogTitle>Add Medicine</DialogTitle>
+                                    <DialogContent>
+                                                    <TextField
+                                                        style={{marginTop: "6px"}}
+                                                        id="severity"
+                                                        select
+                                                        label="Medicine Name"
+                                                        value={selectedMed}
+                                                        onChange={(event) => setSelectedMed(event.target.value)}
+                                                        fullWidth={true}
+                                                        InputProps={{style: {fontSize: "0.9rem"}}}
 
 
-                            {/*                        /!*>*!/*/}
-                            {/*                        /!*        {healthCateg.map((option,id) => (*!/*/}
-                            {/*                        /!*            <MenuItem  key={option.value+""+id} value={option.value}>*!/*/}
-                            {/*                        /!*                    {option.value}*!/*/}
-                            {/*                        /!*            </MenuItem>*!/*/}
-                            {/*                        /!*        ))}*!/*/}
-                            {/*                        /!*</TextField>*!/*/}
+                                                    >
+                                                            {medicinesList.map((option,id) => (
+                                                                <MenuItem  key={option.name+""+id} value={option.id}>
+                                                                        {option.name}
+                                                                </MenuItem>
+                                                            ))}
+                                                    </TextField>
 
-                            {/*        </DialogContent>*/}
+                                    </DialogContent>
+                                    <DialogActions>
+                                            <Button onClick={() => setMedicinePicker(false)} color="primary">
+                                                    Cancel
+                                            </Button>
+                                            <Button onClick={() => {
+                                                    addMedicineToList();
+                                                    setMedicinePicker(false);
+                                            }} color="primary">
+                                                    Ok
+                                            </Button>
+                                    </DialogActions>
 
-                            {/*</Dialog>*/}
+                            </Dialog>
 
 
 
