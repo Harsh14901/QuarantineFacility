@@ -144,4 +144,4 @@ venv.bak/
 .mypy_cache/
 .pem
 .env
-cache/
+
