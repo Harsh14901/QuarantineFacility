@@ -136,14 +136,14 @@ class WardSerializer(serializers.ModelSerializer):
 class FacilitySerializer(serializers.ModelSerializer):
     ward_set = WardSerializer(many=True,read_only=True)
 
-    def save(self, **kwargs):
-        try:
-            set_location(self.validated_data)
-        except:
-            raise ValidationError(
-                detail="Could not allocate location", code='invalid_coordinates')
+    # def save(self, **kwargs):
+    #     try:
+    #         set_location(self.validated_data)
+    #     except:
+    #         raise ValidationError(
+    #             detail="Could not allocate location", code='invalid_coordinates')
 
-        return super().save(**kwargs)
+    #     return super().save(**kwargs)
 
     class Meta():
         model = Facility
