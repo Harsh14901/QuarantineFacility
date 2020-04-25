@@ -1,24 +1,43 @@
 from django.shortcuts import render
+from django.http.response import HttpResponse
+from django.http import JsonResponse
+from django.core.cache import caches
+from django.db.models.signals import *
+from django.dispatch import receiver
+
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.http.response import HttpResponse
 from rest_framework.viewsets import *
+from rest_framework import status
+from rest_framework import mixins
+from rest_framework import generics
+from rest_framework.permissions import SAFE_METHODS
+
+from .algo import *
+from MainSystem.settings import *
 from .models import *
 from .serializers import *
 
-from django.http import JsonResponse
-from rest_framework import status
-
-from rest_framework import mixins
-from rest_framework import generics
-
-from .algo import *
-
 import random
 import names
+import os
 
 from rest_auth.views import LoginView
-# from random_word.random_word import RandomWords
+
+@receiver(post_save)
+def clear_cache_on_model_save(sender, **kwargs):
+    caches[sender.__name__.lower()].clear()
+
+class CacheMixin(object):
+
+    def dispatch(self, request, *args, **kwargs):
+        cache = caches[self.basename]
+        key = f"{request.user.username}"
+        if(cache.get(key) is not None and request.method in SAFE_METHODS):
+            return cache.get(key)
+        resp = super().dispatch(request, *args, **kwargs)
+        cache.set(key,resp.render())
+        return resp
 
 def isCityAdmin(user):
     return len(user.city_set.all()) != 0
@@ -104,7 +123,7 @@ def searchFacility(request):
     return JsonResponse(FacilitySerializer(facilitySet,many=True).data,safe=False)
 
 
-class CityViewSet(ModelViewSet):
+class CityViewSet(CacheMixin,ModelViewSet):
     queryset = City.objects.all()
     serializer_class = CitySerializer
 
@@ -124,7 +143,7 @@ class CityViewSet(ModelViewSet):
         return queryset
     
 
-class FacilityViewSet(ModelViewSet):
+class FacilityViewSet(CacheMixin,ModelViewSet):
     queryset = Facility.objects.all()
     serializer_class = FacilitySerializer
 
@@ -133,8 +152,8 @@ class FacilityViewSet(ModelViewSet):
             return super().create(request, *args, **kwargs)
         else:
             return Response("Insufficient Access Rights",status=status.HTTP_401_UNAUTHORIZED)
+  
     def get_queryset(self):
-        
         queryset = Facility.objects.none()
         user = self.request._user
         if user.is_staff:
@@ -144,9 +163,9 @@ class FacilityViewSet(ModelViewSet):
         elif(isFacilityAdmin(user)):
             queryset = Facility.objects.all().filter(admin=user)
         return queryset
-  
+    
 
-class WardViewSet(ModelViewSet):
+class WardViewSet(CacheMixin,ModelViewSet):
     queryset = Ward.objects.all()
     serializer_class = WardSerializer
   
@@ -162,7 +181,7 @@ class WardViewSet(ModelViewSet):
         return queryset
     
 
-class RoomViewSet(ModelViewSet):
+class RoomViewSet(CacheMixin, ModelViewSet):
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
 
@@ -184,7 +203,8 @@ class RoomViewSet(ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
-class PersonViewSet(ModelViewSet):
+
+class PersonViewSet(CacheMixin, ModelViewSet):
     queryset = Person.objects.all()
     serializer_class = PersonSerializer
 
@@ -199,12 +219,13 @@ class PersonViewSet(ModelViewSet):
             queryset = Person.objects.all().filter(room__ward__facility__admin=user)
         return queryset
 
-class LuxuryViewSet(ModelViewSet):
+
+class LuxuryViewSet(CacheMixin, ModelViewSet):
     queryset = Luxury.objects.all()
     serializer_class = LuxurySerializer
 
 
-class PersonAccomodationViewSet(ModelViewSet):
+class PersonAccomodationViewSet(CacheMixin, ModelViewSet):
     queryset = Person.objects.all()
     serializer_class = PersonAccomodationSerializer
 
@@ -219,11 +240,13 @@ class PersonAccomodationViewSet(ModelViewSet):
             queryset = Person.objects.all().filter(room__ward__facility__admin=user)
         return queryset
 
-class MedicineViewSet(ModelViewSet):
+
+class MedicineViewSet(CacheMixin, ModelViewSet):
     queryset = Medicine.objects.all()
     serializer_class = MedicineSerializer
 
-class CheckupViewSet(ModelViewSet):
+
+class CheckupViewSet(CacheMixin, ModelViewSet):
     queryset = CheckupRecords.objects.all()
     serializer_class = CheckupSerializer
 
@@ -239,7 +262,7 @@ class CheckupViewSet(ModelViewSet):
         return queryset
 
 
-class GroupViewSet(ModelViewSet):
+class GroupViewSet(CacheMixin, ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
@@ -315,7 +338,7 @@ def AllocateGroups(request):
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class DischargedViewSet(generics.ListCreateAPIView):
+class DischargedViewSet(CacheMixin, generics.ListCreateAPIView):
     queryset = Discharged.objects.all()
     serializer_class = DischargedSerializer
 
