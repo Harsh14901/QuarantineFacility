@@ -43,6 +43,7 @@ class CacheMixin(object):
         cache.set(key,resp.render())
         return resp
 
+
 def isCityAdmin(user):
     return len(user.city_set.all()) != 0
 
