@@ -26,7 +26,11 @@ from rest_auth.views import LoginView
 
 @receiver(post_save)
 def clear_cache_on_model_save(sender, **kwargs):
-    caches[sender.__name__.lower()].clear()
+    try:
+        caches[sender.__name__.lower()].clear()
+    except:
+        pass
+    
 
 class CacheMixin(object):
 
