@@ -213,7 +213,7 @@ def get_all_distances(patient):
 
 def set_location(obj):
     p1=f"{obj['latitude']},{obj['longitude']}"
-    key='efe1c6b8-2b70-4252-a030-7d7f9ae2be5c'
+    key=API_KEY
     url='https://graphhopper.com/api/1/geocode'
     params={
         'point':p1,
