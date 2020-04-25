@@ -42,4 +42,3 @@ urlpatterns = [
     url(r'^get_nearest_facilities/$',getClosestFacilities,name="getClosestFacilities")
 
 ]
-
