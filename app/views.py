@@ -324,6 +324,7 @@ def AllocateGroups(request):
     if request.method == "POST":
         groups_data = []
         groups = []
+        print(request.data)
         for group_data in request.data:
             print(group_data)
             people_data = group_data.pop("person_set")
