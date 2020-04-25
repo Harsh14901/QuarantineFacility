@@ -240,25 +240,7 @@ class Room(models.Model):
     
 
 class Luxury(models.Model):
-    TV = "led_tv"
-    WIFI = "free wifi"
-    FRIDGE = "fridge"
-    AC = "ac"
-    HEATER = "heater"
-    MICROWAVE = "microwave"
-    KETTLE = "kettle"
-
-    LuxuryItems = (
-        (TV,"LED TV"),
-        (WIFI,"Free WiFi"),
-        (FRIDGE,"Refrigerator"),
-        (AC,"Air Conditioner"),
-        (HEATER,"Heater"),
-        (MICROWAVE,"Microwave"),
-        (KETTLE,"Kettle"),
-    )
-
-    category = models.CharField(choices=LuxuryItems,max_length=50)
+    category = models.CharField(max_length=50,null=True)
     cost = models.PositiveIntegerField()
 
     def __str__(self):

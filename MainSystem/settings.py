@@ -230,8 +230,36 @@ JWT_AUTH = {
 
 }
 
+CACHES = {
+    'default': {'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+                'LOCATION': config('CACHE_LOCATION')},
+    'checkuprecords': {'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+                       'LOCATION': config('CACHE_LOCATION')+"checkuprecords/"},
+    'city': {'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+             'LOCATION': config('CACHE_LOCATION')+"city/"},
+    'discharged': {'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+                   'LOCATION': config('CACHE_LOCATION')+"discharged/"},
+    'facility': {'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+                 'LOCATION': config('CACHE_LOCATION')+"facility/"},
+    'group': {'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+              'LOCATION': config('CACHE_LOCATION')+"group/"},
+    'luxury': {'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+               'LOCATION': config('CACHE_LOCATION')+"luxury/"},
+    'medicine': {'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+                 'LOCATION': config('CACHE_LOCATION')+"medicine/"},
+    'person': {'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+               'LOCATION': config('CACHE_LOCATION')+"person/"},
+    'room': {'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+             'LOCATION': config('CACHE_LOCATION')+"room/"},
+    'user': {'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+             'LOCATION': config('CACHE_LOCATION')+"user/"},
+    'ward': {'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+             'LOCATION': config('CACHE_LOCATION')+"ward/"},
+}
+
+CACHE_MIDDLEWARE_SECONDS = 60*15
 # Always at the end
-# import dj_database_url 
+# import dj_database_url
 # prod_db  =  dj_database_url.config(conn_max_age=500)
 # DATABASES['default'].update(prod_db)
 DATABASES = {}
