@@ -18,7 +18,7 @@ class WardAdmin(admin.ModelAdmin):
 
 @admin.register(Facility)
 class FacilityAdmin(admin.ModelAdmin):
-    list_display = ['name','owner','capacity','room_count','address','occupant_count']
+    list_display = ['name','owner','capacity','id','room_count','address','occupant_count']
 
 @admin.register(Person)
 class PersonAdmin(admin.ModelAdmin):
