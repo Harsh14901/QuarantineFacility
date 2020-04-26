@@ -7,6 +7,7 @@ from math import *
 from MainSystem.settings import API_KEY
 
 INFINITY = 1000000000
+CRITICAL_RATIO = 0.9
 
 def get_sorted_rooms(person,facility):
     room_list = []
@@ -90,7 +91,7 @@ def make_allocation(patient):
             break
 
         preferredFacility = Facility.objects.get(id=fac_pref)
-        if preferredFacility.capacity ==0 or  preferredFacility.occupant_count / preferredFacility.capacity > .9:
+        if preferredFacility.capacity ==0 or  preferredFacility.occupant_count / preferredFacility.capacity > CRITICAL_RATIO:
             allocated=False
             break
 
@@ -112,9 +113,9 @@ def make_allocation(patient):
         print('allocating through GEO API')
         row = get_all_distances(patient)
         print(row)
-        row.sort(key=lambda x:x.occupant_count/x.capacity > 0.9 if x.capacity >0 else 1)
+        row.sort(key=lambda x:x.occupant_count/x.capacity > CRITICAL_RATIO if x.capacity >0 else 1)
         for facility in row:
-            print(facility.occupant_count/facility.capacity, facility)
+            print(facility.occupant_count/facility.capacity if facility.capacity>0 else 1, facility)
         for facility in row:
             allocated = True
             for i in range(len(family)):
@@ -214,9 +215,11 @@ def get_all_distances(patient):
         all_facilities = half_sorted
         print('API call failed ... using point to point distances')
 
-    all_facilities.sort(key = lambda x:x.isVIP)
-    # if patient.vip:
-    #     all_facilities.reverse()
+    if patient.vip:
+        all_facilities.sort(key = lambda x:not x.isVIP)
+    else:
+        all_facilities.sort(key = lambda x:x.isVIP)
+    
     return all_facilities
 
 
