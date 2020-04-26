@@ -324,11 +324,10 @@ def AllocateGroups(request):
     if request.method == "POST":
         groups_data = []
         groups = []
-        print(request.data)
         for group_data in request.data:
-            print(group_data)
+            # print(group_data)
             people_data = group_data.pop("person_set")
-            group_serializer = GroupSerializer(data=group_data)
+            group_serializer = GroupSerializer(data=group_data,context={"request":request})
             if group_serializer.is_valid():
                 group = group_serializer.save(person_set=people_data)
                 if group is not None:
