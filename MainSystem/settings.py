@@ -226,7 +226,7 @@ JWT_AUTH = {
     'JWT_PRIVATE_KEY': private_key,
     'JWT_PUBLIC_KEY': private_key.public_key(),
     'JWT_ALGORITHM': 'RS256',
-    'JWT_AUTH_COOKIE': "token"
+    'JWT_AUTH_COOKIE': "token",
 
 }
 
