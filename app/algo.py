@@ -7,6 +7,7 @@ from math import *
 from MainSystem.settings import API_KEY
 
 INFINITY = 1000000000
+CRITICAL_RATIO = 0.9
 
 def get_sorted_rooms(person,facility):
     room_list = []
@@ -61,7 +62,7 @@ def get_sorted_list(all_groups):
     for group in all_groups:
         if group.category == Group.ADULTS:
             all_dummy_patients += list(group.person_set.all())
-        elif(len(group.person_set.all() != 0)):
+        elif len(group.person_set.all()) != 0:
             all_dummy_patients.append( group.person_set.latest('age') )
 
     all_dummy_patients.sort(key=lambda  x:x.priority())
@@ -88,7 +89,12 @@ def make_allocation(patient):
         except:
             allocated = False
             break
-        
+
+        preferredFacility = Facility.objects.get(id=fac_pref)
+        if preferredFacility.capacity ==0 or  preferredFacility.occupant_count / preferredFacility.capacity > CRITICAL_RATIO:
+            allocated=False
+            break
+
         room_pk = check_allocation_possible(patient, facility_pk=fac_pref)
         if room_pk is not None:
             patient.room = Room.objects.get(id=room_pk)
@@ -106,6 +112,10 @@ def make_allocation(patient):
     else:
         print('allocating through GEO API')
         row = get_all_distances(patient)
+        print(row)
+        row.sort(key=lambda x:x.occupant_count/x.capacity > CRITICAL_RATIO if x.capacity >0 else 1)
+        for facility in row:
+            print(facility.occupant_count/facility.capacity if facility.capacity>0 else 1, facility)
         for facility in row:
             allocated = True
             for i in range(len(family)):
@@ -205,15 +215,17 @@ def get_all_distances(patient):
         all_facilities = half_sorted
         print('API call failed ... using point to point distances')
 
-    all_facilities.sort(key = lambda x:x.isVIP)
     if patient.vip:
-        all_facilities.reverse()
+        all_facilities.sort(key = lambda x:not x.isVIP)
+    else:
+        all_facilities.sort(key = lambda x:x.isVIP)
+    
     return all_facilities
 
 
 def set_location(obj):
     p1=f"{obj['latitude']},{obj['longitude']}"
-    key='efe1c6b8-2b70-4252-a030-7d7f9ae2be5c'
+    key=API_KEY
     url='https://graphhopper.com/api/1/geocode'
     params={
         'point':p1,
