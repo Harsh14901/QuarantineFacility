@@ -43,6 +43,7 @@ class CacheMixin(object):
         cache.set(key,resp.render())
         return resp
 
+
 def isCityAdmin(user):
     return len(user.city_set.all()) != 0
 
@@ -324,9 +325,9 @@ def AllocateGroups(request):
         groups_data = []
         groups = []
         for group_data in request.data:
-            print(group_data)
+            # print(group_data)
             people_data = group_data.pop("person_set")
-            group_serializer = GroupSerializer(data=group_data)
+            group_serializer = GroupSerializer(data=group_data,context={"request":request})
             if group_serializer.is_valid():
                 group = group_serializer.save(person_set=people_data)
                 if group is not None:

@@ -81,6 +81,8 @@ class PersonSerializer(serializers.ModelSerializer):
                   'luxuries', 'group', 'latitude', 'longitude' ,'checkuprecords_set','room_pk','ward_pk','facility_pk','facility_name','doa','address']
 
     def is_valid(self, raise_exception=False):
+        print(self.context)
+        print()
         if('code' not in self.initial_data.keys() and self.context['request'].method == 'POST'):
             code = "P" + str(random.randint(10000000, 99999999))
             while(len(Person.objects.filter(code=code)) != 0):
@@ -95,12 +97,14 @@ class GroupSerializer(serializers.ModelSerializer):
     person_set = PersonSerializer(many=True,read_only=True)
 
     def create(self, validated_data):
+        print(self.context['request'].method,'group')
         if "person_set" in validated_data.keys():
             people_data = validated_data.pop("person_set")
             group = Group.objects.create(**validated_data)
             for person_data in people_data:
+                print('\n',person_data)
                 person_data['group'] = group.id
-                person_serializer = PersonSerializer(data=person_data)
+                person_serializer = PersonSerializer(data=person_data,context=self.context)
                 if person_serializer.is_valid():
                     person = person_serializer.save()
                 else:
