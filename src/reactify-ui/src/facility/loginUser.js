@@ -12,7 +12,7 @@ const loginUser = (callback,data,url) => {
                 },
             withCredentials: true
         };
-        axios.post(url, data,lookupOpts). then(r => callback(r)).catch(function(error){console.log("hi",error.data)})
+        axios.post(url, data,lookupOpts). then(r => callback(r)).catch(function(error){callback(error)})
 
 };
 

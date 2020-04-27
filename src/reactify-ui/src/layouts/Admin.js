@@ -78,6 +78,7 @@ export default function Admin({ ...rest }) {
   };
   // initialize and destroy the PerfectScrollbar plugin
   React.useEffect(() => {
+          console.log("loc is",window.location.href);
           const callback = res => {
                   if(!res.username)
                         history.push('/login');
