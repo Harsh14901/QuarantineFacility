@@ -156,7 +156,7 @@ export default function MedicinesDetails() {
                                                                 }
                                                         ]}
                                                     />
-                                                    <Backdrop open={loading} style={{zIndex: "100"}}>
+                                                    <Backdrop open={loading} style={{zIndex: "100"}} onClick={() => setLoading(false)}>
                                                                 <CircularProgress color="inherit" />
                                                         </Backdrop>
                                             </CardBody>

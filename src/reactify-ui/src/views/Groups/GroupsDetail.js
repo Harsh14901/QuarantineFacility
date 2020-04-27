@@ -30,6 +30,8 @@ import UserDetails from "views/UserProfile/UserDetails";
 import GroupInfo from "views/Groups/GroupInfo";
 import SnacbarNotification from "views/Components/SnacbarNotification";
 import GroupsAddDialog from "views/Components/GroupsAddDialog";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Backdrop from "@material-ui/core/Backdrop";
 
 
 const styles = {
@@ -62,6 +64,7 @@ export default function GroupsDetail() {
         const [openDialog,setOpenDialog] = useState(false);
         const [selectedGroupDetails,setSelectedGroupDetails] = useState({});
         const [notif,setNotif] = useState(false);
+        const [loading,setLoading] = useState(false);
 
 
         function handleDialogClose(){
@@ -87,6 +90,7 @@ export default function GroupsDetail() {
         ];
         function getGroupsData() {
                 const callback = result => {
+                        setLoading(false);
                         console.log(result);
                         setGroupData(result);
                         let details=[];
@@ -105,6 +109,7 @@ export default function GroupsDetail() {
                         details.sort(function(a,b){ return b.active-a.active});
                         setDataDisplay(details);
                 };
+                setLoading(true);
                 GetGroupData(callback)
         }
 
@@ -216,7 +221,9 @@ export default function GroupsDetail() {
                             </Alert>
                     </Snackbar>
                     <SnacbarNotification setOpen={setNotif} text={"Group has been discharged Successfully"} open={notif}/>
-
+                    <Backdrop open={loading} style={{zIndex: "100"}} onClick={() => setLoading(false)}>
+                            <CircularProgress color="inherit" />
+                    </Backdrop>
             </div>
         );
 }

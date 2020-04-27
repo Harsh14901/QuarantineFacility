@@ -20,6 +20,8 @@ import GetPeopleData from "PeopleData/GetPeopleData";
 import MapExtreme from "views/Maps/MapExtreme";
 import Dialog from "@material-ui/core/Dialog";
 import UserDetails from "views/UserProfile/UserDetails";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Backdrop from "@material-ui/core/Backdrop";
 
 const styles = {
   cardCategoryWhite: {
@@ -48,6 +50,7 @@ export default function UserProfile() {
         const [dataDisplay,setDataDisplay] = useState([]);
         const [openDialog,setOpenDialog] = useState(false);
         const [selectedUserDetails,setSelectedUserDetails] = useState({});
+        const [loading,setLoading] = useState(false);
 
         const columnsHeading=[
                 { title: 'User ID', field: 'code'},
@@ -62,6 +65,7 @@ export default function UserProfile() {
         ];
         function getPeopleData() {
                 const callback = result => {
+                        setLoading(false);
                         console.log(result);
                         setPeopleData(result);
                         let details=[];
@@ -82,6 +86,7 @@ export default function UserProfile() {
                          console.log(details);
                         setDataDisplay(details);
                 };
+                setLoading(true);
                 GetPeopleData(callback)
         }
 
@@ -139,7 +144,9 @@ export default function UserProfile() {
                             <UserDetails closeFunc={handleDialogClose} data={selectedUserDetails}/>
 
                     </Dialog>
-
+                    <Backdrop open={loading} style={{zIndex: "100"}} onClick={() => setLoading(false)}>
+                            <CircularProgress color="inherit" />
+                    </Backdrop>
 
             </div>
         );
