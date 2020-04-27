@@ -44,7 +44,9 @@ import ArrowDownward from "@material-ui/icons/ArrowDownward";
 import Remove from "@material-ui/icons/Remove";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import {Add} from "@material-ui/icons";
-import {DOMAIN} from "variables/Constants";
+import {DOMAIN, TableIcons} from "variables/Constants";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Backdrop from "@material-ui/core/Backdrop";
 
 const styles = {
         cardCategoryWhite: {
@@ -70,25 +72,7 @@ const useStyles = makeStyles(styles);
 export default function MedicinesDetails() {
 
 
-        const tableIcons = {
-                Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
-                Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-                Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-                Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
-                DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-                Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
-                Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
-                Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
-                FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
-                LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
-                NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-                PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
-                ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-                Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
-                SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
-                ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-                ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
-        };
+
 
 
         const classes = useStyles();
@@ -97,6 +81,7 @@ export default function MedicinesDetails() {
         const [openDialog,setOpenDialog] = useState(false);
         const [newMedName,setNewMedName] = useState("");
         const [newMedCost,setNewMedCost] = useState("");
+        const [loading,setLoading] = useState(true);
 
         const columnsHeading=[
                 { title: 'ID', field: 'id'},
@@ -106,6 +91,7 @@ export default function MedicinesDetails() {
         function getMedicineData() {
                 const callback = result => {
                         console.log(result);
+                        setLoading(false);
                         setMedicineData(result);
                         let details=[];
                         result.map((data,j) =>{
@@ -155,8 +141,9 @@ export default function MedicinesDetails() {
                                                     </p>
                                             </CardHeader>
                                             <CardBody>
+
                                                     <MaterialTable
-                                                        icons={tableIcons}
+                                                        icons={TableIcons}
                                                         title=""
                                                         columns={columnsHeading}
                                                         data={dataDisplay}
@@ -169,6 +156,9 @@ export default function MedicinesDetails() {
                                                                 }
                                                         ]}
                                                     />
+                                                    <Backdrop open={loading} style={{zIndex: "100"}}>
+                                                                <CircularProgress color="inherit" />
+                                                        </Backdrop>
                                             </CardBody>
                                     </Card>
                             </GridItem>
