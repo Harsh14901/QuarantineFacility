@@ -29,6 +29,7 @@ import Alert from "@material-ui/lab/Alert";
 import UserDetails from "views/UserProfile/UserDetails";
 import GroupInfo from "views/Groups/GroupInfo";
 import SnacbarNotification from "views/Components/SnacbarNotification";
+import GroupsAddDialog from "views/Components/GroupsAddDialog";
 
 
 const styles = {
@@ -192,7 +193,7 @@ export default function GroupsDetail() {
                         }}
                         onClose={handleClose}
                     >
-                            <AddGroupDialog submitFunc={submitDetails}/>
+                            <GroupsAddDialog submitFunc={submitDetails}/>
 
                     </Dialog>
                     <Dialog

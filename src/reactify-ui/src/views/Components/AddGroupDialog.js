@@ -14,7 +14,7 @@ import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 import EditIcon from "@material-ui/icons/Edit";
 import CloseIcon from "@material-ui/icons/Close";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import styles from "assets/jss/homeStyles";
 import AddIcon from "@material-ui/icons/Add";
@@ -125,7 +125,7 @@ function AddGroupDialog(props) {
                 console.log(data.marker);
                 console.log(data.info);
                 if(!data.info){
-                        setAddress(data.marker[0]+"N , "+data.marker[1]+"S")
+                        setAddress(data.marker[0]+"N , "+data.marker[1]+"E")
                 }
                 getFacilities(data.marker)
 
@@ -176,14 +176,22 @@ function AddGroupDialog(props) {
                 let temp=[];
                 let category='adults';
                 userDetails.map((data,j)=>{
-                        temp.push({...userDetails[j],latitude: latLong[0],longitude: latLong[0],address: address,vip: VIPStatus,risk: userDetails[j].risk?"high":"low"})
+                        temp.push({...userDetails[j],latitude: latLong[0],longitude: latLong[1],address: address,vip: VIPStatus,risk: userDetails[j].risk?"high":"low"});
                         if(userDetails[j].age<18)
                                 category='family'
                 });
 
-                props.submitFunc([{facility_preference: selectedFacility,category:category,person_set: temp}])
+                props.submitFunc({facility_preference: selectedFacility,category:category,person_set: temp})
         }
 
+        function handleInitialData(data){
+                setUserDetails(data.person_set);
+                setLatLong(data.person_set[0].latLong);
+                setCategory(data.category);
+                setAddress(data.person_set[0].address);
+                setVipStatus(data.person_set[0].vip);
+                setSelectedFacility(data.facility_preference)
+        }
         function goNext(){
                 if(step===1)
                 {
@@ -223,7 +231,12 @@ function AddGroupDialog(props) {
         function handleCategory() {
                 setCategory(!category)
         }
-
+        useEffect(()=> {
+                try {
+                        if (props.data.facility_preference)
+                                handleInitialData(props.data)
+                }catch(e){}
+        });
         return(
             <div className={classes.formDiv}>
 
