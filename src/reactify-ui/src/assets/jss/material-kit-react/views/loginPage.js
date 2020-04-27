@@ -3,7 +3,6 @@ import { container } from "assets/jss/material-kit-react.js";
 const signupPageStyle = {
         container: {
                 ...container,
-                zIndex: "20000",
                 overflow: "hidden",
                 position: "sticky",
                 color: "#FFFFFF",
