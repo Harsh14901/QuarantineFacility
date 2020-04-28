@@ -32,7 +32,7 @@ def get_etag(request, *args, **kwargs):
 
 class CacheMixin(object):
 
-    @cache_control(max_age=600, must_revalidate=True)
+    @cache_control(max_age=60, must_revalidate=True)
     def dispatch(self, request, *args, **kwargs):
         @etag(get_etag)
         def _dispatch(request, *args, **kwargs):

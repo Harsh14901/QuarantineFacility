@@ -169,18 +169,18 @@ def naive_distance(p1,p2):
     except:
         return INFINITY
 
-def sort_naively(p1):
+def sort_naively(p1,**kwargs):
     unsorted = []
-    for facility in Facility.objects.all():
+    for facility in kwargs['queryset']:
         p2=(facility.latitude,facility.longitude)
         unsorted.append((naive_distance(p1,p2),facility))
     sorted_pairs = sorted(unsorted,key=lambda x:x[0])
     print(sorted_pairs)
     return [pair[1] for pair in sorted_pairs]
 
-def get_all_distances(patient):
+def get_all_distances(patient,**kwargs):
     p1=(float(patient.latitude),float(patient.longitude))
-    half_sorted = sort_naively(p1)
+    half_sorted = sort_naively(p1,kwargs)
     print(half_sorted)
     p1='{},{}'.format(patient.latitude,patient.longitude)
     all_facilities = []
@@ -242,20 +242,3 @@ def set_location(obj):
     else:
         obj['latitude'] = point['lat']
         obj['longitude'] = point['lng']
-    
-        
-
-
-@api_view(['GET'])
-def getClosestFacilities(request):
-    dummy = Person(
-        latitude=request.GET['latitude'],
-        longitude=request.GET['longitude'],
-        vip = request.GET['vip']!='0' or request.GET['vip']==0,
-    )
-    a=get_all_distances(dummy)
-    if dummy.vip:
-        a=filter(lambda x:x.isVIP,a)
-    else:
-        a=filter(lambda x: not x.isVIP,a)
-    return Response({'id':f.id,'name':f.name,'vip':f.isVIP} for f in a)

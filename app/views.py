@@ -24,16 +24,18 @@ import os
 
 from rest_auth.views import LoginView
 
+
 def isCityAdmin(user):
     return len(user.city_set.all()) != 0
+
 
 def isFacilityAdmin(user):
     return len(user.facility_set.all()) != 0
 
 
 # Create your views here.
-def index(request):  
-    print('important')          
+def index(request):
+    print('important')
     groups = Group.objects.all()
     # tbd=[]
     # for group in groups:
@@ -56,59 +58,63 @@ def index(request):
         resp = "<h1>Failed for</h1>"
         b = []
         for per in result:
-            b.append(f"{per.name} | {per.age} | {per.group.category} | {per.risk} | {per.vip}")
+            b.append(
+                f"{per.name} | {per.age} | {per.group.category} | {per.risk} | {per.vip}")
         resp += "<br/>".join(b)
-    
+
     resp += "<h1> Succesfully allocated rooms </h1>"
     b = []
     for group in groups:
         for per in group.person_set.all():
             if per.room is not None:
-                b.append(f"{per.name} | {per.age} | {per.group.category} | {per.risk} | {per.vip} | <b> {per.room} </b>")
+                b.append(
+                    f"{per.name} | {per.age} | {per.group.category} | {per.risk} | {per.vip} | <b> {per.room} </b>")
     resp += "<br/>".join(b)
 
     return HttpResponse(str(resp))
-    
-    
 
 
 def searchPerson(request):
     queryDict = request.GET
 
-    address = queryDict.get('address',default='')
-    name = queryDict.get('name',default='')
-    
-    queryset = Person.objects.filter(address__icontains=address,name__icontains=name)
-    return JsonResponse(PersonSerializer(queryset,many=True).data,safe=False)
+    address = queryDict.get('address', default='')
+    name = queryDict.get('name', default='')
+
+    queryset = Person.objects.filter(
+        address__icontains=address, name__icontains=name)
+    return JsonResponse(PersonSerializer(queryset, many=True).data, safe=False)
+
 
 def searchFacility(request):
     queryDict = request.GET
 
-    location = queryDict.get('location',default='')
-    name = queryDict.get('name',default='')
-    occupancy_lb = int(queryDict.get('occupancy_lb',default=0))
-    occupancy_ub = int(queryDict.get('occupancy_ub',default=1000000000))
+    location = queryDict.get('location', default='')
+    name = queryDict.get('name', default='')
+    occupancy_lb = int(queryDict.get('occupancy_lb', default=0))
+    occupancy_ub = int(queryDict.get('occupancy_ub', default=1000000000))
 
-    capacity_lb = int(queryDict.get('capacity_lb',default=0))
-    capacity_ub = int(queryDict.get('capacity_ub',default=1000000000))
+    capacity_lb = int(queryDict.get('capacity_lb', default=0))
+    capacity_ub = int(queryDict.get('capacity_ub', default=1000000000))
 
-    uid = queryDict.get('uid',default=None)
+    uid = queryDict.get('uid', default=None)
 
     facilitySet = Facility.objects.filter(name__icontains=name)
-    facilitySet = list(filter(lambda obj: capacity_lb <= obj.capacity <= capacity_ub,list(facilitySet)))
-    facilitySet = list(filter(lambda obj: occupancy_lb <= obj.occupancy_count <= occupancy_ub,list(facilitySet)))
+    facilitySet = list(filter(lambda obj: capacity_lb <=
+                       obj.capacity <= capacity_ub, list(facilitySet)))
+    facilitySet = list(filter(lambda obj: occupancy_lb <=
+                       obj.occupancy_count <= occupancy_ub, list(facilitySet)))
     if uid:
         facilitySet = []
         try:
             person = Person.objects.get(id=uid)
             facilitySet = [person.room.ward.facility]
-        except :
+        except:
             # return HttpResponse('user does not exist', status=status.HTTP_400_BAD_REQUEST)
-            pass   
-    return JsonResponse(FacilitySerializer(facilitySet,many=True).data,safe=False)
+            pass
+    return JsonResponse(FacilitySerializer(facilitySet, many=True).data, safe=False)
 
 
-class CityViewSet(CacheMixin,ModelViewSet):
+class CityViewSet(CacheMixin, ModelViewSet):
     queryset = City.objects.all()
     serializer_class = CitySerializer
 
@@ -126,9 +132,9 @@ class CityViewSet(CacheMixin,ModelViewSet):
         if(isCityAdmin(user)):
             return user.city_set.all()
         return queryset
-    
 
-class FacilityViewSet(CacheMixin,ModelViewSet):
+
+class FacilityViewSet(CacheMixin, ModelViewSet):
     queryset = Facility.objects.all()
     serializer_class = FacilitySerializer
 
@@ -136,8 +142,8 @@ class FacilityViewSet(CacheMixin,ModelViewSet):
         if(isCityAdmin(request.user) or request.user.is_staff):
             return super().create(request, *args, **kwargs)
         else:
-            return Response("Insufficient Access Rights",status=status.HTTP_401_UNAUTHORIZED)
-  
+            return Response("Insufficient Access Rights", status=status.HTTP_401_UNAUTHORIZED)
+
     def get_queryset(self):
         queryset = Facility.objects.none()
         user = self.request._user
@@ -148,12 +154,12 @@ class FacilityViewSet(CacheMixin,ModelViewSet):
         elif(isFacilityAdmin(user)):
             queryset = Facility.objects.all().filter(admin=user)
         return queryset
-    
 
-class WardViewSet(CacheMixin,ModelViewSet):
+
+class WardViewSet(CacheMixin, ModelViewSet):
     queryset = Ward.objects.all()
     serializer_class = WardSerializer
-  
+
     def get_queryset(self):
         queryset = Ward.objects.none()
         user = self.request._user
@@ -164,7 +170,7 @@ class WardViewSet(CacheMixin,ModelViewSet):
         elif(isFacilityAdmin(user)):
             queryset = Ward.objects.all().filter(facility__admin=user)
         return queryset
-    
+
 
 class RoomViewSet(CacheMixin, ModelViewSet):
     queryset = Room.objects.all()
@@ -182,7 +188,7 @@ class RoomViewSet(CacheMixin, ModelViewSet):
         return queryset
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data,many=True)
+        serializer = self.get_serializer(data=request.data, many=True)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
@@ -241,9 +247,11 @@ class CheckupViewSet(CacheMixin, ModelViewSet):
         if user.is_staff:
             return super().get_queryset()
         if(isCityAdmin(user)):
-            queryset = CheckupRecords.objects.all().filter(person__room__ward__facility__city__admin=user)
+            queryset = CheckupRecords.objects.all().filter(
+                person__room__ward__facility__city__admin=user)
         elif(isFacilityAdmin(user)):
-            queryset = CheckupRecords.objects.all().filter(person__room__ward__facility__admin=user)
+            queryset = CheckupRecords.objects.all().filter(
+                person__room__ward__facility__admin=user)
         return queryset
 
 
@@ -270,7 +278,6 @@ class GroupViewSet(CacheMixin, ModelViewSet):
             if(valid):
                 queryset = queryset | Group.objects.all().filter(id=group.id)
         return queryset
-    
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -279,14 +286,14 @@ class GroupViewSet(CacheMixin, ModelViewSet):
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
-        
+
         serializer = self.get_serializer(queryset, many=True)
 
         user = request.user
         if user.is_staff:
             return Response(serializer.data)
         for group in serializer.data:
-            
+
             temp = []
             for person in group['person_set']:
                 facilty_pk = person['facility_pk']
@@ -299,6 +306,7 @@ class GroupViewSet(CacheMixin, ModelViewSet):
             group['person_set'] = temp
         return Response(serializer.data)
 
+
 @api_view(['POST'])
 def AllocateGroups(request):
     if request.method == "POST":
@@ -307,25 +315,27 @@ def AllocateGroups(request):
         for group_data in request.data:
             # print(group_data)
             people_data = group_data.pop("person_set")
-            group_serializer = GroupSerializer(data=group_data,context={"request":request})
+            group_serializer = GroupSerializer(
+                data=group_data, context={"request": request})
             if group_serializer.is_valid():
                 group = group_serializer.save(person_set=people_data)
                 if group is not None:
                     groups.append(group)
             else:
-                return Response(group_serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+                return Response(group_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         allocation = allocate(groups)
         for group in groups:
             groups_data.append(GroupSerializer(group).data)
 
-        return Response(groups_data)        
-    
+        return Response(groups_data)
+
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class DischargedViewSet(CacheMixin, generics.ListCreateAPIView):
     queryset = Discharged.objects.all()
     serializer_class = DischargedSerializer
+
 
 @api_view()
 def null_view(request):
@@ -335,6 +345,7 @@ def null_view(request):
 @api_view()
 def complete_view(request):
     return Response("Email account is activated")
+
 
 @api_view(['POST'])
 def discharge_group(request):
@@ -353,7 +364,7 @@ def discharge_group(request):
         try:
             Discharged(person=person).save()
         except Exception as e:
-            if(str(e).find('UNIQUE constraint')==-1):
+            if(str(e).find('UNIQUE constraint') == -1):
                 return Response("Error Occured")
     return Response('done')
 
@@ -363,3 +374,29 @@ class LoginAuth(LoginView):
         response = super().get_response()
         response.cookies['token']['Secure'] = True
         return response
+
+
+@api_view(['GET'])
+def getClosestFacilities(request):
+    dummy = Person(
+        latitude=request.GET['latitude'],
+        longitude=request.GET['longitude'],
+        vip=request.GET['vip'] != '0' or request.GET['vip'] == 0,
+    )
+
+    queryset = Facility.objects.none()
+    user = request.user
+    if user.is_staff:
+        return Facility.objects.all()
+    if(isCityAdmin(user)):
+        queryset = Facility.objects.all().filter(city__admin=user)
+    elif(isFacilityAdmin(user)):
+        queryset = Facility.objects.all().filter(admin=user)
+    
+    
+    a = get_all_distances(dummy,queryset=queryset)
+    if dummy.vip:
+        a = filter(lambda x: x.isVIP, a)
+    else:
+        a = filter(lambda x: not x.isVIP, a)
+    return Response({'id': f.id, 'name': f.name, 'vip': f.isVIP} for f in a)
