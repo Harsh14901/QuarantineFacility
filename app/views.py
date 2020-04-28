@@ -381,7 +381,7 @@ def getClosestFacilities(request):
     dummy = Person(
         latitude=request.GET['latitude'],
         longitude=request.GET['longitude'],
-        vip=request.GET['vip'] != '0' or request.GET['vip'] == 0,
+        vip=request.GET['vip'] == '0' or request.GET['vip'] == 0,
     )
 
     queryset = Facility.objects.none()
@@ -392,7 +392,6 @@ def getClosestFacilities(request):
         queryset = Facility.objects.all().filter(city__admin=user)
     elif(isFacilityAdmin(user)):
         queryset = Facility.objects.all().filter(admin=user)
-    
     
     a = get_all_distances(dummy,queryset=queryset)
     if dummy.vip:

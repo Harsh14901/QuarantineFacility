@@ -46,7 +46,7 @@ class CacheMixin(object):
 
             digest = m.hexdigest()
             cache.set(key, digest)
-            resp._headers['etag'] = ('ETag', f"\"{digest}\"")
+            resp._headers['etag'] = ('ETag', f"{digest}")
 
             return resp
 

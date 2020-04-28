@@ -180,7 +180,7 @@ def sort_naively(p1,**kwargs):
 
 def get_all_distances(patient,**kwargs):
     p1=(float(patient.latitude),float(patient.longitude))
-    half_sorted = sort_naively(p1,kwargs)
+    half_sorted = sort_naively(p1,**kwargs)
     print(half_sorted)
     p1='{},{}'.format(patient.latitude,patient.longitude)
     all_facilities = []
