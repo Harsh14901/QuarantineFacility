@@ -378,16 +378,17 @@ class LoginAuth(LoginView):
 
 @api_view(['GET'])
 def getClosestFacilities(request):
+    print(request.GET)
     dummy = Person(
         latitude=request.GET['latitude'],
         longitude=request.GET['longitude'],
-        vip=request.GET['vip'] == '0' or request.GET['vip'] == 0,
+        vip=request.GET['vip'] != '0' or request.GET['vip'] != 0,
     )
 
     queryset = Facility.objects.none()
     user = request.user
     if user.is_staff:
-        return Facility.objects.all()
+        queryset = Facility.objects.all()
     if(isCityAdmin(user)):
         queryset = Facility.objects.all().filter(city__admin=user)
     elif(isFacilityAdmin(user)):
