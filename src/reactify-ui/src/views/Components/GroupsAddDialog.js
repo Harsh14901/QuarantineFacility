@@ -42,8 +42,8 @@ const InputText = (props) => {
                         fullWidth: true
                 }}
                 inputProps={{
+                        readOnly: true,
                         value: props.value,
-                        onChange: () => console.log("Change noted"),
                         type: "text",
                         endAdornment: (
                             <InputAdornment position="end">
@@ -162,10 +162,10 @@ export default function UserDetails(props) {
                                                     tabContent: (
                                                         <div className={classes2.container}>
 
-                                                                <InputText title={"Category"} value={data2.category}/>
-                                                                <InputText title={"VIP"} value={data2.vip}/>
+                                                                <InputText title={"Category"} value={data2.category?data2.category:"Add members to see Details"}/>
+                                                                <InputText title={"VIP"} value={data2.vip?data2.vip:"false"}/>
                                                                 <InputText title={"Member Count"} value={data2.member_count}/>
-                                                                <InputText title={"Address"} value={data2.address}/>
+                                                                <InputText title={"Address"} value={data2.address+"\u00a0"}/>
 
                                                                 <div style={{position: "relative",padding: "20px",display: "flex",justifyContent: "center",alignItems: "center", width:"100%"}}>
                                                                         <Button onClick={submitDetails} className={classes.submitButton}>
