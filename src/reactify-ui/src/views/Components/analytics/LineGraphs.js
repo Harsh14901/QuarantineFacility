@@ -39,7 +39,7 @@ function LineGraphs(props) {
 
                                 if(series.length>7){
                                         let abcd=parseInt((series.length/10).toFixed(0));
-                                        console.log("abcd is ",abcd,series.length);
+                                        // console.log("abcd is ",abcd,series.length);
                                         setOptions({...options,axisX: {...options.axisX,
                                                         labelInterpolationFnc: function (value,index) {
                                                                 return (index%abcd===0)?value:''
@@ -49,7 +49,7 @@ function LineGraphs(props) {
 
                                 setOptions({...options,high: (1.5*max),height: (props.size==='large'?"40vh":"30vh")});
                                 setData({labels: labels,series: [series]});
-                                console.log({labels: labels,series:[series]})
+                                // console.log({labels: labels,series:[series]})
                         };
 
                         getData(callback,props.url)

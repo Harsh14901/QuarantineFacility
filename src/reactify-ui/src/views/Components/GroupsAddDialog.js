@@ -120,12 +120,12 @@ export default function UserDetails(props) {
                 else if(title===actions[2].name){
                         deleteGroup(j);
                 }
-                console.log(event);
+                //  console.log(event);
                 setFabOpen(false);
         };
 
         const addOrEditDetails= (data) => {
-                console.log("Just check out what the error is",compGrpDetails);
+                //  console.log("Just check out what the error is",compGrpDetails);
                 let temp = [...compGrpDetails];
                 temp[groupToEdit] = data;
                 setCompGrpDetails(temp);

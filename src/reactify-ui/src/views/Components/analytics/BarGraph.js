@@ -42,7 +42,7 @@ function BarGraph(props) {
                                 max=res.max;
                                 labels=res.labels;
                                 series=res.series;
-                                console.log("HI girls",{labels:[labels],series:series})
+                                // console.log("HI girls",{labels:[labels],series:series})
                         }
                         else {
                                 for (let x in result) {
@@ -57,7 +57,7 @@ function BarGraph(props) {
 
                         if(series.length>7){
                                 let abcd=parseInt((series.length/10).toFixed(0));
-                                console.log("abcd is ",abcd,series.length);
+                                // console.log("abcd is ",abcd,series.length);
                                 setOptions({...options,axisX: {...options.axisX,
                                                 labelInterpolationFnc: function (value,index) {
                                                         return (index%abcd===0)?value:''
@@ -69,7 +69,7 @@ function BarGraph(props) {
                         setOptions({...options,high: (1.5*max)});
                         setData({labels: labels,series: [series]});
                         setIncrease((now/last -1)*100);
-                        console.log({labels: labels,series:[series]})
+                        // console.log({labels: labels,series:[series]})
                 };
 
                 getData(callback,props.url)

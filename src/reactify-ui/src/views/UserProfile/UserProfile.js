@@ -66,7 +66,7 @@ export default function UserProfile() {
         function getPeopleData() {
                 const callback = result => {
                         setLoading(false);
-                        console.log(result);
+                        // console.log(result);
                         setPeopleData(result);
                         let details=[];
                          result.map((data,j) =>{
@@ -76,14 +76,14 @@ export default function UserProfile() {
                                          ,facility_name:data.facility_name,risk: data.risk,doa:data.doa,number: data.contact_num,email:data.email
                                  ,vip: data.vip,facility_pk:data.facility_pk,group: data.group,address: data.address,latitude:data.latitude,longitude:data.longitude,checkuprecords_set: data.checkuprecords_set})
                          });
-                        console.log(details);
+                        // console.log(details);
                          details.sort(function(a,b) {if(a.facility_name==='Discharged')
                          {
                                  return 1
                          }
                          return -1;
                          });
-                         console.log(details);
+                         // console.log(details);
                         setDataDisplay(details);
                 };
                 setLoading(true);

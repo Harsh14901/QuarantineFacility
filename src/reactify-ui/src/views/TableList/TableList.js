@@ -112,7 +112,7 @@ export default function TableList() {
         function getFacilityData() {
                 const callback = result => {
                         setLoading(false);
-                        console.log(result);
+                        // console.log(result);
                         setFacilityData(result);
                         let details=[];
                         let totalCap=0;
@@ -152,11 +152,11 @@ export default function TableList() {
 
         function submitDetails(data){
                 const callback = result => {
-                        console.log("this is result",result);
+                        // console.log("this is result",result);
                         setSuccessAlert(true);
                         handleClose();
                 };
-                console.log("submit detaisl",JSON.stringify(data));
+                // console.log("submit detaisl",JSON.stringify(data));
                 PostData(callback,data,DOMAIN + '/rooms/')
 
         }

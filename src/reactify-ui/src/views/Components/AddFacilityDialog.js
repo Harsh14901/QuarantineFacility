@@ -121,19 +121,19 @@ function AddFacilityDialog(props){
                 setAddress(data.info);
                 setLatLong(data.marker);
                 handleLocationClose();
-                console.log(data.marker);
-                console.log(data.info);
-                console.log(!data.info);
+                // console.log(data.marker);
+                // console.log(data.info);
+                // console.log(!data.info);
                 if(!data.info){
                         setAddress(data.marker[0]+"N , "+data.marker[1]+"S")
-                        console.log(!data.info)
+                        // console.log(!data.info)
                 }
 
         }
 
         const handleAddressChange = event => {
-                setAddress(event.target.value)
-                console.log(event.target.value)
+                setAddress(event.target.value);
+                // console.log(event.target.value)
         };
 
 
@@ -163,7 +163,7 @@ function AddFacilityDialog(props){
                 else if(title===actions[1].name){
                         deleteRoom(j);
                 }
-                console.log(event);
+                // console.log(event);
                 setFabOpen(false);
         };
 
@@ -176,12 +176,12 @@ function AddFacilityDialog(props){
                 let temp=[...roomDetails];
                 temp[j]={ ...roomDetails[j], [prop]: event.target.value };
                 setRoomDetails(temp);
-                console.log(roomDetails[j].name)
+                // console.log(roomDetails[j].name)
 
         };
         const handleFacilityChange = (prop) => (event) => {
                 setFacilityDetails({ ...facilityDetails, [prop]: event.target.value });
-                console.log(facilityDetails)
+                // console.log(facilityDetails)
 
         };
 
@@ -203,18 +203,18 @@ function AddFacilityDialog(props){
                         if(num!=="")
                                 numbers.push(num);
                         numbers.map((data2) => {
-                                console.log("ward ids are", ward2Id,ward1Id);
+                                // console.log("ward ids are", ward2Id,ward1Id);
                                 const id =(data.category===1)?ward1Id:ward2Id;
                                 details.push({ward: id,category: data.category+"",type: VIPStatus?data.type+2:data.type,room_num: parseInt(data2),floor: 0,area:data.area,capacity:data.capacity})
                         })
                 });
                 props.submitFunc(details);
-                console.log("Submitting Details",details)
+                // console.log("Submitting Details",details)
         }
 
         function postWard(cat,id){
                 const callback = result => {
-                        console.log("wardId is here",result);
+                        // console.log("wardId is here",result);
                         if(cat===1)
                                 setWard1Id(result.id);
                         else
@@ -224,13 +224,13 @@ function AddFacilityDialog(props){
 
                 };
                 const data={facility: id,category:cat+""};
-                console.log("ward detailsss",data);
+                // console.log("ward detailsss",data);
                 PostData(callback,data,DOMAIN + '/wards/')
         }
 
         function postFacility(){
                 const callback = result => {
-                        console.log("ward is here",result);
+                        // console.log("ward is here",result);
                         setFacilityId(result.id);
                         postWard(1,result.id);
                         postWard(2,result.id);
@@ -239,17 +239,17 @@ function AddFacilityDialog(props){
                 };
                 if(facilityDetails.name==="" || address==="" || facilityDetails.owner==="")
                 {       setReqDet(true);
-                console.log(facilityDetails.address);
+                // console.log(facilityDetails.address);
                 return}
                 let temp={...facilityDetails,isVIP: VIPStatus,latitude: latLong[0],longitude: latLong[1],address:address,city: selectedCity};
-                console.log("posting fac",temp);
+                // console.log("posting fac",temp);
                 PostFacilityData(callback,temp)
         }
 
         function getCities(){
                 const callback = res => {
                         setCitiesList(res);
-                        console.log("Got cities list",res)
+                        // console.log("Got cities list",res)
                 };
 
                 getData(callback,DOMAIN+'/cities/')

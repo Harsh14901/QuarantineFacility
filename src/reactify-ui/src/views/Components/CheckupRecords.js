@@ -103,28 +103,30 @@ export default function CheckupRecords(props){
 
         const deleteMed = (idx) => event =>{
                 let temp=[...checkupDetails];
-                temp[checkupDetails.length-1].medicines=temp[checkupDetails.length-1].medicines.filter(function(value,id){ console.log(id,"hi",idx); return id!==idx});
-                console.log("medicinesList is", temp[checkupDetails.length-1].medicines);
+                temp[checkupDetails.length-1].medicines=temp[checkupDetails.length-1].medicines.filter(function(value,id){
+                        // console.log(id,"hi",idx);
+                        return id!==idx});
+                // console.log("medicinesList is", temp[checkupDetails.length-1].medicines);
                 setCheckupDetails(temp);
-                console.log("I have deleted this",idx)
+                // console.log("I have deleted this",idx)
 
         };
 
         const handleChange = (prop) => (event) => {
 
-                        console.log(event.target.value);
-                        console.log(checkupDetails[checkupDetails.length-1]);
-                        console.log(checkupDetails);
-                        console.log(checkupDetails[1]);
+                        // console.log(event.target.value);
+                        // console.log(checkupDetails[checkupDetails.length-1]);
+                        // console.log(checkupDetails);
+                        // console.log(checkupDetails[1]);
 
                         let temp = [];
                         checkupDetails.map((data)=>
                                 temp.push(data)
                         );
-                        console.log(temp);
+                        // console.log(temp);
                         // let len = checkupDetails.length;
                         temp[checkupDetails.length-1] = {...checkupDetails[checkupDetails.length-1], [prop]: event.target.value};
-                        console.log(temp);
+                        // console.log(temp);
 
                 setCheckupDetails(temp)
 
@@ -140,7 +142,7 @@ export default function CheckupRecords(props){
         function submitDetails(){
 
                 const callback = res =>{
-                        console.log("Checkup details edited",res);
+                        // console.log("Checkup details edited",res);
                         setNotif(true);
                         props.closeFunc()
 
@@ -151,7 +153,7 @@ export default function CheckupRecords(props){
                  let data={person: props.data.id,doctor:checkupDetails[len].doctor,
                          health_status: checkupDetails[len].health_staus
                  , next_checkup_date: checkupDetails[len].next_checkup_date,medicines: checkupDetails[len].medicines};
-                 console.log("I am going to post this data",JSON.stringify(data));
+                 // console.log("I am going to post this data",JSON.stringify(data));
                  postData(callback,data,DOMAIN + '/checkup-records/')
 
 
@@ -191,14 +193,14 @@ export default function CheckupRecords(props){
         function getMedName(id){
                 let name="";
                 medicinesList.map((data)=> {
-                        // console.log("ids are here",data.id,id);
+                        // // console.log("ids are here",data.id,id);
                         if(data.id===id) {
                                 name = data.name;
-                                //console.log("name is here",name)
+                                //// console.log("name is here",name)
                         }
                         return name
                 });
-                //console.log(name);
+                //// console.log(name);
                 return name;
         }
 
@@ -215,7 +217,7 @@ export default function CheckupRecords(props){
         const handleMedChange = (prop) => (event) => {
 
                                 //setSelectedMed(event.target.value);
-                                console.log(prop,event.target.value)
+                                // console.log(prop,event.target.value)
 
         };
 
@@ -226,16 +228,16 @@ export default function CheckupRecords(props){
         useEffect(() => {
                 getMedicinesList();
                 // if(!props.data.checkuprecords_set[0]){
-                //          console.log("HAHAHHAHAH")
+                //          // console.log("HAHAHHAHAH")
                 // }
                  {
                          let temp=[...props.data.checkuprecords_set];
                          temp.push({...defaultCheckup,person:props.data.id});
                         setCheckupDetails(temp);
                 }
-                console.log("checkup details",checkupDetails);
+                // console.log("checkup details",checkupDetails);
                 checkupDetails.map((data) => {
-                        console.log(data)
+                        // console.log(data)
                 })
         }, []);
 
