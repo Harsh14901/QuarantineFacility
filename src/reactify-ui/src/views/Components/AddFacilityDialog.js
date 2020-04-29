@@ -203,6 +203,7 @@ function AddFacilityDialog(props){
                         if(num!=="")
                                 numbers.push(num);
                         numbers.map((data2) => {
+                                console.log("ward ids are", ward2Id,ward1Id);
                                 const id =(data.category===1)?ward1Id:ward2Id;
                                 details.push({ward: id,category: data.category+"",type: VIPStatus?data.type+2:data.type,room_num: parseInt(data2),floor: 0,area:data.area,capacity:data.capacity})
                         })
