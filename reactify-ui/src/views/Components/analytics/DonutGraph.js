@@ -47,7 +47,7 @@ function DonutGraph(props){
                         let a = result['Ward-1'];
                         let b= result['Ward-2'];
                         let c = result['vacant'];
-                        console.log("Result is ",result);
+                        // console.log("Result is ",result);
 
                         setData({
                                 labels: [
@@ -74,7 +74,7 @@ function DonutGraph(props){
                         );
                 };
                 if(props.data){
-                        console.log(props.data)
+                        // console.log(props.data)
                         callback(props.data)
                 }
                 else

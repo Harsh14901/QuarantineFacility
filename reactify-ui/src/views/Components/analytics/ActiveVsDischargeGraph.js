@@ -56,7 +56,7 @@ function ActiveVsDischargeGraph() {
 
                                 setOptions({...options,high: 110,height: "30vh"});
                                 setData({labels: labels,series: [percentages,percentage2]});
-                                console.log("hurrah",[percentages,percentage2])
+                                // console.log("hurrah",[percentages,percentage2])
 
                         };
 

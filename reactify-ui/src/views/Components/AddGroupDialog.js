@@ -14,7 +14,7 @@ import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 import EditIcon from "@material-ui/icons/Edit";
 import CloseIcon from "@material-ui/icons/Close";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import styles from "assets/jss/homeStyles";
 import AddIcon from "@material-ui/icons/Add";
@@ -53,7 +53,7 @@ function AddGroupDialog(props) {
         const classes2 = useStyles2();
 
 
-        const defaultUserDetail={name: "",age: 18,address: "",risk: false,contact: "",email: "",latitude:"80.12345",longitude:"80.12345",vip:false};
+        const defaultUserDetail={name: "",age: 18,address: "",risk: false,gender: "Other",contact_num: "",email: "",latitude:"80.12345",longitude:"80.12345",vip:false};
         const [userDetails,setUserDetails] = useState([defaultUserDetail]);
         const [step,setStep] = useState(1);
         const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
@@ -85,6 +85,24 @@ function AddGroupDialog(props) {
                 }
         ];
 
+
+        const genderCateg = [
+                {
+                        value: 'Other',
+                        label: 'Prefer not to say',
+                },
+                {
+                        value: 'M',
+                        label: 'Male',
+                },
+                {
+                        value: 'F',
+                        label: 'Female',
+                }
+        ];
+
+
+
         const [fabOpen, setFabOpen] = React.useState(false);
         const [fabHidden, setFabHidden] = React.useState(false);
 
@@ -106,7 +124,7 @@ function AddGroupDialog(props) {
                 else if(title===actions[2].name){
                         restoreMember(j);
                 }
-                console.log(event);
+                // console.log(event);
                 setFabOpen(false);
         };
 
@@ -122,10 +140,10 @@ function AddGroupDialog(props) {
                 setAddress(data.info);
                 setLatLong(data.marker);
                 handleLocationClose();
-                console.log(data.marker);
-                console.log(data.info);
+                // console.log(data.marker);
+                // console.log(data.info);
                 if(!data.info){
-                        setAddress(data.marker[0]+"N , "+data.marker[1]+"S")
+                        setAddress(data.marker[0]+"N , "+data.marker[1]+"E")
                 }
                 getFacilities(data.marker)
 
@@ -134,7 +152,7 @@ function AddGroupDialog(props) {
         function getFacilities(data){
 
                 const callback = res => {
-                        console.log("Got the facilities",res);
+                        // console.log("Got the facilities",res);
                         let temp=[];
                         for(let x=0;x<res.length;x++)
                                 temp.push({value: res[x].id,label: res[x].name});
@@ -167,7 +185,7 @@ function AddGroupDialog(props) {
                 let temp=[...userDetails];
                 temp[j]={ ...userDetails[j], [prop]: event.target.value };
                 setUserDetails(temp);
-                console.log(userDetails[j].name)
+                // console.log(userDetails[j].name)
 
         };
 
@@ -176,14 +194,22 @@ function AddGroupDialog(props) {
                 let temp=[];
                 let category='adults';
                 userDetails.map((data,j)=>{
-                        temp.push({...userDetails[j],latitude: latLong[0],longitude: latLong[0],address: address,vip: VIPStatus,risk: userDetails[j].risk?"high":"low"})
+                        temp.push({...userDetails[j],latitude: latLong[0],longitude: latLong[1],address: address,vip: VIPStatus,risk: userDetails[j].risk?"high":"low"});
                         if(userDetails[j].age<18)
                                 category='family'
                 });
 
-                props.submitFunc([{facility_preference: selectedFacility,category:category,person_set: temp}])
+                props.submitFunc({facility_preference: selectedFacility,category:category,person_set: temp})
         }
 
+        function handleInitialData(data){
+                setUserDetails(data.person_set);
+                setLatLong(data.person_set[0].latLong);
+                setCategory(data.category);
+                setAddress(data.person_set[0].address);
+                setVipStatus(data.person_set[0].vip);
+                setSelectedFacility(data.facility_preference)
+        }
         function goNext(){
                 if(step===1)
                 {
@@ -223,7 +249,12 @@ function AddGroupDialog(props) {
         function handleCategory() {
                 setCategory(!category)
         }
-
+        useEffect(()=> {
+                try {
+                        if (props.data.facility_preference)
+                                handleInitialData(props.data)
+                }catch(e){}
+        });
         return(
             <div className={classes.formDiv}>
 
@@ -288,16 +319,37 @@ function AddGroupDialog(props) {
                                                                         </MenuItem>
                                                                     ))}
                                                             </TextField>
+
+                                                            <TextField
+                                                                style={{marginTop: "6px"}}
+                                                                id="gender"
+                                                                select
+                                                                label="Gender"
+                                                                value={userDetails[j].gender}
+                                                                onChange={handleChange('gender',j)}
+                                                                fullWidth={true}
+                                                                InputProps={{style: {fontSize: "0.9rem"}}}
+
+
+                                                            >
+                                                                    {genderCateg.map((option) => (
+                                                                        <MenuItem  key={option.value} value={option.value}>
+                                                                                {option.label}
+                                                                        </MenuItem>
+                                                                    ))}
+                                                            </TextField>
+
+
                                                             <CustomInput
                                                                 labelText="Contact Number..."
                                                                 id="contact"
-                                                                value={userDetails[j].contact}
+                                                                value={userDetails[j].contact_num}
                                                                 formControlProps={{
                                                                         fullWidth: true
                                                                 }}
                                                                 inputProps={{
-                                                                        onChange: handleChange("contact",j),
-                                                                        value: userDetails[j].contact,
+                                                                        onChange: handleChange("contact_num",j),
+                                                                        value: userDetails[j].contact_num,
                                                                         type: "number",
                                                                         endAdornment: (
                                                                             <InputAdornment position="end">

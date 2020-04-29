@@ -95,7 +95,7 @@ export default function GroupInfo(props) {
 
         function dischargeGroup() {
                 const callback= result =>{
-                        console.log("Shud have discharged",result);
+                        // console.log("Shud have discharged",result);
                         setNotif(true);
                         setDischargeDialogOpen(false);
                         props.closeFunc();
@@ -115,7 +115,7 @@ export default function GroupInfo(props) {
                                 active+=1
                 });
                 setActive(active);
-                console.log("YUHUHUHUHUHUHU",active)
+                // console.log("YUHUHUHUHUHUHU",active)
         }
 
         setTimeout(function() {
@@ -124,7 +124,7 @@ export default function GroupInfo(props) {
 
 
         useEffect(() => {
-                console.log("hi",props.data);
+                // console.log("hi",props.data);
                 checkActive();
         }, []);
 

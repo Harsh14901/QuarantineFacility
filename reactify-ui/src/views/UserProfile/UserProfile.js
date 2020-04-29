@@ -20,6 +20,8 @@ import GetPeopleData from "PeopleData/GetPeopleData";
 import MapExtreme from "views/Maps/MapExtreme";
 import Dialog from "@material-ui/core/Dialog";
 import UserDetails from "views/UserProfile/UserDetails";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Backdrop from "@material-ui/core/Backdrop";
 
 const styles = {
   cardCategoryWhite: {
@@ -48,6 +50,7 @@ export default function UserProfile() {
         const [dataDisplay,setDataDisplay] = useState([]);
         const [openDialog,setOpenDialog] = useState(false);
         const [selectedUserDetails,setSelectedUserDetails] = useState({});
+        const [loading,setLoading] = useState(false);
 
         const columnsHeading=[
                 { title: 'User ID', field: 'code'},
@@ -62,26 +65,28 @@ export default function UserProfile() {
         ];
         function getPeopleData() {
                 const callback = result => {
-                        console.log(result);
+                        setLoading(false);
+                        // console.log(result);
                         setPeopleData(result);
                         let details=[];
                          result.map((data,j) =>{
                                  if(!data.facility_name)
                                          data.facility_name='Discharged';
-                                 details.push({code:data.code,id:data.id,name:data.name,age:data.age,member_count:-1,gender: data.gender
+                                 details.push({luxuries: data.luxuries,code:data.code,id:data.id,name:data.name,age:data.age,member_count:-1,gender: data.gender
                                          ,facility_name:data.facility_name,risk: data.risk,doa:data.doa,number: data.contact_num,email:data.email
                                  ,vip: data.vip,facility_pk:data.facility_pk,group: data.group,address: data.address,latitude:data.latitude,longitude:data.longitude,checkuprecords_set: data.checkuprecords_set})
                          });
-                        console.log(details);
+                        // console.log(details);
                          details.sort(function(a,b) {if(a.facility_name==='Discharged')
                          {
                                  return 1
                          }
                          return -1;
                          });
-                         console.log(details);
+                         // console.log(details);
                         setDataDisplay(details);
                 };
+                setLoading(true);
                 GetPeopleData(callback)
         }
 
@@ -139,7 +144,9 @@ export default function UserProfile() {
                             <UserDetails closeFunc={handleDialogClose} data={selectedUserDetails}/>
 
                     </Dialog>
-
+                    <Backdrop open={loading} style={{zIndex: "100"}} onClick={() => setLoading(false)}>
+                            <CircularProgress color="inherit" />
+                    </Backdrop>
 
             </div>
         );

@@ -34,6 +34,8 @@ import changeUserFacility from "facility/changeUserFacility";
 import ChangeFacilityDialog from "views/Components/ChangeFacilityDialog";
 import CheckupRecords from "views/Components/CheckupRecords";
 import {DOMAIN} from "variables/Constants";
+import Luxuries from "views/Luxuries/Luxuries";
+import LuxuriesDetails from "views/Components/LuxuriesDetails";
 
 const useStyles2 = makeStyles(styles2);
 const useStyles = makeStyles(styles);
@@ -67,11 +69,16 @@ export default function UserDetails(props) {
 
         const [active,setActive] = useState(true);
         const [checkupOpen,setCheckupOpen] = useState(false);
+        const [luxuriesOpen,setLuxuriesOpen] = useState(false);
 
 
 
         function handleCheckupClose(){
                 setCheckupOpen(false)
+        }
+
+        function handleLuxuriesClose(){
+                setLuxuriesOpen(false)
         }
 
         const handleDialogClose= () => {
@@ -83,7 +90,7 @@ export default function UserDetails(props) {
                 setSelectedGroupDetails(res);
                 setOpenDialog(true);
                 };
-                console.log("Hi good night",DOMAIN + '/groups/'+props.data.group+'/');
+                // console.log("Hi good night",DOMAIN + '/groups/'+props.data.group+'/');
                 getData(callback,DOMAIN + '/groups/'+props.data.group+'/')
         };
 
@@ -112,7 +119,7 @@ export default function UserDetails(props) {
 
         function changeWard(id) {
                 const callback = result => {
-                        console.log("Seems to have changed ward",result);
+                        // console.log("Seems to have changed ward",result);
                         handleClose();
 
                 };
@@ -124,7 +131,7 @@ export default function UserDetails(props) {
 
         function changeFacility(pref){
                 const callback = result => {
-                        console.log("Seems to have changed facility",result)
+                        // console.log("Seems to have changed facility",result)
                 };
 
 
@@ -133,7 +140,7 @@ export default function UserDetails(props) {
 
         function getPairWard() {
                 const callback = result => {
-                        console.log(result);
+                        // console.log(result);
                         let a=result.ward_set[0].id;
                         let b=result.ward_set[1].id;
                         if(a===props.data.ward_pk)
@@ -147,7 +154,7 @@ export default function UserDetails(props) {
 
         function dischargeUser() {
                 const callback= result =>{
-                  console.log("Shud have discharged",result);
+                  // console.log("Shud have discharged",result);
                         setDischargeDialogOpen(false)
                         props.closeFunc();
                 };
@@ -164,7 +171,7 @@ export default function UserDetails(props) {
                         props.data.facility_name='Discharged';
                 if(props.data.facility_name==='Discharged')
                         setActive(false);
-                console.log("Need backup",active)
+                // console.log("Need backup",active)
         }
 
         setTimeout(function() {
@@ -193,6 +200,8 @@ export default function UserDetails(props) {
                                                     <GridItem xs={12}>
                                                             <Para text={"User id:- " + props.data.code}/>
                                                             <SideButton onClick={() => setCheckupOpen(true)} text={"View Medical Records"}/>
+                                                            <SideButton onClick={() => setLuxuriesOpen(true)} text={"View Luxuries"}/>
+
 
                                                     </GridItem>
                                                     <GridItem xs={6}>
@@ -352,6 +361,20 @@ export default function UserDetails(props) {
                         onClose={handleCheckupClose}
                     >
                         <CheckupRecords  data={props.data} closeFunc={() => setCheckupOpen(false)}/>
+                    </Dialog>
+
+                    <Dialog
+                        open={luxuriesOpen}
+                        PaperProps={{
+                                style: {
+                                        backgroundColor: 'transparent',
+                                        boxShadow: 'none',
+                                        scrollbarColor: "transparent"
+                                },
+                        }}
+                        onClose={handleLuxuriesClose}
+                    >
+                            <LuxuriesDetails  data={props.data} closeFunc={() => setLuxuriesOpen(false)}/>
                     </Dialog>
             </div>
         )

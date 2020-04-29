@@ -3,19 +3,18 @@ import axios from 'axios';
 import {func} from "prop-types";
 import {DOMAIN} from "variables/Constants";
 
-const PostFacilityData = (callback,data) => {
+const checkUserAuthenticated = (callback) => {
 
-        const endpt = DOMAIN + '/facilities/';
         let lookupOpts = {
-                method:'POST',
+                method:'GET',
                 headers:{
                         'Content-Type':'application/json',
                         'Accept': 'application/json'
                 },
                 withCredentials: true
         };
-        axios.post(endpt, data,lookupOpts). then(r => callback(r.data)).catch(function(error){console.log("hi",error.data)})
+        axios.get(DOMAIN + '/rest-auth/user/',lookupOpts). then(r => callback(r.data)).catch(function(error){callback({username: null})})
 
 };
 
-export default PostFacilityData
+export default checkUserAuthenticated

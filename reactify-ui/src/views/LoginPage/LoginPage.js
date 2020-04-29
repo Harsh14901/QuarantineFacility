@@ -1,15 +1,18 @@
 import React, {useEffect, useState} from "react";
+
 // @material-ui/core components
+
 import { makeStyles } from "@material-ui/core/styles";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Icon from "@material-ui/core/Icon";
+
 // @material-ui/icons
+
 import Email from "@material-ui/icons/Email";
 import People from "@material-ui/icons/People";
+
 // core components
-import Header from "components/Header/Header.js";
-import HeaderLinks from "components/Header/HeaderLinks.js";
-import Footer from "components/Footer/Footer.js";
+
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import Button from "components/CustomButtons/Button.js";
@@ -30,6 +33,10 @@ import getData from "facility/getData";
 import { useHistory } from 'react-router-dom';
 import loginUser from "facility/loginUser";
 import {DOMAIN} from "variables/Constants";
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Backdrop from "@material-ui/core/Backdrop";
 
 
 const useStyles = makeStyles(styles);
@@ -41,24 +48,44 @@ export default function LoginPage(props) {
   const [name,setName] = useState("");
   const [password,setPassword] = useState("");
   const [step,setStep] = useState(1);
-
+  const [loading,setLoading] = useState(false);
+  const [succMsg,setSuccMsg] = useState(false);
+  const [failMsg,setFailMsg] = useState(false);
+  const [msgText,setMsgText] = useState("Login Failed");
         const history = useHistory();
 
+        function handleAlertClose() {
+                setSuccMsg(false);
+                setFailMsg(false);
+        }
 
         function resetPassword(){
                 const callback = res => {
-                        console.log("Password reset successful",res)
+                        setLoading(false);
+                        console.log("Password reset successful",res);
+                        setSuccMsg(true);
+                        setMsgText("Password reset details have been sent to email");
+                        setStep(1);
                 };
+                setLoading(true);
                 postData(callback,{email: email},DOMAIN + '/rest-auth/password/reset/')
         }
 
 
         function submitDetails(){
                 const callback = result => {
-
-                        console.log("And here I have the login token",result)
-                        history.push('/admin')
+                        setLoading(false);
+                        result = JSON.stringify(result);
+                        if(result.indexOf("Error")!==-1){
+                                setPassword("");
+                                setFailMsg(true);
+                                setMsgText("Login Failed");
+                        }else {
+                                console.log("And here I have the login token", result)
+                                history.push('/admin')
+                        }
                 };
+                setLoading(true);
 
                 let data={username: name,email: email,password: password};
                 console.log("Here is the data",JSON.stringify(data));
@@ -210,6 +237,19 @@ export default function LoginPage(props) {
                     </Card>}
             </GridItem>
           </GridContainer>
+            <Snackbar open={succMsg} autoHideDuration={6000} onClose={handleAlertClose}>
+                    <Alert onClose={handleAlertClose} severity="success">
+                            { msgText}
+                    </Alert>
+            </Snackbar>
+            <Snackbar open={failMsg} autoHideDuration={5000} onClose={handleAlertClose}>
+                    <Alert onClose={handleAlertClose} severity="error">
+                            { msgText}
+                    </Alert>
+            </Snackbar>
+            <Backdrop open={loading} style={{zIndex: "100"}}>
+                    <CircularProgress color="inherit" />
+            </Backdrop>
     </div>
   );
 }

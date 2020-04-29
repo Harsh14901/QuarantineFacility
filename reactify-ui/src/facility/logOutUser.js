@@ -1,8 +1,9 @@
 import cookie from "react-cookies";
 import axios from 'axios';
 import {func} from "prop-types";
+import {DOMAIN} from "variables/Constants";
 
-const loginUser = (callback,data,url) => {
+const logOutUser = (callback) => {
 
         let lookupOpts = {
                 method:'POST',
@@ -10,10 +11,10 @@ const loginUser = (callback,data,url) => {
                         'Content-Type':'application/json',
                         'Accept': 'application/json'
                 },
-            withCredentials: true
+                withCredentials: true
         };
-        axios.post(url, data,lookupOpts). then(r => callback(r)).catch(function(error){callback(error)})
+        axios.post(DOMAIN + '/rest-auth/logout/',{},lookupOpts). then(r => callback(r.data)).catch(function(error){console.log("hi",error.data)})
 
 };
 
-export default loginUser
+export default logOutUser

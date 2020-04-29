@@ -29,6 +29,9 @@ import Alert from "@material-ui/lab/Alert";
 import UserDetails from "views/UserProfile/UserDetails";
 import GroupInfo from "views/Groups/GroupInfo";
 import SnacbarNotification from "views/Components/SnacbarNotification";
+import GroupsAddDialog from "views/Components/GroupsAddDialog";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Backdrop from "@material-ui/core/Backdrop";
 
 
 const styles = {
@@ -61,6 +64,7 @@ export default function GroupsDetail() {
         const [openDialog,setOpenDialog] = useState(false);
         const [selectedGroupDetails,setSelectedGroupDetails] = useState({});
         const [notif,setNotif] = useState(false);
+        const [loading,setLoading] = useState(false);
 
 
         function handleDialogClose(){
@@ -86,7 +90,8 @@ export default function GroupsDetail() {
         ];
         function getGroupsData() {
                 const callback = result => {
-                        console.log(result);
+                        setLoading(false);
+                        // // console.log(result);
                         setGroupData(result);
                         let details=[];
                         result.map((data) =>{
@@ -104,6 +109,7 @@ export default function GroupsDetail() {
                         details.sort(function(a,b){ return b.active-a.active});
                         setDataDisplay(details);
                 };
+                setLoading(true);
                 GetGroupData(callback)
         }
 
@@ -124,13 +130,13 @@ export default function GroupsDetail() {
         }
 
         function submitDetails(data){
-                console.log("Submitting",data);
-                console.log("Hello boy",JSON.stringify(data));
+                // // console.log("Submitting",data);
+                // // console.log("Hello boy",JSON.stringify(data));
                 handleClose();
 
                 const callback = result => {
-                        console.log(result);
-                        console.log("Hurrah");
+                        // // console.log(result);
+                        // // console.log("Hurrah");
                         let temp=[];
                         temp=[...groupData];
                         setGroupData(temp.concat(result));
@@ -192,7 +198,7 @@ export default function GroupsDetail() {
                         }}
                         onClose={handleClose}
                     >
-                            <AddGroupDialog submitFunc={submitDetails}/>
+                            <GroupsAddDialog submitFunc={submitDetails}/>
 
                     </Dialog>
                     <Dialog
@@ -215,7 +221,9 @@ export default function GroupsDetail() {
                             </Alert>
                     </Snackbar>
                     <SnacbarNotification setOpen={setNotif} text={"Group has been discharged Successfully"} open={notif}/>
-
+                    <Backdrop open={loading} style={{zIndex: "100"}} onClick={() => setLoading(false)}>
+                            <CircularProgress color="inherit" />
+                    </Backdrop>
             </div>
         );
 }
