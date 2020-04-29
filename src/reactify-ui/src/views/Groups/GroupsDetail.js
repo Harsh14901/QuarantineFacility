@@ -91,7 +91,7 @@ export default function GroupsDetail() {
         function getGroupsData() {
                 const callback = result => {
                         setLoading(false);
-                        console.log(result);
+                        // // console.log(result);
                         setGroupData(result);
                         let details=[];
                         result.map((data) =>{
@@ -130,13 +130,13 @@ export default function GroupsDetail() {
         }
 
         function submitDetails(data){
-                console.log("Submitting",data);
-                console.log("Hello boy",JSON.stringify(data));
+                // // console.log("Submitting",data);
+                // // console.log("Hello boy",JSON.stringify(data));
                 handleClose();
 
                 const callback = result => {
-                        console.log(result);
-                        console.log("Hurrah");
+                        // // console.log(result);
+                        // // console.log("Hurrah");
                         let temp=[];
                         temp=[...groupData];
                         setGroupData(temp.concat(result));

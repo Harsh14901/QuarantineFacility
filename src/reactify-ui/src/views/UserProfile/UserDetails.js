@@ -90,7 +90,7 @@ export default function UserDetails(props) {
                 setSelectedGroupDetails(res);
                 setOpenDialog(true);
                 };
-                console.log("Hi good night",DOMAIN + '/groups/'+props.data.group+'/');
+                // console.log("Hi good night",DOMAIN + '/groups/'+props.data.group+'/');
                 getData(callback,DOMAIN + '/groups/'+props.data.group+'/')
         };
 
@@ -119,7 +119,7 @@ export default function UserDetails(props) {
 
         function changeWard(id) {
                 const callback = result => {
-                        console.log("Seems to have changed ward",result);
+                        // console.log("Seems to have changed ward",result);
                         handleClose();
 
                 };
@@ -131,7 +131,7 @@ export default function UserDetails(props) {
 
         function changeFacility(pref){
                 const callback = result => {
-                        console.log("Seems to have changed facility",result)
+                        // console.log("Seems to have changed facility",result)
                 };
 
 
@@ -140,7 +140,7 @@ export default function UserDetails(props) {
 
         function getPairWard() {
                 const callback = result => {
-                        console.log(result);
+                        // console.log(result);
                         let a=result.ward_set[0].id;
                         let b=result.ward_set[1].id;
                         if(a===props.data.ward_pk)
@@ -154,7 +154,7 @@ export default function UserDetails(props) {
 
         function dischargeUser() {
                 const callback= result =>{
-                  console.log("Shud have discharged",result);
+                  // console.log("Shud have discharged",result);
                         setDischargeDialogOpen(false)
                         props.closeFunc();
                 };
@@ -171,7 +171,7 @@ export default function UserDetails(props) {
                         props.data.facility_name='Discharged';
                 if(props.data.facility_name==='Discharged')
                         setActive(false);
-                console.log("Need backup",active)
+                // console.log("Need backup",active)
         }
 
         setTimeout(function() {

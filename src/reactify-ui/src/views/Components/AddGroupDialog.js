@@ -124,7 +124,7 @@ function AddGroupDialog(props) {
                 else if(title===actions[2].name){
                         restoreMember(j);
                 }
-                console.log(event);
+                // console.log(event);
                 setFabOpen(false);
         };
 
@@ -140,8 +140,8 @@ function AddGroupDialog(props) {
                 setAddress(data.info);
                 setLatLong(data.marker);
                 handleLocationClose();
-                console.log(data.marker);
-                console.log(data.info);
+                // console.log(data.marker);
+                // console.log(data.info);
                 if(!data.info){
                         setAddress(data.marker[0]+"N , "+data.marker[1]+"E")
                 }
@@ -152,7 +152,7 @@ function AddGroupDialog(props) {
         function getFacilities(data){
 
                 const callback = res => {
-                        console.log("Got the facilities",res);
+                        // console.log("Got the facilities",res);
                         let temp=[];
                         for(let x=0;x<res.length;x++)
                                 temp.push({value: res[x].id,label: res[x].name});
@@ -185,7 +185,7 @@ function AddGroupDialog(props) {
                 let temp=[...userDetails];
                 temp[j]={ ...userDetails[j], [prop]: event.target.value };
                 setUserDetails(temp);
-                console.log(userDetails[j].name)
+                // console.log(userDetails[j].name)
 
         };
 

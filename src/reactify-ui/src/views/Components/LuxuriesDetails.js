@@ -87,7 +87,7 @@ export default function LuxuriesDetails(props){
                 temp=temp.filter(function(value,id){return id!==idx});
                 //console.log("medicinesList is", temp[checkupDetails.length-1].medicines);
                 setUserList(temp);
-                console.log("I have deleted this",idx)
+                // console.log("I have deleted this",idx)
 
         };
 
@@ -95,13 +95,13 @@ export default function LuxuriesDetails(props){
         function submitDetails(){
 
                 const callback = res =>{
-                        console.log("Checkup details edited",res);
+                        // console.log("Checkup details edited",res);
                         setNotif(true);
                         props.closeFunc()
 
                 };
                 let data={luxuries: userList};
-                console.log("I am going to patch this data",JSON.stringify(data));
+                // console.log("I am going to patch this data",JSON.stringify(data));
                 PatchData(callback,data,DOMAIN + '/people/'+props.data.id+"/")
 
 
@@ -109,7 +109,7 @@ export default function LuxuriesDetails(props){
 
         function getLuxuriesList(){
                 const callback = res => {
-                        console.log('lux list',res);
+                        // console.log('lux list',res);
                         setLuxuriesList(res);
                 };
                 getData(callback,DOMAIN + '/luxuries/')
@@ -134,11 +134,11 @@ export default function LuxuriesDetails(props){
                         // console.log("ids are here",data.id,id);
                         if(data.id===id) {
                                 name = data.category;
-                                //console.log("name is here",name)
+                                //// console.log("name is here",name)
                         }
                         return name
                 });
-                //console.log(name);
+                //// console.log(name);
                 return name;
         }
 
