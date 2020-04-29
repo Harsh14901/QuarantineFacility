@@ -69,7 +69,7 @@ def get_sorted_list(all_groups):
 
     return all_dummy_patients
 
-def make_allocation(patient):
+def make_allocation(patient,**kwargs):
 
     """ Allocation based on facility preference """
     print('allocating',patient)
@@ -111,7 +111,7 @@ def make_allocation(patient):
         return True
     else:
         print('allocating through GEO API')
-        row = get_all_distances(patient)
+        row = get_all_distances(patient, **kwargs)
         print(row)
         row.sort(key=lambda x:x.occupant_count/x.capacity > CRITICAL_RATIO if x.capacity >0 else 1)
         for facility in row:
@@ -140,13 +140,13 @@ def make_allocation(patient):
     return False
 
 
-def allocate(groups):
+def allocate(groups,**kwargs):
     patients = get_sorted_list(groups)
     failed = []
     for patient in patients:
         if patient.room is not None:
             continue
-        if not make_allocation(patient):
+        if not make_allocation(patient,**kwargs):
             failed.append(patient)
         else:
             patient = Person.objects.get(pk=patient.id)

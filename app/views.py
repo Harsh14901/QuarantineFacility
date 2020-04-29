@@ -323,7 +323,17 @@ def AllocateGroups(request):
                     groups.append(group)
             else:
                 return Response(group_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        allocation = allocate(groups)
+        
+        queryset = Facility.objects.none()
+        user = request.user
+        if user.is_staff:
+            queryset = Facility.objects.all()
+        if(isCityAdmin(user)):
+            queryset = Facility.objects.all().filter(city__admin=user)
+        elif(isFacilityAdmin(user)):
+            queryset = Facility.objects.all().filter(admin=user)
+        
+        allocation = allocate(groups,queryset=queryset)
         for group in groups:
             groups_data.append(GroupSerializer(group).data)
 
