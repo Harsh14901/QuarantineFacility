@@ -257,7 +257,7 @@ CACHES = {
              'LOCATION': config('CACHE_LOCATION')+"ward/"},
 }
 
-CACHE_MIDDLEWARE_SECONDS = 60*15
+CACHE_MIDDLEWARE_SECONDS = 60*60
 # Always at the end
 # import dj_database_url
 # prod_db  =  dj_database_url.config(conn_max_age=500)

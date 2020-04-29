@@ -63,9 +63,7 @@ class PersonAccomodationSerializer(serializers.ModelSerializer):
 
 class PersonSerializer(serializers.ModelSerializer):
     checkuprecords_set = CheckupSerializer(many=True,read_only=True)
-    # luxuries_pk = serializers.PrimaryKeyRelatedField(many=True,read_only=False,queryset=Luxury.objects.all(),source='luxuries')
     def save(self, **kwargs):
-        # print(self.validated_data)
         if('latitude' in self.validated_data.keys() or 'longitude' in self.validated_data.keys()):
             try:
                 set_location(self.validated_data)
@@ -147,6 +145,7 @@ class FacilitySerializer(serializers.ModelSerializer):
             except:
                 raise ValidationError(
                     detail="Could not allocate location", code='invalid_coordinates')
+        return super().save(**kwargs)
 
     class Meta():
         model = Facility

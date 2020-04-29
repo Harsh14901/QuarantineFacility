@@ -69,7 +69,7 @@ def get_sorted_list(all_groups):
 
     return all_dummy_patients
 
-def make_allocation(patient):
+def make_allocation(patient,**kwargs):
 
     """ Allocation based on facility preference """
     print('allocating',patient)
@@ -111,7 +111,7 @@ def make_allocation(patient):
         return True
     else:
         print('allocating through GEO API')
-        row = get_all_distances(patient)
+        row = get_all_distances(patient, **kwargs)
         print(row)
         row.sort(key=lambda x:x.occupant_count/x.capacity > CRITICAL_RATIO if x.capacity >0 else 1)
         for facility in row:
@@ -140,13 +140,13 @@ def make_allocation(patient):
     return False
 
 
-def allocate(groups):
+def allocate(groups,**kwargs):
     patients = get_sorted_list(groups)
     failed = []
     for patient in patients:
         if patient.room is not None:
             continue
-        if not make_allocation(patient):
+        if not make_allocation(patient,**kwargs):
             failed.append(patient)
         else:
             patient = Person.objects.get(pk=patient.id)
@@ -169,18 +169,18 @@ def naive_distance(p1,p2):
     except:
         return INFINITY
 
-def sort_naively(p1):
+def sort_naively(p1,**kwargs):
     unsorted = []
-    for facility in Facility.objects.all():
+    for facility in kwargs['queryset']:
         p2=(facility.latitude,facility.longitude)
         unsorted.append((naive_distance(p1,p2),facility))
     sorted_pairs = sorted(unsorted,key=lambda x:x[0])
     print(sorted_pairs)
     return [pair[1] for pair in sorted_pairs]
 
-def get_all_distances(patient):
+def get_all_distances(patient,**kwargs):
     p1=(float(patient.latitude),float(patient.longitude))
-    half_sorted = sort_naively(p1)
+    half_sorted = sort_naively(p1,**kwargs)
     print(half_sorted)
     p1='{},{}'.format(patient.latitude,patient.longitude)
     all_facilities = []
@@ -242,20 +242,3 @@ def set_location(obj):
     else:
         obj['latitude'] = point['lat']
         obj['longitude'] = point['lng']
-    
-        
-
-
-@api_view(['GET'])
-def getClosestFacilities(request):
-    dummy = Person(
-        latitude=request.GET['latitude'],
-        longitude=request.GET['longitude'],
-        vip = request.GET['vip']!='0' or request.GET['vip']==0,
-    )
-    a=get_all_distances(dummy)
-    if dummy.vip:
-        a=filter(lambda x:x.isVIP,a)
-    else:
-        a=filter(lambda x: not x.isVIP,a)
-    return Response({'id':f.id,'name':f.name,'vip':f.isVIP} for f in a)
