@@ -142,8 +142,8 @@ export default function UserDetails(props) {
 
         const actions = [
                 { icon: <EditIcon />, name: 'Edit Group Details' },
-                { icon: <AddIcon />, name: 'Add Member' },
-                { icon: <DeleteIcon />, name: 'Delete Member' },
+                { icon: <AddIcon />, name: 'Add Group' },
+                { icon: <DeleteIcon />, name: 'Delete Group' },
         ];
 
 

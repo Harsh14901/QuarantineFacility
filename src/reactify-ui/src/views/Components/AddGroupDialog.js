@@ -53,7 +53,7 @@ function AddGroupDialog(props) {
         const classes2 = useStyles2();
 
 
-        const defaultUserDetail={name: "",age: 18,address: "",risk: false,contact: "",email: "",latitude:"80.12345",longitude:"80.12345",vip:false};
+        const defaultUserDetail={name: "",age: 18,address: "",risk: false,gender: "Other",contact_num: "",email: "",latitude:"80.12345",longitude:"80.12345",vip:false};
         const [userDetails,setUserDetails] = useState([defaultUserDetail]);
         const [step,setStep] = useState(1);
         const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
@@ -84,6 +84,24 @@ function AddGroupDialog(props) {
                         label: 'Low Risk',
                 }
         ];
+
+
+        const genderCateg = [
+                {
+                        value: 'Other',
+                        label: 'Prefer not to say',
+                },
+                {
+                        value: 'M',
+                        label: 'Male',
+                },
+                {
+                        value: 'F',
+                        label: 'Female',
+                }
+        ];
+
+
 
         const [fabOpen, setFabOpen] = React.useState(false);
         const [fabHidden, setFabHidden] = React.useState(false);
@@ -301,16 +319,37 @@ function AddGroupDialog(props) {
                                                                         </MenuItem>
                                                                     ))}
                                                             </TextField>
+
+                                                            <TextField
+                                                                style={{marginTop: "6px"}}
+                                                                id="gender"
+                                                                select
+                                                                label="Gender"
+                                                                value={userDetails[j].gender}
+                                                                onChange={handleChange('gender',j)}
+                                                                fullWidth={true}
+                                                                InputProps={{style: {fontSize: "0.9rem"}}}
+
+
+                                                            >
+                                                                    {genderCateg.map((option) => (
+                                                                        <MenuItem  key={option.value} value={option.value}>
+                                                                                {option.label}
+                                                                        </MenuItem>
+                                                                    ))}
+                                                            </TextField>
+
+
                                                             <CustomInput
                                                                 labelText="Contact Number..."
                                                                 id="contact"
-                                                                value={userDetails[j].contact}
+                                                                value={userDetails[j].contact_num}
                                                                 formControlProps={{
                                                                         fullWidth: true
                                                                 }}
                                                                 inputProps={{
-                                                                        onChange: handleChange("contact",j),
-                                                                        value: userDetails[j].contact,
+                                                                        onChange: handleChange("contact_num",j),
+                                                                        value: userDetails[j].contact_num,
                                                                         type: "number",
                                                                         endAdornment: (
                                                                             <InputAdornment position="end">
