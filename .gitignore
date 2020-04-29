@@ -110,6 +110,9 @@ target/
 # Jupyter Notebook
 .ipynb_checkpoints
 
+
+cache/
+*.pem
 # pyenv
 .python-version
 
@@ -144,4 +147,4 @@ venv.bak/
 .mypy_cache/
 .pem
 .env
-
+private.pem
