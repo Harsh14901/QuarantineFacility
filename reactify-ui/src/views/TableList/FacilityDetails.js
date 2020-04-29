@@ -2,21 +2,9 @@ import Card from "components/Card/Card";
 import CardHeader from "components/Card/CardHeader";
 import VipIcon from "assets/img/icons/VipIcon";
 import CardBody from "components/Card/CardBody";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import Tooltip from "@material-ui/core/Tooltip";
-import LaunchIcon from "@material-ui/icons/Launch";
 import CardFooter from "components/Card/CardFooter";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
-import Transition from "react-transition-group/Transition";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogActions from "@material-ui/core/DialogActions";
-import UserDetails from "views/UserProfile/UserDetails";
 import React, {useEffect, useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import styles2 from "assets/jss/material-kit-react/views/loginPage";
@@ -92,7 +80,7 @@ export default function FacilityDetails(props) {
         }, 700);
 
         useEffect(() => {
-                console.log(" hello",props.data);
+                // console.log(" hello",props.data);
                 setDetails();
         }, []);
 

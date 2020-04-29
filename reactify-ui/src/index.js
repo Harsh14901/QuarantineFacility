@@ -27,6 +27,7 @@ import Admin from "layouts/Admin.js";
 import "assets/css/material-dashboard-react.css?v=1.8.0";
 import LoginPage from "views/LoginPage/LoginPage";
 import {CookiesProvider} from "react-cookie";
+import ForgotPasswordPage from "views/LoginPage/ForgotPasswordPage";
 
 const hist = createBrowserHistory();
 
@@ -35,6 +36,7 @@ ReactDOM.render(
 
     <Router history={hist}>
     <Switch>
+            <Route path="/password/reset/confirm" component={ForgotPasswordPage}/>
             <Route path="/login" component={LoginPage}/>
             <Route path="/admin" component={Admin} />
             <Redirect from="/" to="/admin" />

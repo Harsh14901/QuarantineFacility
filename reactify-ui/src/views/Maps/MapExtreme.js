@@ -67,8 +67,8 @@ export default function MapExtreme(props) {
                                             "coordinates": [data.latitude, data.longitude]}}
                                 )
                         });
-                        console.log("Eureka",temp);
-                        console.log("oereka",geoJsonFeature);
+                        // console.log("Eureka",temp);
+                        // console.log("oereka",geoJsonFeature);
                         setGeojsonFeature(temp)
                 };
                 getFacilityData(callback)
@@ -76,7 +76,7 @@ export default function MapExtreme(props) {
 
 
         function RealTimePass(SearchInfo){
-                console.log("Haha",SearchInfo.latLng);
+                // console.log("Haha",SearchInfo.latLng);
                 addMarker(SearchInfo);
                 // setLatLong(SearchInfo.latLng);
                 // setMarker([SearchInfo.latLng.lat,SearchInfo.latLng.lng])
@@ -87,11 +87,11 @@ export default function MapExtreme(props) {
                 try {
                         setMarker([e.latlng.lat, e.latlng.lng]);
                 }catch (error) {
-                        console.log("Yipee",e);
+                        // console.log("Yipee",e);
                         setMarker([e.latLng.lat,e.latLng.lng])
                 }
                 setMarkerPopup(e.info);
-                console.log("HUHUHUHUH",e);
+                // console.log("HUHUHUHUH",e);
                 setLatLong(e.latlng);
 
         };

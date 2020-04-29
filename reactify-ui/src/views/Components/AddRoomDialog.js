@@ -85,7 +85,7 @@ export default function AddRoomDialog(props) {
                 else if(title===actions[1].name){
                         deleteRoom(j);
                 }
-                console.log(event);
+                // console.log(event);
                 setFabOpen(false);
         };
 
@@ -98,7 +98,7 @@ export default function AddRoomDialog(props) {
                 let temp=[...roomDetails];
                 temp[j]={ ...roomDetails[j], [prop]: event.target.value };
                 setRoomDetails(temp);
-                console.log(roomDetails[j].name)
+                // console.log(roomDetails[j].name)
 
         };
 
@@ -126,7 +126,7 @@ export default function AddRoomDialog(props) {
                 });
                 props.submitFunc(details);
                 props.closeFunc();
-                console.log("Submitting Details",details)
+                // console.log("Submitting Details",details)
         }
 
         return(

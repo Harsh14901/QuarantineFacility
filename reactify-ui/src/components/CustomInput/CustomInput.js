@@ -23,7 +23,7 @@ export default function CustomInput(props) {
     labelProps,
     inputProps,
     error,
-    success, required
+    success, required , defaultValue
   } = props;
 
   const labelClasses = classNames({
@@ -54,6 +54,7 @@ export default function CustomInput(props) {
       ) : null}
       <Input
           required={required}
+          defaultValue={defaultValue}
         classes={{
           root: marginTop,
           disabled: classes.disabled,

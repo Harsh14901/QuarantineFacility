@@ -3,19 +3,18 @@ import axios from 'axios';
 import {func} from "prop-types";
 import {DOMAIN} from "variables/Constants";
 
-const PostFacilityData = (callback,data) => {
+const PatchData = (callback,data,url) => {
 
-        const endpt = DOMAIN + '/facilities/';
         let lookupOpts = {
-                method:'POST',
+                method:'PATCH',
                 headers:{
                         'Content-Type':'application/json',
                         'Accept': 'application/json'
                 },
                 withCredentials: true
         };
-        axios.post(endpt, data,lookupOpts). then(r => callback(r.data)).catch(function(error){console.log("hi",error.data)})
+        axios.patch(url, data,lookupOpts). then(r => callback(data)).catch(function(error){console.log("hi",error)})
 
 };
 
-export default PostFacilityData
+export default PatchData

@@ -54,7 +54,7 @@ export default function LoginPage(props) {
 
   const book = () =>{
     if(checked===true){
-      console.log("Redirecting to payment gateway")
+      // console.log("Redirecting to payment gateway")
     }
   };
 

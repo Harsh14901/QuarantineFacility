@@ -69,7 +69,7 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-export default function MedicinesDetails() {
+export default function Luxuries() {
 
 
 
@@ -81,28 +81,24 @@ export default function MedicinesDetails() {
         const [openDialog,setOpenDialog] = useState(false);
         const [newMedName,setNewMedName] = useState("");
         const [newMedCost,setNewMedCost] = useState("");
-        const [loading,setLoading] = useState(true);
+        const [loading,setLoading] = useState(false);
 
         const columnsHeading=[
                 { title: 'ID', field: 'id'},
-                { title: 'Medicine Name', field: 'name' },
+                { title: 'Luxury Category', field: 'category' },
                 { title: 'Cost', field: 'cost' },
         ];
         function getMedicineData() {
                 const callback = result => {
-                        console.log(result);
                         setLoading(false);
+                        console.log(result);
                         setMedicineData(result);
-                        let details=[];
-                        result.map((data,j) =>{
-                                if(!data.facility_name)
-                                        data.facility_name='Discharged';
-                                details.push({id:data.id,name:data.name,cost: data.cost})
-                        });
-                        console.log(details);
-                        setDataDisplay(details);
+
+                        console.log(result);
+                        setDataDisplay(result);
                 };
-                getData(callback,DOMAIN + '/medicines/')
+                setLoading(true);
+                getData(callback,DOMAIN + '/luxuries/')
         }
 
 
@@ -112,12 +108,14 @@ export default function MedicinesDetails() {
 
         function addMedicine(){
                 const callback = res =>{
-                        console.log("Medicine added",res);
+                        console.log("Luxury added",res);
                         medicineData.push(res);
                         handleDialogClose();
 
                 };
-                postData(callback,{name: newMedName,cost: newMedCost},DOMAIN + '/medicines/')
+                let data = {category: newMedName,cost: parseInt(newMedCost)};
+                console.log(data);
+                postData(callback,data,DOMAIN + '/luxuries/')
         }
 
         useEffect(() => {
@@ -134,14 +132,13 @@ export default function MedicinesDetails() {
                                     <Card>
                                             <CardHeader color="primary">
                                                     <h4 className={classes.cardTitleWhite}>
-                                                            Medicines' Details
+                                                            Luxuries' Details
                                                     </h4>
                                                     <p className={classes.cardCategoryWhite}>
-                                                            List of Medicines
+                                                            List of Luxuries
                                                     </p>
                                             </CardHeader>
                                             <CardBody>
-
                                                     <MaterialTable
                                                         icons={TableIcons}
                                                         title=""
@@ -150,15 +147,15 @@ export default function MedicinesDetails() {
                                                         actions={[
                                                                 {
                                                                         icon: Add,
-                                                                        tooltip: 'Add Medicine',
+                                                                        tooltip: 'Add Luxury',
                                                                         isFreeAction: true,
                                                                         onClick: (event) => setOpenDialog(true)
                                                                 }
                                                         ]}
                                                     />
                                                     <Backdrop open={loading} style={{zIndex: "100"}} onClick={() => setLoading(false)}>
-                                                                <CircularProgress color="inherit" />
-                                                        </Backdrop>
+                                                            <CircularProgress color="inherit" />
+                                                    </Backdrop>
                                             </CardBody>
                                     </Card>
                             </GridItem>
@@ -176,7 +173,7 @@ export default function MedicinesDetails() {
                                         onChange={(e) => setNewMedName(e.target.value)}
                                         margin="dense"
                                         id="name"
-                                        label="Medicine Name"
+                                        label="Luxury Name"
                                         type="text"
                                         fullWidth
                                     />

@@ -24,6 +24,8 @@ import MapExtreme from "views/Maps/MapExtreme";
 import GroupInfo from "views/Groups/GroupInfo";
 import FacilityDetails from "views/TableList/FacilityDetails";
 import {DOMAIN} from "variables/Constants";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Backdrop from "@material-ui/core/Backdrop";
 
 const styles = {
   cardCategoryWhite: {
@@ -71,6 +73,7 @@ export default function TableList() {
         const [addFacilityDialog,setAddFacilityDialog] = useState(false);
         const [successAlert,setSuccessAlert] =useState(false);
         const [latLong,setLatLong] = useState({lat:31,lng:80});
+        const [loading,setLoading] = useState(false);
 
         const [openDialog,setOpenDialog] = useState(false);
 
@@ -108,7 +111,8 @@ export default function TableList() {
 
         function getFacilityData() {
                 const callback = result => {
-                        console.log(result);
+                        setLoading(false);
+                        // console.log(result);
                         setFacilityData(result);
                         let details=[];
                         let totalCap=0;
@@ -137,6 +141,7 @@ export default function TableList() {
                         setWard2TotalCapacity(totalWard2Occup+"/"+totalWard2Cap);
                         setDataDisplay(details);
                 };
+                setLoading(true);
                 GetFacilityData(callback)
         }
 
@@ -147,11 +152,11 @@ export default function TableList() {
 
         function submitDetails(data){
                 const callback = result => {
-                        console.log("this is result",result);
+                        // console.log("this is result",result);
                         setSuccessAlert(true);
                         handleClose();
                 };
-                console.log("submit detaisl",JSON.stringify(data));
+                // console.log("submit detaisl",JSON.stringify(data));
                 PostData(callback,data,DOMAIN + '/rooms/')
 
         }
@@ -160,6 +165,9 @@ export default function TableList() {
 
         return (
             <div>
+                    <Backdrop open={loading} style={{zIndex: "100"}} onClick={() => setLoading(false)}>
+                            <CircularProgress color="inherit" />
+                    </Backdrop>
                     <GridContainer justifyContent={"center"}>
                             <GridItem xs={12} sm={12} md={4}>
                                     <StatDetailCard graph title="Total Capacity" data={facilityTotalCapacity} status={"Just Updated"} />
