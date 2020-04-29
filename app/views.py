@@ -382,7 +382,7 @@ def getClosestFacilities(request):
     dummy = Person(
         latitude=request.GET['latitude'],
         longitude=request.GET['longitude'],
-        vip=request.GET['vip'] != '0' or request.GET['vip'] != 0,
+        vip=str(request.GET['vip']) != '0',
     )
 
     queryset = Facility.objects.none()
