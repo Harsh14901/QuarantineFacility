@@ -59,6 +59,5 @@ class CacheMixin(object):
             resp._headers['etag'] = ('ETag', f"\"{digest}\"")
             
             return resp
-
         kwargs['basename'] = self.basename
         return _dispatch(request, *args, **kwargs)
