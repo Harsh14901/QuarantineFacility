@@ -342,7 +342,7 @@ def AllocateGroups(request):
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class DischargedViewSet(CacheMixin, generics.ListCreateAPIView):
+class DischargedViewSet(CacheMixin, ModelViewSet):
     queryset = Discharged.objects.all()
     serializer_class = DischargedSerializer
 

@@ -20,11 +20,11 @@ router.register(r'luxuries',LuxuryViewSet)
 router.register(r'medicines',MedicineViewSet)
 router.register(r'checkup-records',CheckupViewSet)
 router.register(r'person-accomodation',PersonAccomodationViewSet)
+router.register(r'discharge',DischargedViewSet)
 urlpatterns = [
     url('',include(router.urls)),
     url(r'^index/$',index,name="index"),
     url(r'^allocate/$',AllocateGroups,name="allocate"),
-    url(r'^discharge/$',DischargedViewSet.as_view(),name="discharge"),
     url(r'^discharge_group/$',discharge_group,name="discharge_group"),
     url(r'^person/search/$',searchPerson,name="search_user"),
     url(r'^facility/search/$',searchFacility,name="search_facility"),

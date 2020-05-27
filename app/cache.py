@@ -22,6 +22,7 @@ def clear_cache_on_model_save(sender, **kwargs):
             post_save.send(sender=desc.field.related_model)
     except:
         pass
+    caches['default'].clear()
 
 
 def get_etag(request, *args, **kwargs):
